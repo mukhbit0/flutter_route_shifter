@@ -1,4 +1,3 @@
-import '../../effects/physics_spring_effect.dart';
 import '../../../flutter_route_shifter.dart';
 
 /// Mixin that provides physics-based spring effects for RouteShifterBuilder.

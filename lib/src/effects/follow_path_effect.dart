@@ -40,29 +40,47 @@ class FollowPathEffect extends RouteEffect {
     return AnimatedBuilder(
       animation: animation,
       builder: (context, _) {
-        final progress = animation.value;
-        final pathMetric = path.computeMetrics().first;
-        final distance = pathMetric.length * progress;
+        try {
+          final progress = animation.value;
+          final metrics = path.computeMetrics();
+          
+          // Safety check: Return child if path is empty
+          if (metrics.isEmpty) {
+            return Transform.translate(
+              offset: pathOrigin,
+              child: child,
+            );
+          }
+          
+          final pathMetric = metrics.first;
+          final distance = pathMetric.length * progress;
 
-        // Get position and tangent at current distance
-        final tangent = pathMetric.getTangentForOffset(distance);
-        final position = tangent?.position ?? Offset.zero;
-        final angle = tangent?.angle ?? 0.0;
+          // Get position and tangent at current distance
+          final tangent = pathMetric.getTangentForOffset(distance);
+          final position = tangent?.position ?? Offset.zero;
+          final angle = tangent?.angle ?? 0.0;
 
-        Widget transformedChild = child;
+          Widget transformedChild = child;
 
-        // Apply rotation if enabled
-        if (rotateAlongPath) {
-          transformedChild = Transform.rotate(
-            angle: angle + rotationOffset,
+          // Apply rotation if enabled
+          if (rotateAlongPath) {
+            transformedChild = Transform.rotate(
+              angle: angle + rotationOffset,
+              child: transformedChild,
+            );
+          }
+
+          return Transform.translate(
+            offset: position + pathOrigin,
             child: transformedChild,
           );
+        } catch (e) {
+          // Graceful fallback on any path calculation error
+          return Transform.translate(
+            offset: pathOrigin,
+            child: child,
+          );
         }
-
-        return Transform.translate(
-          offset: position + pathOrigin,
-          child: transformedChild,
-        );
       },
     );
   }

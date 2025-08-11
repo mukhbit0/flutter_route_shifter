@@ -79,30 +79,39 @@ class _GlitchEffectWrapperState extends State<_GlitchEffectWrapper> {
 
   void _onAnimationUpdate() {
     if (widget.animation.status == AnimationStatus.forward) {
+      // Performance optimization: Skip glitch if intensity is too low
+      if (widget.intensity < 0.1) {
+        return;
+      }
+      
       _glitchTimer ??=
           Timer.periodic(const Duration(milliseconds: 50), (timer) {
         if (!mounted || widget.animation.value > 0.8) {
           timer.cancel();
           _glitchTimer = null;
-          setState(() {
-            _translate = Offset.zero;
-            _shear = Offset.zero;
-            _colorFilter = Colors.transparent;
-          });
+          if (mounted) {
+            setState(() {
+              _translate = Offset.zero;
+              _shear = Offset.zero;
+              _colorFilter = Colors.transparent;
+            });
+          }
           return;
         }
-        setState(() {
-          final intensity = widget.intensity * (1 - widget.animation.value);
-          _translate = Offset(_random.nextDouble() * intensity - intensity / 2,
-              _random.nextDouble() * intensity - intensity / 2);
-          _shear = Offset(_random.nextDouble() * 0.1 - 0.05, 0);
-          _colorFilter = [
-            Colors.red,
-            Colors.green,
-            Colors.blue
-          ][_random.nextInt(3)]
-              .withValues(alpha: 0.2);
-        });
+        if (mounted) {
+          setState(() {
+            final intensity = widget.intensity * (1 - widget.animation.value);
+            _translate = Offset(_random.nextDouble() * intensity - intensity / 2,
+                _random.nextDouble() * intensity - intensity / 2);
+            _shear = Offset(_random.nextDouble() * 0.1 - 0.05, 0);
+            _colorFilter = [
+              Colors.red,
+              Colors.green,
+              Colors.blue
+            ][_random.nextInt(3)]
+                .withValues(alpha: 0.2);
+          });
+        }
       });
     }
   }

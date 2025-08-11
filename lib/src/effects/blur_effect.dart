@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'base_effect.dart';
 
@@ -54,10 +55,13 @@ class BlurEffect extends RouteEffect {
           return child;
         }
 
+        // Web performance optimization: Use lower quality blur on web
+        final effectiveSigma = kIsWeb ? currentSigma * 0.7 : currentSigma;
+
         return BackdropFilter(
           filter: ImageFilter.blur(
-            sigmaX: currentSigma,
-            sigmaY: currentSigma,
+            sigmaX: effectiveSigma,
+            sigmaY: effectiveSigma,
             tileMode: tileMode,
           ),
           child: child,

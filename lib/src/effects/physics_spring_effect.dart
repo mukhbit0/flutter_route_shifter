@@ -102,19 +102,29 @@ class _SpringEffectWrapperState extends State<_SpringEffectWrapper>
   }
 
   void _onParentAnimationUpdate() {
-    if (widget.parentAnimation.status == AnimationStatus.forward) {
-      final simulation = SpringSimulation(
-        SpringDescription(
-            mass: widget.mass,
-            stiffness: widget.stiffness,
-            damping: widget.damping),
-        0.0, // start
-        1.0, // end
-        1.0, // velocity
-      );
-      _controller.animateWith(simulation);
-    } else if (widget.parentAnimation.status == AnimationStatus.reverse) {
-      _controller.reverse();
+    try {
+      if (widget.parentAnimation.status == AnimationStatus.forward) {
+        // Validate physics parameters to prevent simulation errors
+        final mass = widget.mass.clamp(0.1, 10.0);
+        final stiffness = widget.stiffness.clamp(1.0, 1000.0);
+        final damping = widget.damping.clamp(0.1, 10.0);
+        
+        final simulation = SpringSimulation(
+          SpringDescription(
+              mass: mass,
+              stiffness: stiffness,
+              damping: damping),
+          0.0, // start
+          1.0, // end
+          1.0, // velocity
+        );
+        _controller.animateWith(simulation);
+      } else if (widget.parentAnimation.status == AnimationStatus.reverse) {
+        _controller.reverse();
+      }
+    } catch (e) {
+      // Fallback to simple animation if physics simulation fails
+      _controller.forward();
     }
   }
 

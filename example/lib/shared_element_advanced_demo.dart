@@ -209,6 +209,7 @@ class _SharedElementAdvancedExampleState
   }
 
   void _navigateToDetail(BuildContext context, DemoItem item) {
+    // RouteShifterBuilder with Hero-based shared elements
     final route = RouteShifterBuilder()
         .sharedElements(
           flightDuration: const Duration(milliseconds: 600),
