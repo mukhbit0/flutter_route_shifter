@@ -7,14 +7,37 @@ import 'fade_effect.dart';
 /// This effect creates beautiful cascading animations where child widgets
 /// animate in sequence with configurable delays between them.
 ///
+/// Features:
+/// - Robust widget tree traversal using Element.visitChildren()
+/// - Support for nested widgets (Cards in Containers, ListTiles in Padding, etc.)
+/// - Configurable widget selectors for precise control
+/// - Automatic detection of common UI widgets
+/// - Performance-optimized with configurable limits
+///
 /// Example:
 /// ```dart
 /// RouteShifterBuilder()
 ///   .stagger(
 ///     interval: Duration(milliseconds: 100),
-///     selector: (widget) => widget is Card,
+///     selector: (widget) => widget is Card || widget is ListTile,
 ///   )
-///   .fade()
+///   .slide()
+///   .toRoute(page: NextPage())
+/// ```
+///
+/// Advanced usage with element selector:
+/// ```dart
+/// RouteShifterBuilder()
+///   .stagger(
+///     interval: Duration(milliseconds: 150),
+///     elementSelector: (element) {
+///       final widget = element.widget;
+///       return widget is Card &&
+///              element.size?.height != null &&
+///              element.size!.height > 100;
+///     },
+///   )
+///   .scale()
 ///   .toRoute(page: NextPage())
 /// ```
 class StaggerEffect extends RouteEffect {
@@ -22,8 +45,14 @@ class StaggerEffect extends RouteEffect {
   final Duration interval;
 
   /// Function to determine which widgets should be staggered.
-  /// If null, all direct children will be staggered.
+  /// If null, default staggerable widgets will be selected automatically.
   final bool Function(Widget)? selector;
+
+  /// Advanced function to determine which elements should be staggered.
+  /// Provides access to the Element for advanced filtering based on
+  /// size, position, or other element properties.
+  /// Takes precedence over [selector] when both are provided.
+  final bool Function(Element)? elementSelector;
 
   /// The base effect to apply to each staggered widget.
   final RouteEffect baseEffect;
@@ -38,12 +67,14 @@ class StaggerEffect extends RouteEffect {
   ///
   /// [interval] time delay between each child animation
   /// [selector] function to filter which widgets get staggered
+  /// [elementSelector] advanced function for element-based filtering
   /// [baseEffect] the effect to apply to each widget (defaults to fade)
   /// [maxStaggeredChildren] maximum children to process
   /// [reverse] whether to animate in reverse order
   const StaggerEffect({
     this.interval = const Duration(milliseconds: 100),
     this.selector,
+    this.elementSelector,
     RouteEffect? baseEffect,
     this.maxStaggeredChildren = 20,
     this.reverse = false,
@@ -59,6 +90,7 @@ class StaggerEffect extends RouteEffect {
       animation: animation,
       interval: interval,
       selector: selector,
+      elementSelector: elementSelector,
       baseEffect: baseEffect,
       maxChildren: maxStaggeredChildren,
       reverse: reverse,
@@ -70,6 +102,7 @@ class StaggerEffect extends RouteEffect {
   StaggerEffect copyWith({
     Duration? interval,
     bool Function(Widget)? selector,
+    bool Function(Element)? elementSelector,
     RouteEffect? baseEffect,
     int? maxStaggeredChildren,
     bool? reverse,
@@ -81,6 +114,7 @@ class StaggerEffect extends RouteEffect {
     return StaggerEffect(
       interval: interval ?? this.interval,
       selector: selector ?? this.selector,
+      elementSelector: elementSelector ?? this.elementSelector,
       baseEffect: baseEffect ?? this.baseEffect,
       maxStaggeredChildren: maxStaggeredChildren ?? this.maxStaggeredChildren,
       reverse: reverse ?? this.reverse,
@@ -182,6 +216,7 @@ class StaggeredAnimationWrapper extends StatefulWidget {
   final Animation<double> animation;
   final Duration interval;
   final bool Function(Widget)? selector;
+  final bool Function(Element)? elementSelector;
   final RouteEffect baseEffect;
   final int maxChildren;
   final bool reverse;
@@ -192,6 +227,7 @@ class StaggeredAnimationWrapper extends StatefulWidget {
     required this.animation,
     required this.interval,
     this.selector,
+    this.elementSelector,
     required this.baseEffect,
     required this.maxChildren,
     required this.reverse,
@@ -214,47 +250,150 @@ class _StaggeredAnimationWrapperState extends State<StaggeredAnimationWrapper> {
     _createChildAnimations();
   }
 
-  /// Processes the child widget tree to find staggerable widgets.
+  /// Processes the child widget tree to find staggerable widgets using sophisticated Element traversal.
   void _processChildren() {
     final children = <Widget>[];
 
-    void visitor(Widget widgetNode) {
+    // Get the current build context for element traversal
+    final context = this.context;
+
+    final Set<Element> visitedElements = {};
+
+    /// Deep element traversal using Element.visitChildren() for robust widget discovery
+    void deepElementTraversal(Element element) {
+      if (visitedElements.contains(element) ||
+          children.length >= widget.maxChildren) {
+        return;
+      }
+
+      visitedElements.add(element);
+      final elementWidget = element.widget;
+
+      // Check if this widget should be staggered
+      bool shouldStagger = false;
+      if (widget.elementSelector != null) {
+        shouldStagger = widget.elementSelector!(element);
+      } else if (widget.selector != null) {
+        shouldStagger = widget.selector!(elementWidget);
+      } else {
+        // Default stagger detection for common UI widgets
+        shouldStagger = _isDefaultStaggerableWidget(elementWidget);
+      }
+
+      if (shouldStagger) {
+        children.add(elementWidget);
+      }
+
+      // Recursively visit all child elements
+      element.visitChildren(deepElementTraversal);
+    }
+
+    // Alternative widget-based traversal for widget-only contexts
+    void fallbackWidgetTraversal(Widget widgetNode) {
       if (children.length >= widget.maxChildren) return;
 
       if (widget.selector == null || widget.selector!(widgetNode)) {
         children.add(widgetNode);
       }
 
-      // Simple traversal - in a real implementation, this would be more sophisticated
+      // Enhanced widget traversal with better coverage
       if (widgetNode is SingleChildRenderObjectWidget &&
           widgetNode.child != null) {
-        visitor(widgetNode.child!);
+        fallbackWidgetTraversal(widgetNode.child!);
+      } else if (widgetNode is ProxyWidget) {
+        fallbackWidgetTraversal(widgetNode.child);
+      } else if (widgetNode is ParentDataWidget) {
+        fallbackWidgetTraversal(widgetNode.child);
+      } else if (widgetNode is InheritedWidget) {
+        fallbackWidgetTraversal(widgetNode.child);
       } else if (widgetNode is MultiChildRenderObjectWidget) {
-        // Handle multi-child widgets like Column, Row, etc.
-        if (widgetNode is Column) {
-          for (final child in widgetNode.children) {
-            visitor(child);
-          }
-        } else if (widgetNode is Row) {
-          for (final child in widgetNode.children) {
-            visitor(child);
-          }
-        } else if (widgetNode is Stack) {
-          for (final child in widgetNode.children) {
-            visitor(child);
-          }
-        } else if (widgetNode is Flex) {
-          for (final child in widgetNode.children) {
-            visitor(child);
-          }
-        }
+        _traverseMultiChildWidget(widgetNode, fallbackWidgetTraversal);
+      } else if (widgetNode is StatefulWidget ||
+          widgetNode is StatelessWidget) {
+        // For complex widgets, we can't easily traverse without building
+        // But we can detect common patterns
+        _handleComplexWidget(widgetNode, fallbackWidgetTraversal);
       }
     }
 
-    visitor(widget.child);
+    // Try element traversal first (more robust), fallback to widget traversal
+    try {
+      // Convert BuildContext to Element safely
+      final Element contextElement = context as Element;
+      deepElementTraversal(contextElement);
+    } catch (e) {
+      // Fallback to widget-based traversal if element traversal fails
+      fallbackWidgetTraversal(widget.child);
+    }
 
     _staggeredChildren.clear();
     _staggeredChildren.addAll(widget.reverse ? children.reversed : children);
+  }
+
+  /// Determines if a widget is staggerable by default
+  bool _isDefaultStaggerableWidget(Widget widget) {
+    return widget is Card ||
+        widget is ListTile ||
+        widget is Container ||
+        widget is Material ||
+        widget is InkWell ||
+        widget is GestureDetector ||
+        widget is AnimatedContainer ||
+        widget is Chip ||
+        widget is FloatingActionButton ||
+        widget is ElevatedButton ||
+        widget is OutlinedButton ||
+        widget is TextButton ||
+        widget is IconButton ||
+        widget is ExpansionTile ||
+        widget is SwitchListTile ||
+        widget is CheckboxListTile ||
+        widget is RadioListTile ||
+        widget is GridTile ||
+        widget is DataRow ||
+        widget is TableRow ||
+        (widget is Padding && _hasStaggerableChild(widget.child)) ||
+        (widget is Align && _hasStaggerableChild(widget.child)) ||
+        (widget is Center && _hasStaggerableChild(widget.child));
+  }
+
+  /// Checks if a child widget is worth staggering
+  bool _hasStaggerableChild(Widget? child) {
+    return child != null && _isDefaultStaggerableWidget(child);
+  }
+
+  /// Handles traversal of multi-child widgets
+  void _traverseMultiChildWidget(
+      MultiChildRenderObjectWidget widget, void Function(Widget) visitor) {
+    if (widget is Column) {
+      widget.children.forEach(visitor);
+    } else if (widget is Row) {
+      widget.children.forEach(visitor);
+    } else if (widget is Stack) {
+      widget.children.forEach(visitor);
+    } else if (widget is Flex) {
+      widget.children.forEach(visitor);
+    } else if (widget is Wrap) {
+      widget.children.forEach(visitor);
+    } else if (widget is Flow) {
+      widget.children.forEach(visitor);
+    } else if (widget is Table && widget.children.isNotEmpty) {
+      widget.children.forEach(visitor);
+    } else if (widget is IndexedStack) {
+      widget.children.forEach(visitor);
+    }
+  }
+
+  /// Handles complex widgets that might contain staggerable children
+  void _handleComplexWidget(Widget widget, void Function(Widget) visitor) {
+    // Handle widgets that we know might contain lists or grids
+    if (widget.runtimeType.toString().contains('ListView') ||
+        widget.runtimeType.toString().contains('GridView') ||
+        widget.runtimeType.toString().contains('CustomScrollView') ||
+        widget.runtimeType.toString().contains('SingleChildScrollView')) {
+      // These typically contain multiple children but we can't easily access them
+      // without building. The element traversal should handle these cases better.
+    }
   }
 
   /// Creates individual animations for each staggered child.

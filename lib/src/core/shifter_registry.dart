@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:collection';
 
-/// A singleton registry that manages shared elements across route transitions.
+/// A simplified, robust registry for shared element transitions.
 ///
-/// This registry tracks the position, size, and widget data for shared elements
-/// identified by their shiftId. It enables smooth transitions between pages
-/// by coordinating the animation of common elements.
-///
-/// The registry automatically cleans up stale references and provides methods
-/// for managing the lifecycle of shared elements.
+/// This registry uses a simple ID-based approach where elements with the same ID
+/// automatically pair with each other across different pages. No complex context
+/// matching or bidirectional logic - just straightforward element pairing.
 class ShifterRegistry {
   /// Singleton instance of the registry.
   static final ShifterRegistry instance = ShifterRegistry._internal();
@@ -16,306 +13,313 @@ class ShifterRegistry {
   /// Private constructor for singleton pattern.
   ShifterRegistry._internal();
 
-  /// Maps shiftIds to their element data.
-  final Map<Object, ShifterElementData> _elements = {};
-
-  /// Maps shiftIds to their global keys for position tracking.
-  final Map<Object, GlobalKey> _keys = {};
+  /// Maps shiftIds to lists of element instances (allowing multiple elements with same ID)
+  final Map<Object, List<SimpleShifterElement>> _elementsByID = {};
 
   /// Tracks which elements are currently active in transitions.
   final Set<Object> _activeElements = <Object>{};
 
-  /// Weak references to contexts for cleanup.
-  final Map<Object, BuildContext> _contexts = {};
-
   /// Registers a shared element with the registry.
-  ///
-  /// [shiftId] unique identifier for the shared element.
-  /// [key] GlobalKey for tracking the widget's position.
-  /// [context] BuildContext of the widget.
-  /// [child] the widget to be shared.
   void registerElement({
     required Object shiftId,
     required GlobalKey key,
     required BuildContext context,
     required Widget child,
   }) {
-    _keys[shiftId] = key;
-    _contexts[shiftId] = context;
+    
+    // Create new element instance
+    final element = SimpleShifterElement(
+      shiftId: shiftId,
+      key: key,
+      context: context,
+      child: child,
+    );
 
-    // Calculate the current position and size
+    // Add to list of elements with this ID
+    _elementsByID.putIfAbsent(shiftId, () => []).add(element);
+    
+
+    // Update position after frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _updateElementData(shiftId, child);
+      _updateElementPosition(element);
+      _checkForPairs(shiftId);
     });
   }
 
   /// Unregisters a shared element from the registry.
-  ///
-  /// [shiftId] the identifier of the element to remove.
-  void unregisterElement(Object shiftId) {
-    _elements.remove(shiftId);
-    _keys.remove(shiftId);
-    _contexts.remove(shiftId);
-    _activeElements.remove(shiftId);
+  void unregisterElement(Object shiftId, BuildContext context) {
+    
+    final elements = _elementsByID[shiftId];
+    if (elements != null) {
+      // Remove the element with matching context
+      elements.removeWhere((element) => element.context == context);
+      
+      // Clean up empty lists
+      if (elements.isEmpty) {
+        _elementsByID.remove(shiftId);
+      }
+      
+      _activeElements.remove(shiftId);
+    }
   }
 
-  /// Updates the data for a registered element.
-  void _updateElementData(Object shiftId, Widget child) {
-    final key = _keys[shiftId];
-    final context = _contexts[shiftId];
-
-    if (key?.currentContext == null || context == null) return;
-
+  /// Updates the position of an element
+  void _updateElementPosition(SimpleShifterElement element) {
+    
     try {
-      final renderBox = key!.currentContext!.findRenderObject() as RenderBox?;
-      if (renderBox == null || !renderBox.attached) return;
+      final renderBox = element.key.currentContext?.findRenderObject() as RenderBox?;
+      if (renderBox == null || !renderBox.attached) {
+        return;
+      }
 
       final position = renderBox.localToGlobal(Offset.zero);
       final size = renderBox.size;
-      final rect =
-          Rect.fromLTWH(position.dx, position.dy, size.width, size.height);
-
-      // Find matching elements for target rect calculation
-      Rect? targetRect;
-      final matchingElements =
-          _findMatchingElementsInOtherContexts(shiftId, context);
-      if (matchingElements.isNotEmpty) {
-        // Use the first matching element as the target
-        final targetElement = matchingElements.first;
-        final targetKey = _keys[targetElement];
-        if (targetKey?.currentContext != null) {
-          final targetRenderBox =
-              targetKey!.currentContext!.findRenderObject() as RenderBox?;
-          if (targetRenderBox != null && targetRenderBox.attached) {
-            final targetSize = targetRenderBox.size;
-            final targetPosition = targetRenderBox.localToGlobal(Offset.zero);
-            targetRect = Rect.fromLTWH(targetPosition.dx, targetPosition.dy,
-                targetSize.width, targetSize.height);
-          }
-        }
-      }
-
-      _elements[shiftId] = ShifterElementData(
-        shiftId: shiftId,
-        child: child,
-        sourceRect: rect,
-        targetRect: targetRect,
-        key: key,
-        metadata: _getElementMetadata(shiftId),
-      );
-
-      // Set the context on the element data
-      _elements[shiftId]?.setContext(_contexts[shiftId]!);
+      final rect = Rect.fromLTWH(position.dx, position.dy, size.width, size.height);
+      
+      element.rect = rect;
     } catch (e) {
-      // Handle cases where the render object is not available
-      debugPrint('Failed to update element data for $shiftId: $e');
     }
   }
 
-  /// Finds matching elements in other contexts for transition pairing.
-  List<Object> _findMatchingElementsInOtherContexts(
-      Object shiftId, BuildContext currentContext) {
-    final matches = <Object>[];
+  /// Checks for pairs and creates element data when both source and target are ready
+  void _checkForPairs(Object shiftId) {
+    final elements = _elementsByID[shiftId];
+    if (elements == null || elements.length < 2) {
+      return;
+    }
 
-    for (final entry in _contexts.entries) {
-      final otherShiftId = entry.key;
-      final otherContext = entry.value;
 
-      // Skip self and check if shiftIds match
-      if (otherShiftId == shiftId && otherContext != currentContext) {
-        matches.add(otherShiftId);
+    // Find elements that are ready (have valid rects)
+    final readyElements = elements.where((e) => e.rect != null && e.context.mounted).toList();
+    
+    if (readyElements.length >= 2) {
+      
+      // Activate this shiftId for transitions
+      _activeElements.add(shiftId);
+      
+      // Update each element with its pair info
+      for (int i = 0; i < readyElements.length; i++) {
+        final current = readyElements[i];
+        // Find the "other" element (simple approach: use the next one, or first if we're at the end)
+        final partner = readyElements[(i + 1) % readyElements.length];
+        
+        current.partnerRect = partner.rect;
+      }
+    } else {
+    }
+  }
+
+  /// Gets element data for a specific shiftId
+  ShifterElementData? getElementData(Object shiftId) {
+    final elements = _elementsByID[shiftId];
+    if (elements == null || elements.isEmpty) {
+      return null;
+    }
+
+    // Find the first element that has both source and target rects
+    for (final element in elements) {
+      if (element.rect != null && element.partnerRect != null) {
+        return ShifterElementData(
+          shiftId: shiftId,
+          child: element.child,
+          sourceRect: element.rect!,
+          targetRect: element.partnerRect,
+          key: element.key,
+          metadata: {},
+        );
       }
     }
 
-    return matches;
+    // If no complete pair, return element with just source rect
+    final firstReady = elements.firstWhere(
+      (e) => e.rect != null,
+      orElse: () => elements.first,
+    );
+
+    if (firstReady.rect != null) {
+      return ShifterElementData(
+        shiftId: shiftId,
+        child: firstReady.child,
+        sourceRect: firstReady.rect!,
+        targetRect: null,
+        key: firstReady.key,
+        metadata: {},
+      );
+    }
+
+    return null;
   }
 
-  /// Gets metadata for an element.
-  Map<String, dynamic> _getElementMetadata(Object shiftId) {
-    // This could be extended to store additional information about elements
-    return {
-      'shiftId': shiftId,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-      'registered': true,
-    };
-  }
-
-  /// Gets the data for a specific shared element.
-  ///
-  /// Returns null if the element is not found or not ready.
-  ShifterElementData? getElementData(Object shiftId) {
-    return _elements[shiftId];
-  }
-
-  /// Gets all currently active shared elements.
-  ///
-  /// Returns a map of shiftId to element data for all active elements.
+  /// Gets all currently active shared elements
   Map<Object, ShifterElementData> getActiveElements() {
     final activeMap = <Object, ShifterElementData>{};
 
+
     for (final shiftId in _activeElements) {
-      final data = _elements[shiftId];
+      final data = getElementData(shiftId);
       if (data != null) {
         activeMap[shiftId] = data;
+      } else {
       }
     }
 
     return activeMap;
   }
 
-  /// Marks an element as active for transition.
-  ///
-  /// [shiftId] the identifier of the element to activate.
+  /// Gets all registered elements
+  Map<Object, ShifterElementData> getAllElements() {
+    final allMap = <Object, ShifterElementData>{};
+
+    for (final shiftId in _elementsByID.keys) {
+      final data = getElementData(shiftId);
+      if (data != null) {
+        allMap[shiftId] = data;
+      }
+    }
+
+    return allMap;
+  }
+
+  /// Marks an element as active for transition
   void activateElement(Object shiftId) {
     _activeElements.add(shiftId);
   }
 
-  /// Marks an element as inactive after transition.
-  ///
-  /// [shiftId] the identifier of the element to deactivate.
+  /// Marks an element as inactive after transition
   void deactivateElement(Object shiftId) {
     _activeElements.remove(shiftId);
   }
 
-  /// Checks if an element is currently in a transition.
-  ///
-  /// [shiftId] the identifier of the element to check.
-  /// Returns true if the element is currently being animated.
+  /// Checks if an element is currently in a transition
   bool isElementInTransition(Object shiftId) {
     return _activeElements.contains(shiftId);
   }
 
-  /// Finds matching shared elements between source and target contexts.
-  ///
-  /// This method is used during route transitions to identify which elements
-  /// should be animated between pages.
-  List<Object> findMatchingElements(
-      BuildContext sourceContext, BuildContext targetContext) {
-    final matches = <Object>[];
+  /// Performs cleanup of stale references
+  void cleanup() {
+    final staleIds = <Object>[];
 
-    // Find elements that exist in both contexts
-    for (final shiftId in _elements.keys) {
-      final context = _contexts[shiftId];
-      if (context != null) {
-        // Check if this element is relevant to the transition
-        final isInSource = _isContextAncestor(sourceContext, context);
-        final isInTarget = _isContextAncestor(targetContext, context);
+    for (final entry in _elementsByID.entries) {
+      final shiftId = entry.key;
+      final elements = entry.value;
+      
+      // Remove elements with unmounted contexts
+      elements.removeWhere((element) => !element.context.mounted);
+      
+      // Mark empty lists for removal
+      if (elements.isEmpty) {
+        staleIds.add(shiftId);
+      }
+    }
 
-        if (isInSource || isInTarget) {
-          matches.add(shiftId);
+    // Remove empty lists
+    for (final id in staleIds) {
+      _elementsByID.remove(id);
+      _activeElements.remove(id);
+    }
+
+  }
+
+  /// Clears all registered elements
+  void clear() {
+    _elementsByID.clear();
+    _activeElements.clear();
+  }
+
+  /// Gets the current number of registered elements
+  int get elementCount {
+    return _elementsByID.values.fold(0, (sum, list) => sum + list.length);
+  }
+
+  /// Gets the current number of active elements
+  int get activeElementCount => _activeElements.length;
+
+  /// Gets all registered element IDs
+  UnmodifiableSetView<Object> get registeredIds =>
+      UnmodifiableSetView(_elementsByID.keys.toSet());
+
+  /// Gets all active element IDs
+  UnmodifiableSetView<Object> get activeIds =>
+      UnmodifiableSetView(_activeElements);
+
+  /// Updates the position of an element in the registry (compatibility method)
+  void updateElementPosition(Object shiftId, Rect rect, BuildContext context) {
+    // Find the element with matching shiftId and context
+    final elements = _elementsByID[shiftId];
+    if (elements != null) {
+      for (final element in elements) {
+        if (element.context == context) {
+          element.rect = rect;
+          _checkForPairs(shiftId);
+          break;
+        }
+      }
+    }
+  }
+
+  /// Gets all elements in a specific context (compatibility method)
+  List<ShifterElementData> getAllElementsInContext(BuildContext context) {
+    final result = <ShifterElementData>[];
+
+    for (final elements in _elementsByID.values) {
+      for (final element in elements) {
+        if (element.context == context && element.rect != null) {
+          final data = ShifterElementData(
+            shiftId: element.shiftId,
+            child: element.child,
+            sourceRect: element.rect!,
+            targetRect: element.partnerRect,
+            key: element.key,
+            metadata: {},
+          );
+          data.setContext(context);
+          result.add(data);
         }
       }
     }
 
-    return matches;
+    return result;
   }
 
-  /// Checks if one context is an ancestor of another.
-  bool _isContextAncestor(BuildContext ancestor, BuildContext descendant) {
-    BuildContext? current = descendant;
-
-    while (current != null) {
-      if (identical(current, ancestor)) {
-        return true;
-      }
-      // Use visitAncestorElements to safely traverse the tree
-      BuildContext? parent;
-      current.visitAncestorElements((element) {
-        parent = element;
-        return false; // Stop after finding the immediate parent
-      });
-      current = parent;
-    }
-
-    return false;
+  /// Cleans up stale references (compatibility method)
+  void cleanupStaleReferences() {
+    cleanup();
   }
-
-  /// Updates the target rect for a shared element during transition.
-  ///
-  /// This is called when the target position is calculated.
-  void setTargetRect(Object shiftId, Rect targetRect) {
-    final data = _elements[shiftId];
-    if (data != null) {
-      _elements[shiftId] = data.copyWith(targetRect: targetRect);
-    }
-  }
-
-  /// Performs cleanup of stale references.
-  ///
-  /// Should be called periodically to prevent memory leaks.
-  void cleanup() {
-    final staleIds = <Object>[];
-
-    for (final entry in _contexts.entries) {
-      final context = entry.value;
-      if (!context.mounted) {
-        staleIds.add(entry.key);
-      }
-    }
-
-    for (final id in staleIds) {
-      unregisterElement(id);
-    }
-  }
-
-  /// Gets the current number of registered elements.
-  int get elementCount => _elements.length;
-
-  /// Gets the current number of active elements.
-  int get activeElementCount => _activeElements.length;
-
-  /// Clears all registered elements.
-  ///
-  /// Useful for testing or when resetting the application state.
-  void clear() {
-    _elements.clear();
-    _keys.clear();
-    _contexts.clear();
-    _activeElements.clear();
-  }
-
-  /// Gets all registered element IDs.
-  UnmodifiableSetView<Object> get registeredIds =>
-      UnmodifiableSetView(_elements.keys.toSet());
-
-  /// Gets all active element IDs.
-  UnmodifiableSetView<Object> get activeIds =>
-      UnmodifiableSetView(_activeElements);
 
   @override
   String toString() {
-    return 'ShifterRegistry(elements: $elementCount, active: $activeElementCount)';
+    return 'ShifterRegistry(elements: $elementCount, active: $activeElementCount, pairs: ${_elementsByID.length})';
   }
 }
 
-/// Data class that holds information about a shared element.
-///
-/// This class contains all the necessary information for animating a shared
-/// element between different positions during route transitions.
-class ShifterElementData {
-  /// Unique identifier for this shared element.
+/// Simple element wrapper that holds basic information
+class SimpleShifterElement {
   final Object shiftId;
-
-  /// The widget that will be animated.
-  final Widget child;
-
-  /// The source rectangle (starting position/size).
-  final Rect sourceRect;
-
-  /// The target rectangle (ending position/size).
-  /// If null, the element will animate from source to source (no movement).
-  final Rect? targetRect;
-
-  /// GlobalKey for tracking the widget's render object.
   final GlobalKey key;
+  final BuildContext context;
+  final Widget child;
+  
+  Rect? rect;
+  Rect? partnerRect;
 
-  /// Additional metadata for the element.
+  SimpleShifterElement({
+    required this.shiftId,
+    required this.key,
+    required this.context,
+    required this.child,
+  });
+}
+
+/// Data class that holds information about a shared element.
+class ShifterElementData {
+  final Object shiftId;
+  final Widget child;
+  final Rect sourceRect;
+  final Rect? targetRect;
+  final GlobalKey key;
   final Map<String, dynamic> metadata;
-
-  /// Timestamp when this data was created.
   final DateTime createdAt;
 
-  /// Creates a new shared element data instance.
   ShifterElementData({
     required this.shiftId,
     required this.child,
@@ -326,7 +330,6 @@ class ShifterElementData {
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
 
-  /// Creates a copy of this element data with modified fields.
   ShifterElementData copyWith({
     Object? shiftId,
     Widget? child,
@@ -347,57 +350,43 @@ class ShifterElementData {
     );
   }
 
-  /// Gets the effective target rectangle.
-  ///
-  /// Returns [targetRect] if available, otherwise returns [sourceRect].
   Rect get effectiveTargetRect => targetRect ?? sourceRect;
 
-  /// Gets the distance between source and target rectangles.
   double get animationDistance {
     final target = effectiveTargetRect;
     final sourceCenter = sourceRect.center;
     final targetCenter = target.center;
-
     return (targetCenter - sourceCenter).distance;
   }
 
-  /// Gets the scale factor between source and target rectangles.
   double get scaleRatio {
     final target = effectiveTargetRect;
     if (sourceRect.isEmpty || target.isEmpty) return 1.0;
-
     final sourceArea = sourceRect.width * sourceRect.height;
     final targetArea = target.width * target.height;
-
     return (targetArea / sourceArea).clamp(0.1, 10.0);
   }
 
-  /// Checks if this element needs position animation.
   bool get needsPositionAnimation {
     if (targetRect == null) return false;
-
-    const threshold = 1.0; // pixels
+    const threshold = 1.0;
     return (sourceRect.center - targetRect!.center).distance > threshold;
   }
 
-  /// Checks if this element needs size animation.
   bool get needsSizeAnimation {
     if (targetRect == null) return false;
-
-    const threshold = 1.0; // pixels
+    const threshold = 1.0;
     final sourceSize = sourceRect.size;
     final targetSize = targetRect!.size;
     return (sourceSize.width - targetSize.width).abs() > threshold ||
         (sourceSize.height - targetSize.height).abs() > threshold;
   }
 
-  /// Gets metadata value by key with type casting.
   T? getMetadata<T>(String key) {
     final value = metadata[key];
     return value is T ? value : null;
   }
 
-  /// Sets a metadata value and returns a new instance.
   ShifterElementData setMetadata(String key, dynamic value) {
     final newMetadata = Map<String, dynamic>.from(metadata);
     newMetadata[key] = value;
@@ -427,59 +416,11 @@ class ShifterElementData {
         ')';
   }
 
-  /// Gets the current rect (uses sourceRect as the primary rect)
   Rect get rect => sourceRect;
-
-  /// Gets the context if available
   BuildContext? get context => _context;
   BuildContext? _context;
 
-  /// Sets the context for this element
   void setContext(BuildContext context) {
     _context = context;
-  }
-}
-
-// Add extension methods to ShifterRegistry for TransitionCoordinator
-extension ShifterRegistryCoordination on ShifterRegistry {
-  /// Gets all elements in a specific context
-  List<ShifterElementData> getAllElementsInContext(BuildContext context) {
-    final result = <ShifterElementData>[];
-
-    for (final element in _elements.values) {
-      if (element.context == context) {
-        result.add(element);
-      }
-    }
-
-    return result;
-  }
-
-  /// Gets the total number of registered elements
-  int get elementCount => _elements.length;
-
-  /// Cleans up stale references
-  void cleanupStaleReferences() {
-    final keysToRemove = <Object>[];
-
-    for (final entry in _contexts.entries) {
-      final context = entry.value;
-      // Check if context is still mounted
-      try {
-        if (!context.mounted) {
-          keysToRemove.add(entry.key);
-        }
-      } catch (e) {
-        // Context is invalid, remove it
-        keysToRemove.add(entry.key);
-      }
-    }
-
-    for (final key in keysToRemove) {
-      _elements.remove(key);
-      _keys.remove(key);
-      _contexts.remove(key);
-      _activeElements.remove(key);
-    }
   }
 }

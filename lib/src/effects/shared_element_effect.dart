@@ -29,6 +29,10 @@ class SharedElementEffect extends RouteEffect {
   /// The elevation value during flight.
   final double flightElevation;
 
+  /// List of specific shiftIds to include in the shared element transition.
+  /// If null, all available shared elements will be included.
+  final List<String>? shiftIds;
+
   /// Creates a shared element effect.
   const SharedElementEffect({
     this.flightDuration = const Duration(milliseconds: 400),
@@ -38,6 +42,7 @@ class SharedElementEffect extends RouteEffect {
     this.customFlightPath,
     this.useElevation = true,
     this.flightElevation = 8.0,
+    this.shiftIds,
     super.duration,
     super.curve = Curves.linear,
     super.start,
@@ -55,6 +60,7 @@ class SharedElementEffect extends RouteEffect {
       customFlightPath: customFlightPath,
       useElevation: useElevation,
       flightElevation: flightElevation,
+      shiftIds: shiftIds,
       child: child,
     );
   }
@@ -68,6 +74,7 @@ class SharedElementEffect extends RouteEffect {
     Path? customFlightPath,
     bool? useElevation,
     double? flightElevation,
+    List<String>? shiftIds,
     Duration? duration,
     Curve? curve,
     double? start,
@@ -81,6 +88,7 @@ class SharedElementEffect extends RouteEffect {
       customFlightPath: customFlightPath ?? this.customFlightPath,
       useElevation: useElevation ?? this.useElevation,
       flightElevation: flightElevation ?? this.flightElevation,
+      shiftIds: shiftIds ?? this.shiftIds,
       duration: duration ?? this.duration,
       curve: curve ?? this.curve,
       start: start ?? this.start,
@@ -99,7 +107,8 @@ class SharedElementEffect extends RouteEffect {
           morphCurve == other.morphCurve &&
           customFlightPath == other.customFlightPath &&
           useElevation == other.useElevation &&
-          flightElevation == other.flightElevation;
+          flightElevation == other.flightElevation &&
+          shiftIds == other.shiftIds;
 
   @override
   int get hashCode => Object.hash(
@@ -111,6 +120,7 @@ class SharedElementEffect extends RouteEffect {
         customFlightPath,
         useElevation,
         flightElevation,
+        shiftIds,
       );
 
   @override
@@ -131,6 +141,7 @@ class SharedElementOverlay extends StatefulWidget {
   final Path? customFlightPath;
   final bool useElevation;
   final double flightElevation;
+  final List<String>? shiftIds;
   final Widget child;
 
   const SharedElementOverlay({
@@ -143,6 +154,7 @@ class SharedElementOverlay extends StatefulWidget {
     this.customFlightPath,
     required this.useElevation,
     required this.flightElevation,
+    this.shiftIds,
     required this.child,
   }) : super(key: key);
 
@@ -164,16 +176,46 @@ class _SharedElementOverlayState extends State<SharedElementOverlay>
     );
     _flightData = {};
     _setupSharedElements();
+    
+    // Listen for animation completion to deactivate elements
+    _overlayController.addStatusListener((status) {
+      if (status == AnimationStatus.completed || status == AnimationStatus.dismissed) {
+        _cleanupSharedElements();
+      }
+    });
+    
     _overlayController.forward();
   }
 
   @override
   void dispose() {
+    _cleanupSharedElements();
     _overlayController.dispose();
     super.dispose();
   }
 
   void _setupSharedElements() {
+    
+    // First, activate all registered elements that have both source and target positions
+    final allElements = ShifterRegistry.instance.getAllElements();
+    
+    for (final entry in allElements.entries) {
+      final shiftId = entry.key;
+      final elementData = entry.value;
+      
+      // Filter by shiftIds if provided
+      if (widget.shiftIds != null && !widget.shiftIds!.contains(shiftId.toString())) {
+        continue;
+      }
+      
+      // Activate elements that have both source and target positions
+      if (elementData.sourceRect != Rect.zero && elementData.targetRect != null) {
+        ShifterRegistry.instance.activateElement(shiftId);
+      } else {
+      }
+    }
+    
+    // Now get the active elements for transition
     final sharedElements = ShifterRegistry.instance.getActiveElements();
 
     for (final entry in sharedElements.entries) {
@@ -189,6 +231,16 @@ class _SharedElementOverlayState extends State<SharedElementOverlay>
         elevationTween: widget.useElevation ? _createElevationTween() : null,
       );
     }
+    
+  }
+
+  void _cleanupSharedElements() {
+    
+    // Deactivate all elements that were activated for this transition
+    for (final shiftId in _flightData.keys) {
+      ShifterRegistry.instance.deactivateElement(shiftId);
+    }
+    
   }
 
   RectTween _createPositionTween(ShifterElementData elementData) {

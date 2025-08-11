@@ -3,7 +3,7 @@ import '../../effects/color_tint_effect.dart';
 
 /// Extension methods for color tint effects on RouteShifterBuilder.
 mixin ColorTintEffects {
-  List<dynamic> get _effects;
+  List<dynamic> get effects;
 
   /// Adds a color tint effect for overlays and modals.
   dynamic colorTint({
@@ -16,7 +16,7 @@ mixin ColorTintEffects {
     double start = 0,
     double end = 1,
   }) {
-    _effects.add(ColorTintEffect(
+    effects.add(ColorTintEffect(
       beginColor: beginColor,
       endColor: endColor,
       blendMode: blendMode,

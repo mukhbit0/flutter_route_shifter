@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../effects/base_effect.dart';
 import '../effects/shared_element_effect.dart';
+import 'transition_coordinator.dart';
 
 /// The main route class that handles animated transitions between pages.
 ///
@@ -35,6 +36,9 @@ class RouteShifter<T> extends PageRoute<T> {
 
   /// Tracks if this route has been disposed.
   bool _disposed = false;
+
+  /// Target context for shared element coordination.
+  BuildContext? targetContext;
 
   /// Creates a new RouteShifter.
   RouteShifter({
@@ -110,8 +114,18 @@ class RouteShifter<T> extends PageRoute<T> {
 
     Widget result = child;
 
+    // Add transition coordination BEFORE applying effects
+    if (sharedElementSettings != null) {
+      TransitionCoordinator.instance.coordinateTransition(
+        fromContext: context,
+        toContext: context, // Will be updated when target context is available
+        transitionId: '${page.hashCode}-${DateTime.now().millisecondsSinceEpoch}',
+      );
+    }
+
     // Apply shared element transitions first using the new enhanced effect
     if (sharedElementSettings != null) {
+      final shiftIds = sharedElementSettings?['shiftIds'] as List<String>?;
       final sharedElementEffect = SharedElementEffect(
         flightDuration: sharedElementSettings?['flightDuration'] as Duration? ??
             const Duration(milliseconds: 400),
@@ -124,6 +138,7 @@ class RouteShifter<T> extends PageRoute<T> {
         useElevation: sharedElementSettings?['useElevation'] as bool? ?? true,
         flightElevation:
             sharedElementSettings?['flightElevation'] as double? ?? 8.0,
+        shiftIds: shiftIds,
       );
       result = sharedElementEffect.build(animation, result);
     }

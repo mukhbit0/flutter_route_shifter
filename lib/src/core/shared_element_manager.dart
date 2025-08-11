@@ -33,14 +33,12 @@ class SharedElementTransitionManager {
   }) {
     // Check if transition is already active
     if (_activeTransitions.containsKey(shiftId)) {
-      debugPrint('Transition already active for $shiftId');
       return _activeTransitions[shiftId];
     }
 
     // Find source and target elements
     final sourceElement = ShifterRegistry.instance.getElementData(shiftId);
     if (sourceElement == null) {
-      debugPrint('Source element not found for $shiftId');
       return null;
     }
 

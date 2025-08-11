@@ -40,14 +40,14 @@ class MaterialPresets {
         .fade(
           duration: _mediumDuration,
           curve: MaterialCurves.standardEasing,
-          start: 0.0,
-          end: 0.3,
+          intervalStart: 0.0,
+          intervalEnd: 0.3,
         )
         .slideFromRight(
           duration: _mediumDuration,
           curve: MaterialCurves.standardEasing,
-          start: 0.3,
-          end: 1.0,
+          intervalStart: 0.3,
+          intervalEnd: 1.0,
         );
   }
 
@@ -60,14 +60,14 @@ class MaterialPresets {
         .fade(
           duration: _mediumDuration,
           curve: MaterialCurves.standardEasing,
-          start: 0.0,
-          end: 0.3,
+          intervalStart: 0.0,
+          intervalEnd: 0.3,
         )
         .slideFromBottom(
           duration: _mediumDuration,
           curve: MaterialCurves.standardEasing,
-          start: 0.3,
-          end: 1.0,
+          intervalStart: 0.3,
+          intervalEnd: 1.0,
         );
   }
 
@@ -80,12 +80,16 @@ class MaterialPresets {
         .fade(
           duration: _mediumDuration,
           curve: MaterialCurves.standardEasing,
+          intervalStart: 0.0,
+          intervalEnd: 0.35,
         )
         .scale(
-          beginScale: 0.92,
+          beginScale: 0.8,
           endScale: 1.0,
           duration: _mediumDuration,
-          curve: MaterialCurves.standardEasing,
+          curve: MaterialCurves.emphasizedEasing,
+          start: 0.35,
+          end: 1.0,
         );
   }
 
@@ -98,16 +102,16 @@ class MaterialPresets {
         .fade(
           duration: Duration(milliseconds: 210),
           curve: MaterialCurves.fadeInEasing,
-          start: 0.0,
-          end: 0.35,
+          intervalStart: 0.0,
+          intervalEnd: 0.35,
         )
         .fade(
           beginOpacity: 0.0,
           endOpacity: 1.0,
           duration: Duration(milliseconds: 150),
           curve: MaterialCurves.fadeOutEasing,
-          start: 0.35,
-          end: 1.0,
+          intervalStart: 0.35,
+          intervalEnd: 1.0,
         );
   }
 
@@ -120,12 +124,22 @@ class MaterialPresets {
         .fade(
           duration: _longDuration,
           curve: MaterialCurves.standardEasing,
+          intervalStart: 0.0,
+          intervalEnd: 0.2,
         )
         .scale(
-          beginScale: 0.8,
+          beginScale: 0.6,
           endScale: 1.0,
           duration: _longDuration,
           curve: MaterialCurves.emphasizedEasing,
+          start: 0.2,
+          end: 1.0,
+        )
+        .slideFromBottom(
+          duration: _longDuration,
+          curve: MaterialCurves.emphasizedEasing,
+          intervalStart: 0.1,
+          intervalEnd: 0.8,
         );
   }
 

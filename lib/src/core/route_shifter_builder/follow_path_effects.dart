@@ -3,7 +3,7 @@ import '../../effects/follow_path_effect.dart';
 
 /// Extension methods for follow path effects on RouteShifterBuilder.
 mixin FollowPathEffects {
-  List<dynamic> get _effects;
+  List<dynamic> get effects;
 
   /// Adds a follow path effect for non-linear motion.
   dynamic followPath({
@@ -17,7 +17,7 @@ mixin FollowPathEffects {
     double start = 0.0,
     double end = 1.0,
   }) {
-    _effects.add(FollowPathEffect(
+    effects.add(FollowPathEffect(
       path: path,
       rotateAlongPath: rotateAlongPath,
       rotationOffset: rotationOffset,
@@ -41,7 +41,7 @@ mixin FollowPathEffects {
     bool rotateAlongPath = true,
     Duration? duration,
   }) {
-    _effects.add(FollowPathEffect.circular(
+    effects.add(FollowPathEffect.circular(
       radius: radius,
       startAngle: startAngle,
       sweepAngle: sweepAngle,
@@ -63,7 +63,7 @@ mixin FollowPathEffects {
     bool rotateAlongPath = false,
     Duration? duration,
   }) {
-    _effects.add(FollowPathEffect.wave(
+    effects.add(FollowPathEffect.wave(
       width: width,
       height: height,
       amplitude: amplitude,
@@ -83,7 +83,7 @@ mixin FollowPathEffects {
     bool rotateAlongPath = true,
     Duration? duration,
   }) {
-    _effects.add(FollowPathEffect.spiral(
+    effects.add(FollowPathEffect.spiral(
       maxRadius: maxRadius,
       turns: turns,
       center: center,
@@ -101,7 +101,7 @@ mixin FollowPathEffects {
     bool rotateAlongPath = false,
     Duration? duration,
   }) {
-    _effects.add(FollowPathEffect.sCurve(
+    effects.add(FollowPathEffect.sCurve(
       width: width,
       height: height,
       startPoint: startPoint,
@@ -118,7 +118,7 @@ mixin FollowPathEffects {
     bool rotateAlongPath = true,
     Duration? duration,
   }) {
-    _effects.add(FollowPathEffect.heart(
+    effects.add(FollowPathEffect.heart(
       size: size,
       center: center,
       rotateAlongPath: rotateAlongPath,
@@ -135,7 +135,7 @@ mixin FollowPathEffects {
     bool rotateAlongPath = true,
     Duration? duration,
   }) {
-    _effects.add(FollowPathEffect.figure8(
+    effects.add(FollowPathEffect.figure8(
       width: width,
       height: height,
       center: center,
@@ -153,7 +153,7 @@ mixin FollowPathEffects {
     Duration? duration,
     Curve curve = Curves.easeInOut,
   }) {
-    _effects.add(MultiSegmentPathEffect(
+    effects.add(MultiSegmentPathEffect(
       segments: segments,
       rotateAlongPath: rotateAlongPath,
       segmentTransition: segmentTransition,
@@ -172,7 +172,7 @@ mixin FollowPathEffects {
     Duration? duration,
     Curve curve = Curves.easeInOut,
   }) {
-    _effects.add(ParticleTrailPathEffect(
+    effects.add(ParticleTrailPathEffect(
       path: path,
       particleCount: particleCount,
       trailFadeDuration: trailFadeDuration,

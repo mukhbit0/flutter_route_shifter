@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_route_shifter/flutter_route_shifter.dart';
+import 'shared_element_advanced_demo.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
+/// Flutter Route Shifter Demo Application
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -13,177 +17,110 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         useMaterial3: true,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black87,
+          elevation: 0,
+          centerTitle: true,
+        ),
       ),
-      home: HomeScreen(),
+      home: const HomeScreen(),
     );
   }
 }
 
+/// Modern home screen with clean navigation options
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: Text('Route Shifter Demo'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: const Text('Route Shifter Demo'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Choose a transition type:',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            SizedBox(height: 20),
-
-            // Basic Effects
-            _SectionTitle('Basic Effects'),
-            _TransitionButton(
-              'Fade Transition',
-              () => _navigateWithTransition(
-                context,
-                RouteShifterBuilder().fade(duration: 500.ms),
-                'Fade Effect',
-                Colors.purple,
+            // Header section
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.blue.shade50, Colors.purple.shade50],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.blue.shade100),
               ),
-            ),
-            _TransitionButton(
-              'Slide from Right',
-              () => _navigateWithTransition(
-                context,
-                RouteShifterBuilder().slideFromRight(duration: 350.ms),
-                'Slide Right',
-                Colors.orange,
-              ),
-            ),
-            _TransitionButton(
-              'Scale Up',
-              () => _navigateWithTransition(
-                context,
-                RouteShifterBuilder().scaleUp(duration: 300.ms),
-                'Scale Effect',
-                Colors.green,
-              ),
-            ),
-            _TransitionButton(
-              'Rotation',
-              () => _navigateWithTransition(
-                context,
-                RouteShifterBuilder()
-                    .rotateClockwise(turns: 0.25, duration: 400.ms),
-                'Rotation Effect',
-                Colors.red,
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Flutter Route Shifter',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Experience beautiful page transitions and shared element animations',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ],
               ),
             ),
 
-            SizedBox(height: 16),
+            const SizedBox(height: 32),
 
-            // Combined Effects
-            _SectionTitle('Combined Effects'),
-            _TransitionButton(
-              'Slide + Fade',
-              () => _navigateWithTransition(
-                context,
-                RouteShifterBuilder()
-                    .slideFromRight(duration: 400.ms)
-                    .fade(duration: 300.ms),
-                'Slide + Fade',
-                Colors.teal,
-              ),
-            ),
-            _TransitionButton(
-              'Scale + Rotation + Fade',
-              () => _navigateWithTransition(
-                context,
-                RouteShifterBuilder()
-                    .scale(beginScale: 0.5, duration: 500.ms)
-                    .rotation(beginTurns: -0.5, duration: 500.ms)
-                    .fade(duration: 400.ms),
-                'Complex Animation',
-                Colors.indigo,
-              ),
-            ),
+            // Demo sections
+            Expanded(
+              child: Column(
+                children: [
+                  // Basic transitions
+                  _buildDemoCard(
+                    context,
+                    title: 'Basic Transitions',
+                    description: 'Explore fundamental page transition effects',
+                    icon: Icons.animation,
+                    color: Colors.blue,
+                    onTap: () => _navigateToBasicDemo(context),
+                  ),
 
-            SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
-            // Material Presets
-            _SectionTitle('Material Design Presets'),
-            _TransitionButton(
-              'Material Page Transition',
-              () => _navigateWithPreset(
-                context,
-                MaterialPresets.materialPageTransition(),
-                'Material Page',
-                Colors.blue,
-              ),
-            ),
-            _TransitionButton(
-              'Material Shared Axis Z',
-              () => _navigateWithPreset(
-                context,
-                MaterialPresets.materialSharedAxisZ(),
-                'Shared Axis Z',
-                Colors.deepPurple,
-              ),
-            ),
-            _TransitionButton(
-              'Material Container Transform',
-              () => _navigateWithPreset(
-                context,
-                MaterialPresets.materialContainerTransform(),
-                'Container Transform',
-                Colors.pink,
-              ),
-            ),
+                  // Shared elements
+                  _buildDemoCard(
+                    context,
+                    title: 'Shared Element Transitions',
+                    description: 'Advanced shared element animations',
+                    icon: Icons.sync_alt,
+                    color: Colors.purple,
+                    onTap: () => _navigateToSharedElementDemo(context),
+                  ),
 
-            SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
-            // Cupertino Presets
-            _SectionTitle('Cupertino (iOS) Presets'),
-            _TransitionButton(
-              'iOS Page Transition',
-              () => _navigateWithPreset(
-                context,
-                CupertinoPresets.cupertinoPageTransition(),
-                'iOS Page',
-                Colors.grey,
+                  // Interactive demos
+                  _buildDemoCard(
+                    context,
+                    title: 'Interactive Demos',
+                    description: 'Touch and gesture-based transitions',
+                    icon: Icons.touch_app,
+                    color: Colors.green,
+                    onTap: () => _navigateToInteractiveDemo(context),
+                  ),
+                ],
               ),
-            ),
-            _TransitionButton(
-              'iOS Modal Presentation',
-              () => _navigateWithPreset(
-                context,
-                CupertinoPresets.cupertinoModalPresentation(),
-                'iOS Modal',
-                Colors.cyan,
-              ),
-            ),
-
-            SizedBox(height: 16),
-
-            // Advanced Features
-            _SectionTitle('Advanced Features'),
-            _TransitionButton(
-              'Interactive Dismiss',
-              () => _navigateWithTransition(
-                context,
-                RouteShifterBuilder()
-                    .slideFromRight()
-                    .fade()
-                    .interactiveDismiss(),
-                'Interactive Dismiss (Swipe to go back)',
-                Colors.amber,
-              ),
-            ),
-            _TransitionButton(
-              'Shared Element Demo',
-              () => _navigateToSharedElementDemo(context),
-            ),
-            _TransitionButton(
-              'Staggered Animation',
-              () => _navigateToStaggeredDemo(context),
             ),
           ],
         ),
@@ -191,27 +128,83 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  void _navigateWithTransition(
-    BuildContext context,
-    RouteShifterBuilder builder,
-    String title,
-    Color color,
-  ) {
-    final route = builder.toRoute(
-      page: DemoPage(title: title, color: color),
+  Widget _buildDemoCard(
+    BuildContext context, {
+    required String title,
+    required String description,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.08),
+              blurRadius: 20,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                icon,
+                color: color,
+                size: 28,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    description,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.grey[400],
+              size: 16,
+            ),
+          ],
+        ),
+      ),
     );
-    Navigator.of(context).push(route);
   }
 
-  void _navigateWithPreset(
-    BuildContext context,
-    RouteShifterBuilder preset,
-    String title,
-    Color color,
-  ) {
-    final route = preset.toRoute(
-      page: DemoPage(title: title, color: color),
-    );
+  void _navigateToBasicDemo(BuildContext context) {
+    final route = RouteShifterBuilder()
+        .fade(duration: 400.ms)
+        .slide(beginOffset: const Offset(1, 0))
+        .toRoute(page: const BasicTransitionsDemo());
     Navigator.of(context).push(route);
   }
 
@@ -219,415 +212,96 @@ class HomeScreen extends StatelessWidget {
     final route = RouteShifterBuilder()
         .fade(duration: 400.ms)
         .sharedElements()
-        .toRoute(page: SharedElementDemoPage());
+        .toRoute(page: const SharedElementAdvancedExample());
     Navigator.of(context).push(route);
   }
 
-  void _navigateToStaggeredDemo(BuildContext context) {
-    final route = RouteShifterBuilder()
-        .stagger(interval: 100.ms)
-        .fade(duration: 600.ms)
-        .toRoute(page: StaggeredDemoPage());
-    Navigator.of(context).push(route);
-  }
-}
-
-class _SectionTitle extends StatelessWidget {
-  final String title;
-
-  const _SectionTitle(this.title);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(top: 8, bottom: 8),
-      child: Text(
-        title,
-        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).primaryColor,
-            ),
-      ),
-    );
-  }
-}
-
-class _TransitionButton extends StatelessWidget {
-  final String title;
-  final VoidCallback onTap;
-
-  const _TransitionButton(this.title, this.onTap);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 4),
-      child: ElevatedButton(
-        onPressed: onTap,
-        style: ElevatedButton.styleFrom(
-          padding: EdgeInsets.symmetric(vertical: 16),
-        ),
-        child: Text(title),
-      ),
-    );
-  }
-}
-
-class DemoPage extends StatelessWidget {
-  final String title;
-  final Color color;
-
-  const DemoPage({
-    Key? key,
-    required this.title,
-    required this.color,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        backgroundColor: color,
-        foregroundColor: Colors.white,
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              color.withValues(alpha: 0.1),
-              color.withValues(alpha: 0.05),
-            ],
-          ),
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.animation,
-                size: 80,
-                color: color,
-              ),
-              SizedBox(height: 20),
-              Text(
-                title,
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      color: color,
-                      fontWeight: FontWeight.bold,
-                    ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 10),
-              Text(
-                'This page demonstrates the $title animation.',
-                style: Theme.of(context).textTheme.bodyLarge,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 40),
-              ElevatedButton.icon(
-                onPressed: () => Navigator.of(context).pop(),
-                icon: Icon(Icons.arrow_back),
-                label: Text('Go Back'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: color,
-                  foregroundColor: Colors.white,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class SharedElementDemoPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Shared Element Demo'),
-        backgroundColor: Colors.deepOrange,
-        foregroundColor: Colors.white,
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Text(
-              'Shared Elements',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            SizedBox(height: 20),
-
-            // Hero image that can be shared
-            GestureDetector(
-              onTap: () => _navigateToImageDetail(context),
-              child: Hero(
-                tag: 'demo-image',
-                child: Container(
-                  width: 150,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    color: Colors.deepOrange,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.deepOrange.withValues(alpha: 0.3),
-                        blurRadius: 8,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Icon(
-                    Icons.image,
-                    size: 60,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-
-            SizedBox(height: 20),
-            Text(
-              'Tap the image above to see a shared element transition!',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-
-            SizedBox(height: 40),
-
-            // Examples with Shifter widgets
-            Text(
-              'Shifter Widget Examples',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            SizedBox(height: 16),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                GestureDetector(
-                  onTap: () => _navigateWithShifter(context, 'card-1'),
-                  child: Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Icon(Icons.star, color: Colors.white),
-                  ).asStringShifter('card-1'),
-                ),
-                GestureDetector(
-                  onTap: () => _navigateWithShifter(context, 'card-2'),
-                  child: Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Icon(Icons.favorite, color: Colors.white),
-                  ).asStringShifter('card-2'),
-                ),
-                GestureDetector(
-                  onTap: () => _navigateWithShifter(context, 'card-3'),
-                  child: Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: Colors.purple,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Icon(Icons.lightbulb, color: Colors.white),
-                  ).asStringShifter('card-3'),
-                ),
-              ],
-            ),
-
-            SizedBox(height: 16),
-            Text(
-              'Tap any card to see Shifter widget transitions!',
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _navigateToImageDetail(BuildContext context) {
+  void _navigateToInteractiveDemo(BuildContext context) {
     final route = RouteShifterBuilder()
         .fade(duration: 400.ms)
-        .scale(beginScale: 0.8, duration: 400.ms)
-        .toRoute(page: ImageDetailPage());
-    Navigator.of(context).push(route);
-  }
-
-  void _navigateWithShifter(BuildContext context, String shiftId) {
-    final route = RouteShifterBuilder()
-        .sharedElements()
-        .fade(duration: 500.ms)
-        .toRoute(page: ShifterDetailPage(shiftId: shiftId));
+        .scale(beginScale: 0.8)
+        .toRoute(page: const InteractiveDemo());
     Navigator.of(context).push(route);
   }
 }
 
-class ImageDetailPage extends StatelessWidget {
+/// Simple basic transitions demo
+class BasicTransitionsDemo extends StatelessWidget {
+  const BasicTransitionsDemo({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Image Detail'),
-        backgroundColor: Colors.deepOrange,
-        foregroundColor: Colors.white,
+        title: const Text('Basic Transitions'),
       ),
-      body: Center(
-        child: Hero(
-          tag: 'demo-image',
-          child: Container(
-            width: 300,
-            height: 300,
-            decoration: BoxDecoration(
-              color: Colors.deepOrange,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.image,
-                  size: 120,
-                  color: Colors.white,
-                ),
-                SizedBox(height: 16),
-                Text(
-                  'Expanded View',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ShifterDetailPage extends StatelessWidget {
-  final String shiftId;
-
-  const ShifterDetailPage({Key? key, required this.shiftId}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final color = _getColorForId(shiftId);
-    final icon = _getIconForId(shiftId);
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Shifter Detail'),
-        backgroundColor: color,
-        foregroundColor: Colors.white,
-      ),
-      body: Center(
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: 200,
-              height: 200,
-              decoration: BoxDecoration(
-                color: color,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Icon(icon, size: 100, color: Colors.white),
-            ).asStringShifter(shiftId),
-            SizedBox(height: 20),
+            Icon(
+              Icons.animation,
+              size: 64,
+              color: Colors.blue,
+            ),
+            SizedBox(height: 16),
             Text(
-              'Detail View for $shiftId',
-              style: Theme.of(context).textTheme.headlineMedium,
+              'Basic Transitions Demo',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'This would contain various basic transition examples',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
+              ),
             ),
           ],
         ),
       ),
     );
   }
-
-  Color _getColorForId(String id) {
-    switch (id) {
-      case 'card-1':
-        return Colors.blue;
-      case 'card-2':
-        return Colors.green;
-      case 'card-3':
-        return Colors.purple;
-      default:
-        return Colors.grey;
-    }
-  }
-
-  IconData _getIconForId(String id) {
-    switch (id) {
-      case 'card-1':
-        return Icons.star;
-      case 'card-2':
-        return Icons.favorite;
-      case 'card-3':
-        return Icons.lightbulb;
-      default:
-        return Icons.help;
-    }
-  }
 }
 
-class StaggeredDemoPage extends StatelessWidget {
+/// Interactive demo placeholder
+class InteractiveDemo extends StatelessWidget {
+  const InteractiveDemo({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Staggered Animation Demo'),
-        backgroundColor: Colors.teal,
-        foregroundColor: Colors.white,
+        title: const Text('Interactive Demos'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16),
+      body: const Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Staggered Cards',
-              style: Theme.of(context).textTheme.headlineMedium,
+            Icon(
+              Icons.touch_app,
+              size: 64,
+              color: Colors.green,
             ),
-            SizedBox(height: 20),
-            Expanded(
-              child: ListView.builder(
-                itemCount: 8,
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: EdgeInsets.only(bottom: 12),
-                    child: Card(
-                      elevation: 4,
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: Colors.teal,
-                          child: Text('${index + 1}'),
-                        ),
-                        title: Text('Staggered Item ${index + 1}'),
-                        subtitle: Text(
-                            'This item appears with a ${index * 100}ms delay'),
-                        trailing: Icon(Icons.arrow_forward_ios),
-                      ),
-                    ),
-                  );
-                },
+            SizedBox(height: 16),
+            Text(
+              'Interactive Demos',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'This would contain gesture-based transition examples',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
               ),
             ),
           ],

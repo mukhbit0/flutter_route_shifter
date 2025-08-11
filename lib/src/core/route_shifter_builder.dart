@@ -15,7 +15,11 @@ import 'route_shifter_builder/shear_effects.dart';
 import 'route_shifter_builder/parallax_effects.dart';
 import 'route_shifter_builder/follow_path_effects.dart';
 import 'route_shifter_builder/interactive_effects.dart';
-import 'route_shifter_builder/creative_effects.dart';
+import 'route_shifter_builder/perspective_effects.dart';
+import 'route_shifter_builder/glass_morph_effects.dart';
+import 'route_shifter_builder/mask_effects.dart';
+import 'route_shifter_builder/physics_spring_effects.dart';
+import 'route_shifter_builder/glitch_effects.dart';
 
 /// A modular builder class that provides a chainable API for creating animated route transitions.
 ///
@@ -41,7 +45,11 @@ class RouteShifterBuilder
         ShearEffects,
         ParallaxEffects,
         FollowPathEffects,
-        CreativeEffects,
+        PerspectiveEffects,
+        GlassMorphEffects,
+        MaskEffects,
+        PhysicsSpringEffects,
+        GlitchEffects,
         InteractiveEffects {
   final List<RouteEffect> _effects = [];
   bool _interactiveDismissEnabled = false;
@@ -50,6 +58,21 @@ class RouteShifterBuilder
 
   /// Access to the effects list for mixins
   List<RouteEffect> get effects => _effects;
+
+  /// Method to set interactive dismiss enabled flag (used by mixins)
+  void setInteractiveDismissEnabled(bool value) {
+    _interactiveDismissEnabled = value;
+  }
+
+  /// Method to set dismiss direction (used by mixins)
+  void setDismissDirection(local_shifter.DismissDirection? value) {
+    _dismissDirection = value;
+  }
+
+  /// Method to set shared element settings (used by mixins)
+  void setSharedElementSettings(Map<String, dynamic>? value) {
+    _sharedElementSettings = value;
+  }
 
   /// Creates a route with the configured effects.
   local_shifter.RouteShifter<T> toRoute<T>({
@@ -68,6 +91,65 @@ class RouteShifterBuilder
       dismissDirection: _dismissDirection,
       sharedElementSettings: _sharedElementSettings,
     );
+  }
+
+  /// Pushes the route and returns a Future that completes when the route is popped.
+  ///
+  /// This is a convenience method that combines `toRoute()` with `Navigator.push()`.
+  /// The returned Future can be used with `.then()` to execute code after navigation.
+  ///
+  /// Example:
+  /// ```dart
+  /// RouteShifterBuilder()
+  ///   .fade()
+  ///   .slideFromRight()
+  ///   .pushTo(context, page: NextPage())
+  ///   .then((result) {
+  ///     print('Navigation completed with result: $result');
+  ///   });
+  /// ```
+  Future<T?> pushTo<T>(
+    BuildContext context, {
+    required Widget page,
+    RouteSettings? settings,
+    bool maintainState = true,
+    bool fullscreenDialog = false,
+  }) {
+    final route = toRoute<T>(
+      page: page,
+      settings: settings,
+      maintainState: maintainState,
+      fullscreenDialog: fullscreenDialog,
+    );
+    return Navigator.of(context).push(route);
+  }
+
+  /// Pushes the route as a replacement and returns a Future.
+  ///
+  /// Example:
+  /// ```dart
+  /// RouteShifterBuilder()
+  ///   .fade()
+  ///   .pushReplacementTo(context, page: NewPage())
+  ///   .then((result) {
+  ///     print('Replacement navigation completed');
+  ///   });
+  /// ```
+  Future<T?> pushReplacementTo<T, TO>(
+    BuildContext context, {
+    required Widget page,
+    TO? result,
+    RouteSettings? settings,
+    bool maintainState = true,
+    bool fullscreenDialog = false,
+  }) {
+    final route = toRoute<T>(
+      page: page,
+      settings: settings,
+      maintainState: maintainState,
+      fullscreenDialog: fullscreenDialog,
+    );
+    return Navigator.of(context).pushReplacement(route, result: result);
   }
 
   /// Creates a copy of this builder with the same configuration.

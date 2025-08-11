@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_route_shifter/flutter_route_shifter.dart';
 
-/// Comprehensive example demonstrating advanced shared element transitions
-/// with edge case handling, different aspect ratios, and smooth animations.
+/// Modern and clean shared element transitions demo
 class SharedElementAdvancedExample extends StatefulWidget {
-  const SharedElementAdvancedExample({Key? key}) : super(key: key);
+  const SharedElementAdvancedExample({super.key});
 
   @override
   State<SharedElementAdvancedExample> createState() =>
@@ -15,125 +14,119 @@ class _SharedElementAdvancedExampleState
     extends State<SharedElementAdvancedExample> {
   final List<DemoItem> _items = [
     DemoItem(
-        id: 'hero1',
-        title: 'Hero Image',
-        color: Colors.blue,
-        type: DemoType.image),
+      id: 'photo',
+      title: 'Photo Gallery',
+      color: Colors.blue,
+      type: DemoType.image,
+    ),
     DemoItem(
-        id: 'card1',
-        title: 'Card Expansion',
-        color: Colors.green,
-        type: DemoType.card),
+      id: 'profile',
+      title: 'User Profile',
+      color: Colors.green,
+      type: DemoType.avatar,
+    ),
     DemoItem(
-        id: 'avatar1',
-        title: 'Avatar Growth',
-        color: Colors.purple,
-        type: DemoType.avatar),
+      id: 'article',
+      title: 'Article Card',
+      color: Colors.orange,
+      type: DemoType.card,
+    ),
     DemoItem(
-        id: 'text1',
-        title: 'Text Morph',
-        color: Colors.orange,
-        type: DemoType.text),
-    DemoItem(
-        id: 'complex1',
-        title: 'Complex Widget',
-        color: Colors.red,
-        type: DemoType.complex),
+      id: 'dashboard',
+      title: 'Dashboard',
+      color: Colors.purple,
+      type: DemoType.complex,
+    ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text('Advanced Shared Elements'),
-        backgroundColor: Colors.deepPurple,
-        foregroundColor: Colors.white,
+        title: const Text('Shared Element Transitions'),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black87,
+        elevation: 0,
+        centerTitle: true,
       ),
-      body: Column(
-        children: [
-          // Header section with instructions
-          Container(
-            padding: const EdgeInsets.all(16),
-            margin: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.blue.shade50,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.blue.shade200),
-            ),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Advanced Shared Element Demos',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header section
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.blue.shade50, Colors.purple.shade50],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
-                SizedBox(height: 8),
-                Text(
-                  'Tap any item to see sophisticated shared element transitions with:',
-                  style: TextStyle(fontSize: 14),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.blue.shade100),
+              ),
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Explore Transitions',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Tap any card to experience smooth shared element transitions',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
+            // Demo items grid
+            Expanded(
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  childAspectRatio: 0.85,
                 ),
-                SizedBox(height: 4),
-                Text('• Smooth aspect ratio morphing',
-                    style: TextStyle(fontSize: 12)),
-                Text('• Edge case handling', style: TextStyle(fontSize: 12)),
-                Text('• Performance optimization',
-                    style: TextStyle(fontSize: 12)),
-                Text('• Custom flight paths', style: TextStyle(fontSize: 12)),
-              ],
-            ),
-          ),
-
-          // Demo items grid
-          Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.all(16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: 1.2,
+                itemCount: _items.length,
+                itemBuilder: (context, index) {
+                  final item = _items[index];
+                  return _buildGridItem(context, item);
+                },
               ),
-              itemCount: _items.length,
-              itemBuilder: (context, index) {
-                final item = _items[index];
-                return _buildDemoItem(context, item);
-              },
             ),
-          ),
-
-          // Multi-element transition demo
-          Container(
-            margin: const EdgeInsets.all(16),
-            child: ElevatedButton(
-              onPressed: () => _navigateToMultiElementDemo(context),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepPurple,
-                foregroundColor: Colors.white,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              ),
-              child: const Text('Multi-Element Transition Demo'),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildDemoItem(BuildContext context, DemoItem item) {
+  Widget _buildGridItem(BuildContext context, DemoItem item) {
     return GestureDetector(
       onTap: () => _navigateToDetail(context, item),
       child: Shifter(
-        shiftId: item.id,
+        shiftId: 'container_${item.id}',
         child: Container(
           decoration: BoxDecoration(
-            color: item.color.shade100,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: item.color.shade300),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: item.color.shade200,
-                blurRadius: 8,
+                color: Colors.black.withValues(alpha: 0.08),
+                blurRadius: 20,
                 offset: const Offset(0, 4),
               ),
             ],
@@ -141,23 +134,46 @@ class _SharedElementAdvancedExampleState
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildItemIcon(item),
-              const SizedBox(height: 12),
-              Text(
-                item.title,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: item.color.shade800,
+              // Icon container
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: item.color.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
                 ),
-                textAlign: TextAlign.center,
+                child: Icon(
+                  _getIconForType(item.type),
+                  size: 32,
+                  color: item.color,
+                ),
               ),
-              const SizedBox(height: 4),
+              
+              const SizedBox(height: 16),
+              
+              // Title
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  item.title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              
+              const SizedBox(height: 8),
+              
+              // Subtitle based on type
               Text(
-                _getItemDescription(item.type),
+                _getSubtitleForType(item.type),
                 style: TextStyle(
                   fontSize: 12,
-                  color: item.color.shade600,
+                  color: Colors.grey[600],
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -168,45 +184,33 @@ class _SharedElementAdvancedExampleState
     );
   }
 
-  Widget _buildItemIcon(DemoItem item) {
-    IconData iconData;
-    switch (item.type) {
-      case DemoType.image:
-        iconData = Icons.image;
-        break;
-      case DemoType.card:
-        iconData = Icons.credit_card;
-        break;
-      case DemoType.avatar:
-        iconData = Icons.account_circle;
-        break;
-      case DemoType.text:
-        iconData = Icons.text_fields;
-        break;
-      case DemoType.complex:
-        iconData = Icons.widgets;
-        break;
-    }
-
-    return Icon(
-      iconData,
-      size: 48,
-      color: item.color.shade700,
-    );
-  }
-
-  String _getItemDescription(DemoType type) {
+  IconData _getIconForType(DemoType type) {
     switch (type) {
       case DemoType.image:
-        return 'Hero-style transition';
-      case DemoType.card:
-        return 'Card expansion';
+        return Icons.photo_library;
       case DemoType.avatar:
-        return 'Circular morphing';
-      case DemoType.text:
-        return 'Text transformation';
+        return Icons.person;
+      case DemoType.card:
+        return Icons.article;
       case DemoType.complex:
-        return 'Complex widget morph';
+        return Icons.dashboard;
+      default:
+        return Icons.widgets;
+    }
+  }
+
+  String _getSubtitleForType(DemoType type) {
+    switch (type) {
+      case DemoType.image:
+        return 'Image transitions';
+      case DemoType.avatar:
+        return 'Avatar expansion';
+      case DemoType.card:
+        return 'Content morphing';
+      case DemoType.complex:
+        return 'Complex layouts';
+      default:
+        return 'Transition demo';
     }
   }
 
@@ -217,6 +221,7 @@ class _SharedElementAdvancedExampleState
           flightCurve: Curves.easeInOutCubic,
           enableMorphing: true,
           useElevation: true,
+          shiftIds: ['container_${item.id}'],
         )
         .fade(
           duration: const Duration(milliseconds: 400),
@@ -225,42 +230,28 @@ class _SharedElementAdvancedExampleState
         .toRoute(
           page: SharedElementDetailPage(item: item),
         );
-
-    Navigator.of(context).push(route);
-  }
-
-  void _navigateToMultiElementDemo(BuildContext context) {
-    final route = RouteShifterBuilder()
-        .sharedElements(
-          flightDuration: const Duration(milliseconds: 800),
-          flightCurve: Curves.easeInOutBack,
-          enableMorphing: true,
-        )
-        .slide(offsetBegin: const Offset(0, 1))
-        .toRoute(
-          page: const MultiElementDemoPage(),
-        );
-
     Navigator.of(context).push(route);
   }
 }
 
-/// Detail page showing advanced shared element transition
+/// Clean and modern detail page
 class SharedElementDetailPage extends StatelessWidget {
   final DemoItem item;
 
   const SharedElementDetailPage({
-    Key? key,
+    super.key,
     required this.item,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: Text(item.title),
-        backgroundColor: item.color.shade700,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black87,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
@@ -269,45 +260,65 @@ class SharedElementDetailPage extends StatelessWidget {
           children: [
             const SizedBox(height: 40),
 
-            // Shared element with different aspect ratio
+            // Shared element container
             Center(
-              child: Shifter(
-                shiftId: item.id,
-                child: _buildDetailWidget(item),
-              ),
+              child: _buildDetailContent(item),
             ),
 
             const SizedBox(height: 40),
 
-            // Additional content to demonstrate the transition
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Transition Details',
-                      style: Theme.of(context).textTheme.headlineSmall,
+            // Information card
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Transition Details',
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
-                    const SizedBox(height: 12),
-                    _buildTransitionInfo(item.type),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 16),
+                  _buildFeatureList(item.type),
+                ],
               ),
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 32),
 
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).pop(),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: item.color.shade600,
-                foregroundColor: Colors.white,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+            // Back button
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () => Navigator.of(context).pop(),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: item.color,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text(
+                  'Go Back',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
-              child: const Text('Go Back'),
             ),
           ],
         ),
@@ -315,271 +326,174 @@ class SharedElementDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailWidget(DemoItem item) {
-    switch (item.type) {
-      case DemoType.image:
-        return Container(
-          width: 300,
-          height: 200, // Different aspect ratio
-          decoration: BoxDecoration(
-            color: item.color.shade100,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: item.color.shade300, width: 2),
-          ),
-          child: Icon(
-            Icons.image,
-            size: 80,
-            color: item.color.shade700,
-          ),
-        );
-
-      case DemoType.card:
-        return Container(
-          width: 320,
-          height: 240, // Expanded size
-          decoration: BoxDecoration(
-            color: item.color.shade100,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: item.color.shade300, width: 2),
-            boxShadow: [
-              BoxShadow(
-                color: item.color.shade300,
-                blurRadius: 12,
-                offset: const Offset(0, 6),
+  Widget _buildDetailContent(DemoItem item) {
+    return Shifter(
+      shiftId: 'container_${item.id}',
+      child: Container(
+        width: 280,
+        height: 320,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: item.color.withValues(alpha: 0.2),
+              blurRadius: 30,
+              offset: const Offset(0, 10),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Large icon
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: item.color.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
               ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.credit_card, size: 64, color: item.color.shade700),
-              const SizedBox(height: 16),
-              Text(
-                'Expanded Card',
+              child: Icon(
+                _getIconForType(item.type),
+                size: 64,
+                color: item.color,
+              ),
+            ),
+            
+            const SizedBox(height: 24),
+            
+            // Title
+            Text(
+              item.title,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            
+            const SizedBox(height: 8),
+            
+            // Description
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Text(
+                _getDescriptionForType(item.type),
                 style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: item.color.shade800,
+                  fontSize: 16,
+                  color: Colors.grey[600],
                 ),
+                textAlign: TextAlign.center,
               ),
-            ],
-          ),
-        );
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
+  IconData _getIconForType(DemoType type) {
+    switch (type) {
+      case DemoType.image:
+        return Icons.photo_library;
       case DemoType.avatar:
-        return Container(
-          width: 200,
-          height: 200, // Square aspect ratio
-          decoration: BoxDecoration(
-            color: item.color.shade100,
-            shape: BoxShape.circle,
-            border: Border.all(color: item.color.shade300, width: 3),
-          ),
-          child: Icon(
-            Icons.account_circle,
-            size: 120,
-            color: item.color.shade700,
-          ),
-        );
-
-      case DemoType.text:
-        return Container(
-          width: 280,
-          height: 120, // Different ratio
-          decoration: BoxDecoration(
-            color: item.color.shade100,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: item.color.shade300),
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.text_fields, size: 40, color: item.color.shade700),
-                const SizedBox(height: 8),
-                Text(
-                  'Transformed Text',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: item.color.shade800,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-
+        return Icons.person;
+      case DemoType.card:
+        return Icons.article;
       case DemoType.complex:
-        return Container(
-          width: 340,
-          height: 280, // Much larger
-          decoration: BoxDecoration(
-            color: item.color.shade100,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: item.color.shade300, width: 2),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.widgets, size: 32, color: item.color.shade700),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        'Complex Widget',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: item.color.shade800,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Expanded(
-                  child: GridView.count(
-                    crossAxisCount: 3,
-                    mainAxisSpacing: 8,
-                    crossAxisSpacing: 8,
-                    children: List.generate(
-                        9,
-                        (index) => Container(
-                              decoration: BoxDecoration(
-                                color: item.color.shade200,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  '${index + 1}',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: item.color.shade700,
-                                  ),
-                                ),
-                              ),
-                            )),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
+        return Icons.dashboard;
+      default:
+        return Icons.widgets;
     }
   }
 
-  Widget _buildTransitionInfo(DemoType type) {
-    List<String> features;
+  String _getDescriptionForType(DemoType type) {
     switch (type) {
       case DemoType.image:
-        features = [
-          'Aspect ratio morphing (1.2:1 → 1.5:1)',
+        return 'Beautiful image gallery with smooth transitions and aspect ratio morphing';
+      case DemoType.avatar:
+        return 'User profile with expanding avatar and circular transformation effects';
+      case DemoType.card:
+        return 'Article cards that morph seamlessly with content-aware transitions';
+      case DemoType.complex:
+        return 'Complex dashboard layouts with multiple element coordination';
+      default:
+        return 'Advanced transition demonstration';
+    }
+  }
+
+  Widget _buildFeatureList(DemoType type) {
+    List<String> features = _getFeaturesForType(type);
+    
+    return Column(
+      children: features.map((feature) => Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              Icons.check_circle,
+              size: 16,
+              color: item.color,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                feature,
+                style: const TextStyle(fontSize: 14),
+              ),
+            ),
+          ],
+        ),
+      )).toList(),
+    );
+  }
+
+  List<String> _getFeaturesForType(DemoType type) {
+    switch (type) {
+      case DemoType.image:
+        return [
+          'Aspect ratio morphing',
           'Smooth corner radius transition',
           'Elevation animation',
           'Color interpolation',
         ];
-        break;
-      case DemoType.card:
-        features = [
-          'Size expansion with morphing',
-          'Shadow depth animation',
-          'Content fade-in transition',
-          'Border radius scaling',
-        ];
-        break;
       case DemoType.avatar:
-        features = [
-          'Rectangular to circular morphing',
-          'Size scaling with aspect preservation',
-          'Border width transition',
-          'Icon size adaptation',
+        return [
+          'Circular to rectangular morphing',
+          'Size scaling with proportions',
+          'Smooth border transitions',
+          'Content fade effects',
         ];
-        break;
-      case DemoType.text:
-        features = [
-          'Text size and weight transition',
-          'Container aspect ratio change',
-          'Layout reflow handling',
-          'Color scheme morphing',
+      case DemoType.card:
+        return [
+          'Content-aware morphing',
+          'Shadow depth animation',
+          'Text scaling transitions',
+          'Layout restructuring',
         ];
-        break;
       case DemoType.complex:
-        features = [
-          'Multi-widget composition handling',
-          'Complex layout transitions',
+        return [
+          'Multi-element coordination',
+          'Staggered animations',
+          'Layout transformation',
           'Performance optimization',
-          'Child widget morphing',
         ];
-        break;
+      default:
+        return ['Advanced transition effects'];
     }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: features
-          .map((feature) => Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: Row(
-                  children: [
-                    Icon(Icons.check_circle,
-                        size: 16, color: item.color.shade600),
-                    const SizedBox(width: 8),
-                    Expanded(
-                        child: Text(feature,
-                            style: const TextStyle(fontSize: 14))),
-                  ],
-                ),
-              ))
-          .toList(),
-    );
   }
 }
 
-/// Demo page for multi-element transitions
-class MultiElementDemoPage extends StatelessWidget {
-  const MultiElementDemoPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Multi-Element Demo'),
-        backgroundColor: Colors.deepPurple,
-        foregroundColor: Colors.white,
-      ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Multiple shared elements would be placed here
-            // Each with different stagger timings
-            Text(
-              'Multi-Element Transition Demo',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 16),
-            Text(
-              'This demonstrates coordinated transitions\nof multiple shared elements',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// Data models
+// Data model classes
 class DemoItem {
   final String id;
   final String title;
   final MaterialColor color;
   final DemoType type;
 
-  DemoItem({
+  const DemoItem({
     required this.id,
     required this.title,
     required this.color,

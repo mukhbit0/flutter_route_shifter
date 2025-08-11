@@ -9,8 +9,8 @@ mixin InteractiveEffects {
         local_shifter.DismissDirection.horizontal,
   }) {
     final builder = this as dynamic;
-    builder._interactiveDismissEnabled = true;
-    builder._dismissDirection = direction;
+    builder.setInteractiveDismissEnabled(true);
+    builder.setDismissDirection(direction);
     return this;
   }
 
@@ -25,8 +25,8 @@ mixin InteractiveEffects {
   /// Disables interactive dismiss gestures.
   dynamic disableInteractiveDismiss() {
     final builder = this as dynamic;
-    builder._interactiveDismissEnabled = false;
-    builder._dismissDirection = null;
+    builder.setInteractiveDismissEnabled(false);
+    builder.setDismissDirection(null);
     return this;
   }
 
@@ -36,16 +36,18 @@ mixin InteractiveEffects {
     Curve? flightCurve,
     bool enableMorphing = true,
     bool useElevation = false,
+    List<String>? shiftIds,
     Map<String, dynamic>? settings,
   }) {
     final builder = this as dynamic;
-    builder._sharedElementSettings = {
+    builder.setSharedElementSettings({
       'flightDuration': flightDuration,
       'flightCurve': flightCurve,
       'enableMorphing': enableMorphing,
       'useElevation': useElevation,
+      'shiftIds': shiftIds,
       if (settings != null) ...settings,
-    };
+    });
     return this;
   }
 

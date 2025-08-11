@@ -3,7 +3,7 @@ import '../../effects/clip_path_effect.dart';
 
 /// Mixin that provides clip path effects for RouteShifterBuilder.
 mixin ClipPathEffects {
-  List<dynamic> get _effects;
+  List<dynamic> get effects;
 
   /// Adds a clip path effect for dramatic reveals.
   dynamic clipPath({
@@ -15,7 +15,7 @@ mixin ClipPathEffects {
     double start = 0.0,
     double end = 1.0,
   }) {
-    _effects.add(ClipPathEffect(
+    effects.add(ClipPathEffect(
       type: type,
       direction: direction,
       reversed: reversed,

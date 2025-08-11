@@ -3,7 +3,7 @@ import '../../effects/parallax_effect.dart';
 
 /// Extension methods for parallax effects on RouteShifterBuilder.
 mixin ParallaxEffects {
-  List<dynamic> get _effects;
+  List<dynamic> get effects;
 
   /// Adds a parallax effect for creating depth.
   dynamic parallax({
@@ -18,7 +18,7 @@ mixin ParallaxEffects {
     double start = 0.0,
     double end = 1.0,
   }) {
-    _effects.add(ParallaxEffect(
+    effects.add(ParallaxEffect(
       backgroundSpeed: backgroundSpeed,
       direction: direction,
       blurBackground: blurBackground,
@@ -92,7 +92,7 @@ mixin ParallaxEffects {
     Duration? duration,
     Curve curve = Curves.easeInOut,
   }) {
-    _effects.add(MultiLayerParallaxEffect(
+    effects.add(MultiLayerParallaxEffect(
       layerSpeeds: layerSpeeds,
       direction: direction,
       useLayeredBlur: useLayeredBlur,

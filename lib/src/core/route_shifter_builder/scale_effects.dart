@@ -3,7 +3,7 @@ import '../../effects/scale_effect.dart';
 
 /// Mixin that provides scale effects for RouteShifterBuilder.
 mixin ScaleEffects {
-  List<dynamic> get _effects;
+  List<dynamic> get effects;
 
   /// Adds a scale effect to the transition.
   dynamic scale({
@@ -14,7 +14,7 @@ mixin ScaleEffects {
     double start = 0,
     double end = 1,
   }) {
-    _effects.add(ScaleEffect(
+    effects.add(ScaleEffect(
       beginScale: beginScale,
       endScale: endScale,
       duration: duration,

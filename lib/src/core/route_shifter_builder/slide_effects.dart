@@ -3,24 +3,24 @@ import '../../effects/slide_effect.dart';
 
 /// Mixin that provides slide effects for RouteShifterBuilder.
 mixin SlideEffects {
-  List<dynamic> get _effects;
+  List<dynamic> get effects;
 
   /// Adds a slide effect to the transition.
   dynamic slide({
-    Offset begin = const Offset(1.0, 0.0),
-    Offset offsetEnd = Offset.zero,
+    Offset beginOffset = const Offset(1.0, 0.0),
+    Offset endOffset = Offset.zero,
     Duration? duration,
     Curve curve = Curves.easeInOut,
-    double start = 0,
-    double end = 1,
+    double intervalStart = 0,
+    double intervalEnd = 1,
   }) {
-    _effects.add(SlideEffect(
-      begin: begin,
-      offsetEnd: offsetEnd,
+    effects.add(SlideEffect(
+      begin: beginOffset,
+      offsetEnd: endOffset,
       duration: duration,
       curve: curve,
-      start: start,
-      end: end,
+      start: intervalStart,
+      end: intervalEnd,
     ));
     return this;
   }
@@ -29,59 +29,59 @@ mixin SlideEffects {
   dynamic slideFromRight({
     Duration? duration,
     Curve curve = Curves.easeInOut,
-    double start = 0,
-    double end = 1,
+    double intervalStart = 0,
+    double intervalEnd = 1,
   }) =>
       slide(
-        begin: const Offset(1, 0),
+        beginOffset: const Offset(1, 0),
         duration: duration,
         curve: curve,
-        start: start,
-        end: end,
+        intervalStart: intervalStart,
+        intervalEnd: intervalEnd,
       );
 
   /// Adds a slide from left effect.
   dynamic slideFromLeft({
     Duration? duration,
     Curve curve = Curves.easeInOut,
-    double start = 0,
-    double end = 1,
+    double intervalStart = 0,
+    double intervalEnd = 1,
   }) =>
       slide(
-        begin: const Offset(-1, 0),
+        beginOffset: const Offset(-1, 0),
         duration: duration,
         curve: curve,
-        start: start,
-        end: end,
+        intervalStart: intervalStart,
+        intervalEnd: intervalEnd,
       );
 
   /// Adds a slide from top effect.
   dynamic slideFromTop({
     Duration? duration,
     Curve curve = Curves.easeInOut,
-    double start = 0,
-    double end = 1,
+    double intervalStart = 0,
+    double intervalEnd = 1,
   }) =>
       slide(
-        begin: const Offset(0, -1),
+        beginOffset: const Offset(0, -1),
         duration: duration,
         curve: curve,
-        start: start,
-        end: end,
+        intervalStart: intervalStart,
+        intervalEnd: intervalEnd,
       );
 
   /// Adds a slide from bottom effect.
   dynamic slideFromBottom({
     Duration? duration,
     Curve curve = Curves.easeInOut,
-    double start = 0,
-    double end = 1,
+    double intervalStart = 0,
+    double intervalEnd = 1,
   }) =>
       slide(
-        begin: const Offset(0, 1),
+        beginOffset: const Offset(0, 1),
         duration: duration,
         curve: curve,
-        start: start,
-        end: end,
+        intervalStart: intervalStart,
+        intervalEnd: intervalEnd,
       );
 }

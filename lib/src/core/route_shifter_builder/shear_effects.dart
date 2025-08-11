@@ -3,7 +3,7 @@ import '../../effects/shear_effect.dart';
 
 /// Extension methods for shear effects on RouteShifterBuilder.
 mixin ShearEffects {
-  List<dynamic> get _effects;
+  List<dynamic> get effects;
 
   /// Adds a shear effect for stylistic skewing.
   dynamic shear({
@@ -15,7 +15,7 @@ mixin ShearEffects {
     double start = 0.0,
     double end = 1.0,
   }) {
-    _effects.add(ShearEffect(
+    effects.add(ShearEffect(
       beginShear: beginShear,
       endShear: endShear,
       origin: origin,

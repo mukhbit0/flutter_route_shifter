@@ -23,6 +23,14 @@ class CupertinoPresets {
           duration: _standardDuration,
           curve: Curves.fastEaseInToSlowEaseOut,
         )
+        .fade(
+          beginOpacity: 0.0,
+          endOpacity: 1.0,
+          duration: Duration(milliseconds: 100),
+          curve: Curves.easeOut,
+          intervalStart: 0.0,
+          intervalEnd: 0.3,
+        )
         .interactiveDismiss(
           direction: DismissDirection.horizontal,
         );
@@ -39,9 +47,15 @@ class CupertinoPresets {
         )
         .scale(
           beginScale: 1.0,
-          endScale: 0.95,
+          endScale: 0.92,
           duration: _standardDuration,
           curve: Curves.easeInOut,
+        )
+        .fade(
+          beginOpacity: 0.0,
+          endOpacity: 0.3,
+          duration: Duration(milliseconds: 100),
+          curve: Curves.easeOut,
         )
         .interactiveDismiss(
           direction: DismissDirection.vertical,

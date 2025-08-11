@@ -85,6 +85,7 @@ class _ShifterState extends State<Shifter> with TickerProviderStateMixin {
     // Register with the registry if enabled
     if (widget.enabled) {
       _registerElement();
+    } else {
     }
   }
 
@@ -125,7 +126,10 @@ class _ShifterState extends State<Shifter> with TickerProviderStateMixin {
 
   /// Registers this element with the ShifterRegistry.
   void _registerElement() {
-    if (_isRegistered || !widget.enabled) return;
+    
+    if (_isRegistered || !widget.enabled) {
+      return;
+    }
 
     try {
       ShifterRegistry.instance.registerElement(
@@ -143,7 +147,6 @@ class _ShifterState extends State<Shifter> with TickerProviderStateMixin {
         }
       });
     } catch (e) {
-      debugPrint('Failed to register shared element ${widget.shiftId}: $e');
     }
   }
 
@@ -152,11 +155,10 @@ class _ShifterState extends State<Shifter> with TickerProviderStateMixin {
     if (!_isRegistered) return;
 
     try {
-      ShifterRegistry.instance.unregisterElement(shiftId);
+      ShifterRegistry.instance.unregisterElement(shiftId, context);
       _isRegistered = false;
       _isActive = false;
     } catch (e) {
-      debugPrint('Failed to unregister shared element $shiftId: $e');
     }
   }
 
@@ -176,7 +178,6 @@ class _ShifterState extends State<Shifter> with TickerProviderStateMixin {
             child: widget.child,
           );
         } catch (e) {
-          debugPrint('Failed to update element data for ${widget.shiftId}: $e');
         }
       }
     });
@@ -205,10 +206,6 @@ class _ShifterState extends State<Shifter> with TickerProviderStateMixin {
     _isActive = false;
     ShifterRegistry.instance.deactivateElement(widget.shiftId);
 
-    if (mounted) {
-      setState(() {});
-    }
-
     super.deactivate();
   }
 
@@ -223,7 +220,6 @@ class _ShifterState extends State<Shifter> with TickerProviderStateMixin {
       final size = renderBox.size;
       return Rect.fromLTWH(position.dx, position.dy, size.width, size.height);
     } catch (e) {
-      debugPrint('Failed to get current rect for ${widget.shiftId}: $e');
       return null;
     }
   }
@@ -232,33 +228,55 @@ class _ShifterState extends State<Shifter> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     Widget child = widget.child;
 
-    // Wrap with the tracking key if enabled
     if (widget.enabled) {
+      // Check if we're already inside a Hero widget to avoid nesting
+      final existingHero = context.findAncestorWidgetOfExactType<Hero>();
+      
+      if (existingHero == null) {
+        // Only wrap in Hero if we're not already inside one
+        child = Hero(
+          tag: widget.shiftId,
+          child: widget.child,
+        );
+      } else {
+      }
+      
+      // Always wrap in SizedBox with key for position tracking
       child = SizedBox(
         key: _globalKey,
         child: child,
       );
+      
+      // Add position reporting
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _isRegistered) {
+          final rect = getCurrentRect();
+          if (rect != null) {
+            ShifterRegistry.instance.updateElementPosition(
+              widget.shiftId,
+              rect,
+              context,
+            );
+          } else {
+          }
+        }
+      });
 
-      // Hide the element during active transitions
-      if (_isActive) {
-        child = Opacity(
-          opacity: 0.0,
-          child: child,
-        );
-      }
+      // Let Hero handle visibility during transitions
+      // Don't manually hide elements with opacity as it causes issues
     }
 
-    // Add debug information in debug mode
-    assert(() {
-      if (widget.enabled && _isRegistered) {
-        child = _DebugShifterWrapper(
-          shiftId: widget.shiftId,
-          isActive: _isActive,
-          child: child,
-        );
-      }
-      return true;
-    }());
+    // Add debug information in debug mode - disabled to avoid visual clutter
+    // assert(() {
+    //   if (widget.enabled && _isRegistered) {
+    //     child = _DebugShifterWrapper(
+    //       shiftId: widget.shiftId,
+    //       isActive: _isActive,
+    //       child: child,
+    //     );
+    //   }
+    //   return true;
+    // }());
 
     return child;
   }
@@ -274,49 +292,6 @@ class _ShifterState extends State<Shifter> with TickerProviderStateMixin {
 
   /// Gets the global key for this element.
   GlobalKey get globalKey => _globalKey;
-}
-
-/// Debug wrapper that shows information about shared elements in debug mode.
-class _DebugShifterWrapper extends StatelessWidget {
-  final Object shiftId;
-  final bool isActive;
-  final Widget child;
-
-  const _DebugShifterWrapper({
-    required this.shiftId,
-    required this.isActive,
-    required this.child,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        child,
-        if (isActive)
-          Positioned(
-            top: -20,
-            left: 0,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-              decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(2),
-              ),
-              child: Text(
-                'SHIFTING: $shiftId',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 8,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-      ],
-    );
-  }
 }
 
 /// Extension methods for the Shifter widget.

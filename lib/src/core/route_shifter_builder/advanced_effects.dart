@@ -6,7 +6,7 @@ import '../../effects/base_effect.dart';
 
 /// Mixin that provides advanced effects for RouteShifterBuilder.
 mixin AdvancedEffects {
-  List<dynamic> get _effects;
+  List<dynamic> get effects;
 
   /// Adds a blur effect to the transition.
   dynamic blur({
@@ -17,7 +17,7 @@ mixin AdvancedEffects {
     double start = 0,
     double end = 1,
   }) {
-    _effects.add(BlurEffect(
+    effects.add(BlurEffect(
       beginSigma: beginSigma,
       endSigma: endSigma,
       duration: duration,
@@ -61,8 +61,7 @@ mixin AdvancedEffects {
     double start = 0,
     double end = 1,
   }) {
-    final effectsField = (this as dynamic)._effects as List;
-    effectsField.add(RotationEffect(
+    effects.add(RotationEffect(
       beginTurns: beginTurns,
       endTurns: endTurns,
       duration: duration,
@@ -103,16 +102,17 @@ mixin AdvancedEffects {
   dynamic stagger({
     Duration? interval,
     bool Function(Widget)? selector,
+    bool Function(Element)? elementSelector,
     RouteEffect? baseEffect,
     int maxStaggeredChildren = 20,
     bool reverse = false,
     Duration? duration,
     Curve curve = Curves.easeInOut,
   }) {
-    final effectsField = (this as dynamic)._effects as List;
-    effectsField.add(StaggerEffect(
+    effects.add(StaggerEffect(
       interval: interval ?? const Duration(milliseconds: 100),
       selector: selector,
+      elementSelector: elementSelector,
       baseEffect: baseEffect,
       maxStaggeredChildren: maxStaggeredChildren,
       reverse: reverse,
