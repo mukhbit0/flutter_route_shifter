@@ -26,7 +26,6 @@ class ShifterRegistry {
     required BuildContext context,
     required Widget child,
   }) {
-    
     // Create new element instance
     final element = SimpleShifterElement(
       shiftId: shiftId,
@@ -37,7 +36,6 @@ class ShifterRegistry {
 
     // Add to list of elements with this ID
     _elementsByID.putIfAbsent(shiftId, () => []).add(element);
-    
 
     // Update position after frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -48,37 +46,36 @@ class ShifterRegistry {
 
   /// Unregisters a shared element from the registry.
   void unregisterElement(Object shiftId, BuildContext context) {
-    
     final elements = _elementsByID[shiftId];
     if (elements != null) {
       // Remove the element with matching context
       elements.removeWhere((element) => element.context == context);
-      
+
       // Clean up empty lists
       if (elements.isEmpty) {
         _elementsByID.remove(shiftId);
       }
-      
+
       _activeElements.remove(shiftId);
     }
   }
 
   /// Updates the position of an element
   void _updateElementPosition(SimpleShifterElement element) {
-    
     try {
-      final renderBox = element.key.currentContext?.findRenderObject() as RenderBox?;
+      final renderBox =
+          element.key.currentContext?.findRenderObject() as RenderBox?;
       if (renderBox == null || !renderBox.attached) {
         return;
       }
 
       final position = renderBox.localToGlobal(Offset.zero);
       final size = renderBox.size;
-      final rect = Rect.fromLTWH(position.dx, position.dy, size.width, size.height);
-      
+      final rect =
+          Rect.fromLTWH(position.dx, position.dy, size.width, size.height);
+
       element.rect = rect;
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   /// Checks for pairs and creates element data when both source and target are ready
@@ -88,25 +85,23 @@ class ShifterRegistry {
       return;
     }
 
-
     // Find elements that are ready (have valid rects)
-    final readyElements = elements.where((e) => e.rect != null && e.context.mounted).toList();
-    
+    final readyElements =
+        elements.where((e) => e.rect != null && e.context.mounted).toList();
+
     if (readyElements.length >= 2) {
-      
       // Activate this shiftId for transitions
       _activeElements.add(shiftId);
-      
+
       // Update each element with its pair info
       for (int i = 0; i < readyElements.length; i++) {
         final current = readyElements[i];
         // Find the "other" element (simple approach: use the next one, or first if we're at the end)
         final partner = readyElements[(i + 1) % readyElements.length];
-        
+
         current.partnerRect = partner.rect;
       }
-    } else {
-    }
+    } else {}
   }
 
   /// Gets element data for a specific shiftId
@@ -154,13 +149,11 @@ class ShifterRegistry {
   Map<Object, ShifterElementData> getActiveElements() {
     final activeMap = <Object, ShifterElementData>{};
 
-
     for (final shiftId in _activeElements) {
       final data = getElementData(shiftId);
       if (data != null) {
         activeMap[shiftId] = data;
-      } else {
-      }
+      } else {}
     }
 
     return activeMap;
@@ -202,10 +195,10 @@ class ShifterRegistry {
     for (final entry in _elementsByID.entries) {
       final shiftId = entry.key;
       final elements = entry.value;
-      
+
       // Remove elements with unmounted contexts
       elements.removeWhere((element) => !element.context.mounted);
-      
+
       // Mark empty lists for removal
       if (elements.isEmpty) {
         staleIds.add(shiftId);
@@ -217,7 +210,6 @@ class ShifterRegistry {
       _elementsByID.remove(id);
       _activeElements.remove(id);
     }
-
   }
 
   /// Clears all registered elements
@@ -298,7 +290,7 @@ class SimpleShifterElement {
   final GlobalKey key;
   final BuildContext context;
   final Widget child;
-  
+
   Rect? rect;
   Rect? partnerRect;
 

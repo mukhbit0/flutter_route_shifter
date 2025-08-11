@@ -37,9 +37,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      appBar: AppBar(
-        title: const Text('Route Shifter Demo'),
-      ),
+      appBar: AppBar(title: const Text('Route Shifter Demo')),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -71,10 +69,7 @@ class HomeScreen extends StatelessWidget {
                   SizedBox(height: 8),
                   Text(
                     'Experience beautiful page transitions and shared element animations',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black54,
-                    ),
+                    style: TextStyle(fontSize: 16, color: Colors.black54),
                   ),
                 ],
               ),
@@ -159,11 +154,7 @@ class HomeScreen extends StatelessWidget {
                 color: color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(
-                icon,
-                color: color,
-                size: 28,
-              ),
+              child: Icon(icon, color: color, size: 28),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -181,19 +172,12 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     description,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                   ),
                 ],
               ),
             ),
-            Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.grey[400],
-              size: 16,
-            ),
+            Icon(Icons.arrow_forward_ios, color: Colors.grey[400], size: 16),
           ],
         ),
       ),
@@ -232,34 +216,22 @@ class BasicTransitionsDemo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Basic Transitions'),
-      ),
+      appBar: AppBar(title: const Text('Basic Transitions')),
       body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.animation,
-              size: 64,
-              color: Colors.blue,
-            ),
+            Icon(Icons.animation, size: 64, color: Colors.blue),
             SizedBox(height: 16),
             Text(
               'Basic Transitions Demo',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
             Text(
               'This would contain various basic transition examples',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
+              style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
           ],
         ),
@@ -275,34 +247,22 @@ class InteractiveDemo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Interactive Demos'),
-      ),
+      appBar: AppBar(title: const Text('Interactive Demos')),
       body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.touch_app,
-              size: 64,
-              color: Colors.green,
-            ),
+            Icon(Icons.touch_app, size: 64, color: Colors.green),
             SizedBox(height: 16),
             Text(
               'Interactive Demos',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
             Text(
               'This would contain gesture-based transition examples',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
+              style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
           ],
         ),

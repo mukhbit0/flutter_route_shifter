@@ -81,10 +81,7 @@ class _SharedElementAdvancedExampleState
                   SizedBox(height: 8),
                   Text(
                     'Tap any card to experience smooth shared element transitions',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black54,
-                    ),
+                    style: TextStyle(fontSize: 16, color: Colors.black54),
                   ),
                 ],
               ),
@@ -147,9 +144,9 @@ class _SharedElementAdvancedExampleState
                   color: item.color,
                 ),
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               // Title
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -165,16 +162,13 @@ class _SharedElementAdvancedExampleState
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              
+
               const SizedBox(height: 8),
-              
+
               // Subtitle based on type
               Text(
                 _getSubtitleForType(item.type),
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey[600],
-                ),
+                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -227,9 +221,7 @@ class _SharedElementAdvancedExampleState
           duration: const Duration(milliseconds: 400),
           curve: Curves.easeInOut,
         )
-        .toRoute(
-          page: SharedElementDetailPage(item: item),
-        );
+        .toRoute(page: SharedElementDetailPage(item: item));
     Navigator.of(context).push(route);
   }
 }
@@ -238,10 +230,7 @@ class _SharedElementAdvancedExampleState
 class SharedElementDetailPage extends StatelessWidget {
   final DemoItem item;
 
-  const SharedElementDetailPage({
-    super.key,
-    required this.item,
-  });
+  const SharedElementDetailPage({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -261,9 +250,7 @@ class SharedElementDetailPage extends StatelessWidget {
             const SizedBox(height: 40),
 
             // Shared element container
-            Center(
-              child: _buildDetailContent(item),
-            ),
+            Center(child: _buildDetailContent(item)),
 
             const SizedBox(height: 40),
 
@@ -313,10 +300,7 @@ class SharedElementDetailPage extends StatelessWidget {
                 ),
                 child: const Text(
                   'Go Back',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),
             ),
@@ -359,9 +343,9 @@ class SharedElementDetailPage extends StatelessWidget {
                 color: item.color,
               ),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Title
             Text(
               item.title,
@@ -372,18 +356,15 @@ class SharedElementDetailPage extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            
+
             const SizedBox(height: 8),
-            
+
             // Description
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(
                 _getDescriptionForType(item.type),
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey[600],
-                ),
+                style: TextStyle(fontSize: 16, color: Colors.grey[600]),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -425,28 +406,25 @@ class SharedElementDetailPage extends StatelessWidget {
 
   Widget _buildFeatureList(DemoType type) {
     List<String> features = _getFeaturesForType(type);
-    
+
     return Column(
-      children: features.map((feature) => Padding(
-        padding: const EdgeInsets.only(bottom: 8),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(
-              Icons.check_circle,
-              size: 16,
-              color: item.color,
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                feature,
-                style: const TextStyle(fontSize: 14),
+      children: features
+          .map(
+            (feature) => Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.check_circle, size: 16, color: item.color),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(feature, style: const TextStyle(fontSize: 14)),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      )).toList(),
+          )
+          .toList(),
     );
   }
 
@@ -501,10 +479,4 @@ class DemoItem {
   });
 }
 
-enum DemoType {
-  image,
-  card,
-  avatar,
-  text,
-  complex,
-}
+enum DemoType { image, card, avatar, text, complex }

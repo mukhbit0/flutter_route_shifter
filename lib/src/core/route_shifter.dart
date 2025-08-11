@@ -119,7 +119,8 @@ class RouteShifter<T> extends PageRoute<T> {
       TransitionCoordinator.instance.coordinateTransition(
         fromContext: context,
         toContext: context, // Will be updated when target context is available
-        transitionId: '${page.hashCode}-${DateTime.now().millisecondsSinceEpoch}',
+        transitionId:
+            '${page.hashCode}-${DateTime.now().millisecondsSinceEpoch}',
       );
     }
 

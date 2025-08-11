@@ -85,8 +85,7 @@ class _ShifterState extends State<Shifter> with TickerProviderStateMixin {
     // Register with the registry if enabled
     if (widget.enabled) {
       _registerElement();
-    } else {
-    }
+    } else {}
   }
 
   @override
@@ -126,7 +125,6 @@ class _ShifterState extends State<Shifter> with TickerProviderStateMixin {
 
   /// Registers this element with the ShifterRegistry.
   void _registerElement() {
-    
     if (_isRegistered || !widget.enabled) {
       return;
     }
@@ -146,8 +144,7 @@ class _ShifterState extends State<Shifter> with TickerProviderStateMixin {
           _updateElementData();
         }
       });
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   /// Unregisters this element from the ShifterRegistry.
@@ -158,8 +155,7 @@ class _ShifterState extends State<Shifter> with TickerProviderStateMixin {
       ShifterRegistry.instance.unregisterElement(shiftId, context);
       _isRegistered = false;
       _isActive = false;
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   /// Updates the element data in the registry.
@@ -177,8 +173,7 @@ class _ShifterState extends State<Shifter> with TickerProviderStateMixin {
             context: context,
             child: widget.child,
           );
-        } catch (e) {
-        }
+        } catch (e) {}
       }
     });
   }
@@ -231,22 +226,21 @@ class _ShifterState extends State<Shifter> with TickerProviderStateMixin {
     if (widget.enabled) {
       // Check if we're already inside a Hero widget to avoid nesting
       final existingHero = context.findAncestorWidgetOfExactType<Hero>();
-      
+
       if (existingHero == null) {
         // Only wrap in Hero if we're not already inside one
         child = Hero(
           tag: widget.shiftId,
           child: widget.child,
         );
-      } else {
-      }
-      
+      } else {}
+
       // Always wrap in SizedBox with key for position tracking
       child = SizedBox(
         key: _globalKey,
         child: child,
       );
-      
+
       // Add position reporting
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted && _isRegistered) {
@@ -257,8 +251,7 @@ class _ShifterState extends State<Shifter> with TickerProviderStateMixin {
               rect,
               context,
             );
-          } else {
-          }
+          } else {}
         }
       });
 

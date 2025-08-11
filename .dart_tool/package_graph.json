@@ -10,15 +10,7 @@
         "flutter"
       ],
       "devDependencies": [
-        "flutter_lints",
         "flutter_test"
-      ]
-    },
-    {
-      "name": "flutter_lints",
-      "version": "4.0.0",
-      "dependencies": [
-        "lints"
       ]
     },
     {
@@ -60,11 +52,6 @@
         "sky_engine",
         "vector_math"
       ]
-    },
-    {
-      "name": "lints",
-      "version": "4.0.0",
-      "dependencies": []
     },
     {
       "name": "vm_service",

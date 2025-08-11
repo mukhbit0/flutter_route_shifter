@@ -339,7 +339,8 @@ class RouteShifterUtils {
   }
 
   /// Creates a quick slide transition.
-  static RouteShifterBuilder quickSlide([Offset? beginOffset, Duration? duration]) {
+  static RouteShifterBuilder quickSlide(
+      [Offset? beginOffset, Duration? duration]) {
     return RouteShifterBuilder().slide(
       beginOffset: beginOffset ?? const Offset(1.0, 0.0),
       duration: duration ?? 250.milliseconds,

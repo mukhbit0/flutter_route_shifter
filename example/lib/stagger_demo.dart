@@ -88,11 +88,14 @@ class StaggerDemoPage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Card with Multiple Children',
-                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          const Text(
+                            'Card with Multiple Children',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                           const SizedBox(height: 8),
                           const Text(
-                              'This card contains multiple child widgets'),
+                            'This card contains multiple child widgets',
+                          ),
                           const SizedBox(height: 8),
                           ElevatedButton(
                             onPressed: () {},
@@ -139,14 +142,8 @@ class StaggerDemoPage extends StatelessWidget {
                     leading: const Icon(Icons.expand_more),
                     title: const Text('Expansion Tile'),
                     children: [
-                      ListTile(
-                        title: const Text('Child 1'),
-                        onTap: () {},
-                      ),
-                      ListTile(
-                        title: const Text('Child 2'),
-                        onTap: () {},
-                      ),
+                      ListTile(title: const Text('Child 1'), onTap: () {}),
+                      ListTile(title: const Text('Child 2'), onTap: () {}),
                     ],
                   ),
                 ),
@@ -199,9 +196,9 @@ class StaggerDemoPage extends StatelessWidget {
         break;
     }
 
-    Navigator.of(context).push(
-      builder.toRoute(page: const StaggerResultPage()),
-    );
+    Navigator.of(
+      context,
+    ).push(builder.toRoute(page: const StaggerResultPage()));
   }
 }
 

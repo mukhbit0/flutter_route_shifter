@@ -176,14 +176,15 @@ class _SharedElementOverlayState extends State<SharedElementOverlay>
     );
     _flightData = {};
     _setupSharedElements();
-    
+
     // Listen for animation completion to deactivate elements
     _overlayController.addStatusListener((status) {
-      if (status == AnimationStatus.completed || status == AnimationStatus.dismissed) {
+      if (status == AnimationStatus.completed ||
+          status == AnimationStatus.dismissed) {
         _cleanupSharedElements();
       }
     });
-    
+
     _overlayController.forward();
   }
 
@@ -195,26 +196,26 @@ class _SharedElementOverlayState extends State<SharedElementOverlay>
   }
 
   void _setupSharedElements() {
-    
     // First, activate all registered elements that have both source and target positions
     final allElements = ShifterRegistry.instance.getAllElements();
-    
+
     for (final entry in allElements.entries) {
       final shiftId = entry.key;
       final elementData = entry.value;
-      
+
       // Filter by shiftIds if provided
-      if (widget.shiftIds != null && !widget.shiftIds!.contains(shiftId.toString())) {
+      if (widget.shiftIds != null &&
+          !widget.shiftIds!.contains(shiftId.toString())) {
         continue;
       }
-      
+
       // Activate elements that have both source and target positions
-      if (elementData.sourceRect != Rect.zero && elementData.targetRect != null) {
+      if (elementData.sourceRect != Rect.zero &&
+          elementData.targetRect != null) {
         ShifterRegistry.instance.activateElement(shiftId);
-      } else {
-      }
+      } else {}
     }
-    
+
     // Now get the active elements for transition
     final sharedElements = ShifterRegistry.instance.getActiveElements();
 
@@ -231,16 +232,13 @@ class _SharedElementOverlayState extends State<SharedElementOverlay>
         elevationTween: widget.useElevation ? _createElevationTween() : null,
       );
     }
-    
   }
 
   void _cleanupSharedElements() {
-    
     // Deactivate all elements that were activated for this transition
     for (final shiftId in _flightData.keys) {
       ShifterRegistry.instance.deactivateElement(shiftId);
     }
-    
   }
 
   RectTween _createPositionTween(ShifterElementData elementData) {
