@@ -1,0 +1,42 @@
+name: flutter_route_shifter
+description: A powerful, declarative route transition package with chainable animations, shared elements, and advanced effects for Flutter applications.
+version: 1.0.0
+homepage: https://github.com/mukhbit0/flutter_route_shifter
+repository: https://github.com/mukhbit0/flutter_route_shifter
+issue_tracker: https://github.com/mukhbit0/flutter_route_shifter/issues
+documentation: https://github.com/mukhbit0/flutter_route_shifter/wiki
+
+topics:
+  - animation
+  - transitions
+  - navigation
+  - flutter
+  - material-design
+
+environment:
+  sdk: '>=3.1.0 <4.0.0'
+  flutter: '>=3.7.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+
+# Additional metadata for pub.dev
+platforms:
+  android:
+  ios:
+  web:
+  macos:
+  windows:
+  linux:
+
+funding:
+  - https://github.com/sponsors/yourorg
