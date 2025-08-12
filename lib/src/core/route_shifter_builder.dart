@@ -20,6 +20,7 @@ import 'route_shifter_builder/glass_morph_effects.dart';
 import 'route_shifter_builder/mask_effects.dart';
 import 'route_shifter_builder/physics_spring_effects.dart';
 import 'route_shifter_builder/glitch_effects.dart';
+import 'route_shifter_builder/shared_element_effects.dart';
 
 /// A modular builder class that provides a chainable API for creating animated route transitions.
 ///
@@ -50,7 +51,8 @@ class RouteShifterBuilder
         MaskEffects,
         PhysicsSpringEffects,
         GlitchEffects,
-        InteractiveEffects {
+        InteractiveEffects,
+        SharedElementEffects {
   final List<RouteEffect> _effects = [];
   bool _interactiveDismissEnabled = false;
   local_shifter.DismissDirection? _dismissDirection;

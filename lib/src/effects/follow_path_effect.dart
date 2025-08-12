@@ -43,7 +43,7 @@ class FollowPathEffect extends RouteEffect {
         try {
           final progress = animation.value;
           final metrics = path.computeMetrics();
-          
+
           // Safety check: Return child if path is empty
           if (metrics.isEmpty) {
             return Transform.translate(
@@ -51,7 +51,7 @@ class FollowPathEffect extends RouteEffect {
               child: child,
             );
           }
-          
+
           final pathMetric = metrics.first;
           final distance = pathMetric.length * progress;
 

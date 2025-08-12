@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Core Architecture**: Modular mixin-based RouteShifterBuilder system
 - **Chainable API**: Intuitive `.fade().slide().scale()` syntax
 - **Hero Integration**: Simplified shared elements using Flutter's Hero widgets
-- **Comprehensive Effects Library**: 18+ animation effects
+- **Comprehensive Effects Library**: 34+ animation effects
 
 #### 🎨 Basic Effects
 - **Fade Effect**: Smooth opacity transitions with customizable begin/end values
@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Physics Spring Effect**: Natural spring-based motion with customizable physics
 
 #### 🔗 Combined Features
+- **Sequenced Animations**: Manual timing control with SequencedItem widgets for precise choreography
 - **Stagger Effects**: Cascading animations for lists and grids
 - **Shared Elements**: Hero-like transitions between pages
 - **Platform Presets**: Material Design and Cupertino (iOS) style transitions
@@ -119,7 +120,7 @@ RouteShifterBuilder()
 - **Battery Impact**: Minimal, optimized for mobile
 
 ### 📊 Package Statistics
-- **Total Effects**: 18 unique animation types
+- **Total Effects**: 34+ unique animation types
 - **Code Coverage**: 85%+ test coverage
 - **Lines of Code**: ~3,500 lines
 - **Documentation**: 100% public API documented

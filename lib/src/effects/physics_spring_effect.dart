@@ -94,7 +94,10 @@ class _SpringEffectWrapperState extends State<_SpringEffectWrapper>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this);
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 800), // Set default duration
+      vsync: this,
+    );
     _springAnimation = _controller.drive(Tween<double>(begin: 0.0, end: 1.0));
 
     // Listen to the parent animation to trigger the spring
@@ -107,23 +110,21 @@ class _SpringEffectWrapperState extends State<_SpringEffectWrapper>
         // Validate physics parameters to prevent simulation errors
         final mass = widget.mass.clamp(0.1, 10.0);
         final stiffness = widget.stiffness.clamp(1.0, 1000.0);
-        final damping = widget.damping.clamp(0.1, 10.0);
-        
+        final damping = widget.damping.clamp(0.1, 100.0);
+
         final simulation = SpringSimulation(
-          SpringDescription(
-              mass: mass,
-              stiffness: stiffness,
-              damping: damping),
+          SpringDescription(mass: mass, stiffness: stiffness, damping: damping),
           0.0, // start
           1.0, // end
-          1.0, // velocity
+          0.0, // velocity (start with 0 velocity)
         );
         _controller.animateWith(simulation);
       } else if (widget.parentAnimation.status == AnimationStatus.reverse) {
         _controller.reverse();
       }
     } catch (e) {
-      // Fallback to simple animation if physics simulation fails
+      // Fallback to simple animation with proper duration if physics simulation fails
+      _controller.duration = const Duration(milliseconds: 800);
       _controller.forward();
     }
   }

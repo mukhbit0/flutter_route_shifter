@@ -1,6 +1,8 @@
+// file: lib/src/core/route_shifter_builder/advanced_effects.dart
 import 'package:flutter/material.dart';
 import '../../effects/blur_effect.dart';
 import '../../effects/rotation_effect.dart';
+import '../../effects/sequenced_effect.dart';
 import '../../effects/stagger_effect.dart';
 import '../../effects/base_effect.dart';
 
@@ -102,7 +104,6 @@ mixin AdvancedEffects {
   dynamic stagger({
     Duration? interval,
     bool Function(Widget)? selector,
-    bool Function(Element)? elementSelector,
     RouteEffect? baseEffect,
     int maxStaggeredChildren = 20,
     bool reverse = false,
@@ -110,14 +111,29 @@ mixin AdvancedEffects {
     Curve curve = Curves.easeInOut,
   }) {
     effects.add(StaggerEffect(
-      interval: interval ?? const Duration(milliseconds: 100),
+      interval: interval,
       selector: selector,
-      elementSelector: elementSelector,
       baseEffect: baseEffect,
       maxStaggeredChildren: maxStaggeredChildren,
       reverse: reverse,
       duration: duration,
       curve: curve,
+    ));
+    return this;
+  }
+
+  /// Animates widgets based on a manually defined sequence of timings.
+  dynamic sequenced({
+    required Map<Object, Duration> timings,
+    RouteEffect? baseEffect,
+    Duration? duration,
+    Curve? curve,
+  }) {
+    effects.add(SequencedEffect(
+      timings: timings,
+      baseEffect: baseEffect,
+      duration: duration,
+      curve: curve ?? Curves.easeInOut,
     ));
     return this;
   }

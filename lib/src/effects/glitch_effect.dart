@@ -83,7 +83,7 @@ class _GlitchEffectWrapperState extends State<_GlitchEffectWrapper> {
       if (widget.intensity < 0.1) {
         return;
       }
-      
+
       _glitchTimer ??=
           Timer.periodic(const Duration(milliseconds: 50), (timer) {
         if (!mounted || widget.animation.value > 0.8) {
@@ -101,7 +101,8 @@ class _GlitchEffectWrapperState extends State<_GlitchEffectWrapper> {
         if (mounted) {
           setState(() {
             final intensity = widget.intensity * (1 - widget.animation.value);
-            _translate = Offset(_random.nextDouble() * intensity - intensity / 2,
+            _translate = Offset(
+                _random.nextDouble() * intensity - intensity / 2,
                 _random.nextDouble() * intensity - intensity / 2);
             _shear = Offset(_random.nextDouble() * 0.1 - 0.05, 0);
             _colorFilter = [

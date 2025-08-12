@@ -3,6 +3,49 @@ import 'package:flutter/material.dart';
 /// Extension to fix missing import
 import 'dart:math' as math;
 
+/// Safe wrapper for any curve that ensures bounds are never exceeded.
+class SafeCurve extends Curve {
+  final Curve _inner;
+  const SafeCurve(this._inner);
+
+  @override
+  double transformInternal(double t) {
+    final clamped = t.clamp(0.0, 1.0);
+    // Use the inner curve's transform (not transformInternal) to be safe.
+    final result = _inner.transform(clamped);
+    return result.clamp(0.0, 1.0);
+  }
+}
+
+/// Safe wrapper for Interval curves that ensures bounds are never exceeded.
+class SafeInterval extends Curve {
+  final double begin;
+  final double end;
+  final Curve curve;
+
+  const SafeInterval(this.begin, this.end, {this.curve = Curves.linear});
+
+  @override
+  double transformInternal(double t) {
+    // Ensure input is clamped
+    t = t.clamp(0.0, 1.0);
+
+    // Ensure begin and end are valid
+    final safeBegin = begin.clamp(0.0, 1.0);
+    final safeEnd = end.clamp(safeBegin, 1.0);
+
+    if (t < safeBegin) {
+      return 0.0;
+    } else if (t > safeEnd) {
+      return 1.0;
+    } else {
+      final adjustedT = (t - safeBegin) / (safeEnd - safeBegin);
+      final result = curve.transform(adjustedT.clamp(0.0, 1.0));
+      return result.clamp(0.0, 1.0);
+    }
+  }
+}
+
 /// Custom animation curves following Material Design and platform conventions.
 ///
 /// This class provides additional curves beyond Flutter's built-in curves,
@@ -71,8 +114,8 @@ class ShifterCurves {
   /// Smooth curve for shared element transitions.
   static const Curve sharedElementFlight = Cubic(0.2, 0.0, 0.0, 1.0);
 
-  /// Bouncy curve for playful animations.
-  static const Curve playfulBounce = Cubic(0.68, -0.55, 0.265, 1.55);
+  /// Bouncy curve for playful animations, now wrapped for safety.
+  static final Curve playfulBounce = SafeCurve(Cubic(0.68, -0.55, 0.265, 1.55));
 
   /// Gentle bounce for subtle effects.
   static const Curve gentleBounce = Cubic(0.25, 0.46, 0.45, 0.94);
@@ -101,25 +144,93 @@ class ElasticCurves {
   ElasticCurves._();
 
   /// Light elastic effect.
-  static const Curve light = ElasticOutCurve(0.7);
+  static const Curve light = _SafeElasticOutCurve(0.7);
 
   /// Medium elastic effect.
-  static const Curve medium = ElasticOutCurve(0.5);
+  static const Curve medium = _SafeElasticOutCurve(0.5);
 
   /// Strong elastic effect.
-  static const Curve strong = ElasticOutCurve(0.3);
+  static const Curve strong = _SafeElasticOutCurve(0.3);
 
   /// Extra strong elastic effect.
-  static const Curve extraStrong = ElasticOutCurve(0.1);
+  static const Curve extraStrong = _SafeElasticOutCurve(0.1);
 
   /// Custom elastic in curve.
-  static const Curve elasticIn = ElasticInCurve(0.7);
+  static const Curve elasticIn = _SafeElasticInCurve(0.7);
 
   /// Custom elastic out curve.
-  static const Curve elasticOut = ElasticOutCurve(0.7);
+  static const Curve elasticOut = _SafeElasticOutCurve(0.7);
 
   /// Custom elastic in-out curve.
-  static const Curve elasticInOut = ElasticInOutCurve(0.7);
+  static const Curve elasticInOut = _SafeElasticInOutCurve(0.7);
+}
+
+/// Safe elastic out curve that clamps values to [0, 1].
+class _SafeElasticOutCurve extends Curve {
+  final double period;
+
+  const _SafeElasticOutCurve([this.period = 0.4]);
+
+  @override
+  double transformInternal(double t) {
+    t = t.clamp(0.0, 1.0);
+    if (t == 0.0 || t == 1.0) {
+      return t;
+    }
+    const double s = 0.1591549431; // period / (2 * pi) * asin(1.0)
+    final double result =
+        math.pow(2.0, -10 * t) * math.sin((t - s) * (math.pi * 2.0) / period) +
+            1.0;
+    return result.clamp(0.0, 1.0);
+  }
+}
+
+/// Safe elastic in curve that clamps values to [0, 1].
+class _SafeElasticInCurve extends Curve {
+  final double period;
+
+  const _SafeElasticInCurve([this.period = 0.4]);
+
+  @override
+  double transformInternal(double t) {
+    t = t.clamp(0.0, 1.0);
+    if (t == 0.0 || t == 1.0) {
+      return t;
+    }
+    const double s = 0.1591549431; // period / (2 * pi) * asin(1.0)
+    final double result = -math.pow(2.0, 10 * (t - 1)) *
+        math.sin(((t - 1) - s) * (math.pi * 2.0) / period);
+    return result.clamp(0.0, 1.0);
+  }
+}
+
+/// Safe elastic in-out curve that clamps values to [0, 1].
+class _SafeElasticInOutCurve extends Curve {
+  final double period;
+
+  const _SafeElasticInOutCurve([this.period = 0.4]);
+
+  @override
+  double transformInternal(double t) {
+    t = t.clamp(0.0, 1.0);
+    if (t == 0.0 || t == 1.0) {
+      return t;
+    }
+    const double s = 0.1591549431; // period / (2 * pi) * asin(1.0)
+    t = 2.0 * t - 1.0;
+    double result;
+    if (t < 0.0) {
+      result = -0.5 *
+          math.pow(2.0, 10 * t) *
+          math.sin((t - s) * (math.pi * 2.0) / period);
+    } else {
+      result = math.pow(2.0, -10 * t) *
+              math.sin((t - s) * (math.pi * 2.0) / period) *
+              0.5 +
+          1.0;
+    }
+    return result.clamp(0.0, 1.0);
+  }
 }
 
 /// Collection of anticipation curves that overshoot before settling.
@@ -150,14 +261,19 @@ class _AnticipationCurve extends Curve {
 
   @override
   double transformInternal(double t) {
+    t = t.clamp(0.0, 1.0);
+
+    double result;
     if (t < 0.2) {
-      // Negative overshoot phase
-      return -overshoot * (0.2 - t) / 0.2;
+      // Negative overshoot phase - but clamp to 0 minimum
+      result = -overshoot * (0.2 - t) / 0.2;
     } else {
       // Normal progression with slight overshoot at the end
       final adjusted = (t - 0.2) / 0.8;
-      return Curves.easeOutBack.transform(adjusted);
+      result = Curves.easeOutBack.transform(adjusted.clamp(0.0, 1.0));
     }
+
+    return result.clamp(0.0, 1.0);
   }
 }
 
@@ -170,12 +286,16 @@ class StaggerCurve extends Curve {
 
   @override
   double transformInternal(double t) {
-    if (t < staggerRatio) {
+    t = t.clamp(0.0, 1.0);
+    final safeStaggerRatio = staggerRatio.clamp(0.0, 1.0);
+
+    if (t < safeStaggerRatio) {
       return 0.0;
     }
 
-    final adjustedT = (t - staggerRatio) / (1.0 - staggerRatio);
-    return baseCurve.transform(adjustedT);
+    final adjustedT = (t - safeStaggerRatio) / (1.0 - safeStaggerRatio);
+    final result = baseCurve.transform(adjustedT.clamp(0.0, 1.0));
+    return result.clamp(0.0, 1.0);
   }
 }
 
@@ -193,9 +313,11 @@ class WaveCurve extends Curve {
 
   @override
   double transformInternal(double t) {
+    t = t.clamp(0.0, 1.0);
     final baseValue = baseCurve.transform(t);
     final wave = amplitude * math.sin(frequency * math.pi * t);
-    return (baseValue + wave).clamp(0.0, 1.0);
+    final result = baseValue + wave;
+    return result.clamp(0.0, 1.0);
   }
 }
 
@@ -240,13 +362,23 @@ class _CombinedCurve extends Curve {
 
   @override
   double transformInternal(double t) {
-    if (t < transitionPoint) {
-      return first.transform(t / transitionPoint) * transitionPoint;
+    t = t.clamp(0.0, 1.0);
+    final safeTransitionPoint = transitionPoint.clamp(0.0, 1.0);
+
+    double result;
+    if (t < safeTransitionPoint) {
+      final adjustedT = safeTransitionPoint > 0 ? t / safeTransitionPoint : 0.0;
+      result = first.transform(adjustedT.clamp(0.0, 1.0)) * safeTransitionPoint;
     } else {
-      final adjustedT = (t - transitionPoint) / (1.0 - transitionPoint);
-      return transitionPoint +
-          second.transform(adjustedT) * (1.0 - transitionPoint);
+      final adjustedT = (1.0 - safeTransitionPoint) > 0
+          ? (t - safeTransitionPoint) / (1.0 - safeTransitionPoint)
+          : 0.0;
+      result = safeTransitionPoint +
+          second.transform(adjustedT.clamp(0.0, 1.0)) *
+              (1.0 - safeTransitionPoint);
     }
+
+    return result.clamp(0.0, 1.0);
   }
 }
 
@@ -260,14 +392,25 @@ class _PauseCurve extends Curve {
 
   @override
   double transformInternal(double t) {
-    if (t < pauseStart) {
-      return curve.transform(t / pauseStart) * pauseStart;
-    } else if (t < pauseEnd) {
-      return pauseStart;
+    t = t.clamp(0.0, 1.0);
+    final safePauseStart = pauseStart.clamp(0.0, 1.0);
+    final safePauseEnd = pauseEnd.clamp(safePauseStart, 1.0);
+
+    double result;
+    if (t < safePauseStart) {
+      final adjustedT = safePauseStart > 0 ? t / safePauseStart : 0.0;
+      result = curve.transform(adjustedT.clamp(0.0, 1.0)) * safePauseStart;
+    } else if (t < safePauseEnd) {
+      result = safePauseStart;
     } else {
-      final adjustedT = (t - pauseEnd) / (1.0 - pauseEnd);
-      return pauseStart + curve.transform(adjustedT) * (1.0 - pauseStart);
+      final adjustedT = (1.0 - safePauseEnd) > 0
+          ? (t - safePauseEnd) / (1.0 - safePauseEnd)
+          : 0.0;
+      result = safePauseStart +
+          curve.transform(adjustedT.clamp(0.0, 1.0)) * (1.0 - safePauseStart);
     }
+
+    return result.clamp(0.0, 1.0);
   }
 }
 
@@ -279,7 +422,9 @@ class _ReverseCurve extends Curve {
 
   @override
   double transformInternal(double t) {
-    return 1.0 - curve.transform(1.0 - t);
+    t = t.clamp(0.0, 1.0);
+    final result = 1.0 - curve.transform(1.0 - t);
+    return result.clamp(0.0, 1.0);
   }
 }
 
@@ -291,6 +436,10 @@ class _SteppedCurve extends Curve {
 
   @override
   double transformInternal(double t) {
-    return (t * steps).floor() / steps;
+    t = t.clamp(0.0, 1.0);
+    if (steps <= 0) return t;
+
+    final result = (t * steps).floor() / steps;
+    return result.clamp(0.0, 1.0);
   }
 }

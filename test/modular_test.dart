@@ -49,8 +49,7 @@ void main() {
       final builder = RouteShifterBuilder()
         ..stagger(
           interval: const Duration(milliseconds: 100),
-          elementSelector: (element) {
-            final widget = element.widget;
+          selector: (Widget widget) {
             return widget is Card || widget is ListTile;
           },
         );

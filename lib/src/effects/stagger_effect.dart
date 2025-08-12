@@ -1,561 +1,199 @@
+// file: lib/src/effects/stagger_effect.dart
 import 'package:flutter/material.dart';
 import 'base_effect.dart';
-import 'fade_effect.dart';
+import 'slide_effect.dart';
 
-/// A stagger effect that applies delayed animations to child widgets.
-///
-/// This effect creates beautiful cascading animations where child widgets
-/// animate in sequence with configurable delays between them.
-///
-/// Features:
-/// - Robust widget tree traversal using Element.visitChildren()
-/// - Support for nested widgets (Cards in Containers, ListTiles in Padding, etc.)
-/// - Configurable widget selectors for precise control
-/// - Automatic detection of common UI widgets
-/// - Performance-optimized with configurable limits
-///
-/// Example:
-/// ```dart
-/// RouteShifterBuilder()
-///   .stagger(
-///     interval: Duration(milliseconds: 100),
-///     selector: (widget) => widget is Card || widget is ListTile,
-///   )
-///   .slide()
-///   .toRoute(page: NextPage())
-/// ```
-///
-/// Advanced usage with element selector:
-/// ```dart
-/// RouteShifterBuilder()
-///   .stagger(
-///     interval: Duration(milliseconds: 150),
-///     elementSelector: (element) {
-///       final widget = element.widget;
-///       return widget is Card &&
-///              element.size?.height != null &&
-///              element.size!.height > 100;
-///     },
-///   )
-///   .scale()
-///   .toRoute(page: NextPage())
-/// ```
+/// An effect that applies delayed animations to specific child widgets of a route.
 class StaggerEffect extends RouteEffect {
-  /// The interval between each child animation.
-  final Duration interval;
-
-  /// Function to determine which widgets should be staggered.
-  /// If null, default staggerable widgets will be selected automatically.
+  final Duration? interval;
   final bool Function(Widget)? selector;
-
-  /// Advanced function to determine which elements should be staggered.
-  /// Provides access to the Element for advanced filtering based on
-  /// size, position, or other element properties.
-  /// Takes precedence over [selector] when both are provided.
-  final bool Function(Element)? elementSelector;
-
-  /// The base effect to apply to each staggered widget.
-  final RouteEffect baseEffect;
-
-  /// Maximum number of widgets to stagger (prevents performance issues).
+  final RouteEffect? baseEffect;
   final int maxStaggeredChildren;
-
-  /// Whether to reverse the stagger order.
   final bool reverse;
 
-  /// Creates a stagger effect.
-  ///
-  /// [interval] time delay between each child animation
-  /// [selector] function to filter which widgets get staggered
-  /// [elementSelector] advanced function for element-based filtering
-  /// [baseEffect] the effect to apply to each widget (defaults to fade)
-  /// [maxStaggeredChildren] maximum children to process
-  /// [reverse] whether to animate in reverse order
   const StaggerEffect({
-    this.interval = const Duration(milliseconds: 100),
+    this.interval,
     this.selector,
-    this.elementSelector,
-    RouteEffect? baseEffect,
-    this.maxStaggeredChildren = 20,
+    this.baseEffect,
+    this.maxStaggeredChildren = 30,
     this.reverse = false,
     super.duration,
-    super.curve = Curves.easeInOut,
+    super.curve,
     super.start,
     super.end,
-  }) : baseEffect = baseEffect ?? const FadeEffect();
+  });
 
   @override
   Widget buildTransition(Animation<double> animation, Widget child) {
-    return StaggeredAnimationWrapper(
+    return _StaggerAnimationOverlay(
       animation: animation,
-      interval: interval,
-      selector: selector,
-      elementSelector: elementSelector,
-      baseEffect: baseEffect,
-      maxChildren: maxStaggeredChildren,
-      reverse: reverse,
       child: child,
+      staggerEffect: this,
     );
   }
 
   @override
   StaggerEffect copyWith({
-    Duration? interval,
-    bool Function(Widget)? selector,
-    bool Function(Element)? elementSelector,
-    RouteEffect? baseEffect,
-    int? maxStaggeredChildren,
-    bool? reverse,
     Duration? duration,
     Curve? curve,
     double? start,
     double? end,
   }) {
     return StaggerEffect(
-      interval: interval ?? this.interval,
-      selector: selector ?? this.selector,
-      elementSelector: elementSelector ?? this.elementSelector,
-      baseEffect: baseEffect ?? this.baseEffect,
-      maxStaggeredChildren: maxStaggeredChildren ?? this.maxStaggeredChildren,
-      reverse: reverse ?? this.reverse,
+      interval: interval,
+      selector: selector,
+      baseEffect: baseEffect,
+      maxStaggeredChildren: maxStaggeredChildren,
+      reverse: reverse,
       duration: duration ?? this.duration,
       curve: curve ?? this.curve,
       start: start ?? this.start,
       end: end ?? this.end,
     );
   }
-
-  /// Creates a stagger effect for Card widgets.
-  factory StaggerEffect.cards({
-    Duration? interval,
-    RouteEffect? baseEffect,
-    bool reverse = false,
-    Duration? duration,
-    Curve? curve,
-    double? start,
-    double? end,
-  }) {
-    return StaggerEffect(
-      interval: interval ?? const Duration(milliseconds: 80),
-      selector: (widget) => widget is Card,
-      baseEffect: baseEffect,
-      reverse: reverse,
-      duration: duration,
-      curve: curve ?? Curves.easeInOut,
-      start: start ?? 0.0,
-      end: end ?? 1.0,
-    );
-  }
-
-  /// Creates a stagger effect for ListTile widgets.
-  factory StaggerEffect.listTiles({
-    Duration? interval,
-    RouteEffect? baseEffect,
-    bool reverse = false,
-    Duration? duration,
-    Curve? curve,
-    double? start,
-    double? end,
-  }) {
-    return StaggerEffect(
-      interval: interval ?? const Duration(milliseconds: 60),
-      selector: (widget) => widget is ListTile,
-      baseEffect: baseEffect,
-      reverse: reverse,
-      duration: duration,
-      curve: curve ?? Curves.easeInOut,
-      start: start ?? 0.0,
-      end: end ?? 1.0,
-    );
-  }
-
-  /// Creates a stagger effect for Container widgets.
-  factory StaggerEffect.containers({
-    Duration? interval,
-    RouteEffect? baseEffect,
-    bool reverse = false,
-    Duration? duration,
-    Curve? curve,
-    double? start,
-    double? end,
-  }) {
-    return StaggerEffect(
-      interval: interval ?? const Duration(milliseconds: 100),
-      selector: (widget) => widget is Container,
-      baseEffect: baseEffect,
-      reverse: reverse,
-      duration: duration,
-      curve: curve ?? Curves.easeInOut,
-      start: start ?? 0.0,
-      end: end ?? 1.0,
-    );
-  }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      super == other &&
-          other is StaggerEffect &&
-          interval == other.interval &&
-          selector == other.selector &&
-          baseEffect == other.baseEffect &&
-          maxStaggeredChildren == other.maxStaggeredChildren &&
-          reverse == other.reverse;
-
-  @override
-  int get hashCode => Object.hash(super.hashCode, interval, selector,
-      baseEffect, maxStaggeredChildren, reverse);
-
-  @override
-  String toString() => 'StaggerEffect(interval: $interval, reverse: $reverse, '
-      'maxChildren: $maxStaggeredChildren, duration: $duration)';
 }
 
-/// Widget that applies staggered animations to its children.
-class StaggeredAnimationWrapper extends StatefulWidget {
+/// This widget implements the "Layout and Overlay" technique for robust staggering.
+class _StaggerAnimationOverlay extends StatefulWidget {
   final Animation<double> animation;
-  final Duration interval;
-  final bool Function(Widget)? selector;
-  final bool Function(Element)? elementSelector;
-  final RouteEffect baseEffect;
-  final int maxChildren;
-  final bool reverse;
   final Widget child;
+  final StaggerEffect staggerEffect;
 
-  const StaggeredAnimationWrapper({
-    Key? key,
+  const _StaggerAnimationOverlay({
     required this.animation,
-    required this.interval,
-    this.selector,
-    this.elementSelector,
-    required this.baseEffect,
-    required this.maxChildren,
-    required this.reverse,
     required this.child,
-  }) : super(key: key);
+    required this.staggerEffect,
+  });
 
   @override
-  State<StaggeredAnimationWrapper> createState() =>
-      _StaggeredAnimationWrapperState();
+  State<_StaggerAnimationOverlay> createState() =>
+      _StaggerAnimationOverlayState();
 }
 
-class _StaggeredAnimationWrapperState extends State<StaggeredAnimationWrapper> {
-  final List<Widget> _staggeredChildren = [];
-  late final List<Animation<double>> _childAnimations;
+class _StaggerAnimationOverlayState extends State<_StaggerAnimationOverlay> {
+  final List<_StaggeredItem> _staggeredItems = [];
 
   @override
   void initState() {
     super.initState();
-    _processChildren();
-    _createChildAnimations();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _discoverAndAnimate();
+      }
+    });
   }
 
-  /// Processes the child widget tree to find staggerable widgets using sophisticated Element traversal.
-  void _processChildren() {
-    final children = <Widget>[];
+  void _discoverAndAnimate() {
+    final List<Element> foundElements = [];
+    final selector = widget.staggerEffect.selector ?? (_) => false;
+    final maxChildren = widget.staggerEffect.maxStaggeredChildren;
 
-    // Get the current build context for element traversal
-    final context = this.context;
-
-    final Set<Element> visitedElements = {};
-
-    /// Deep element traversal using Element.visitChildren() for robust widget discovery
-    void deepElementTraversal(Element element) {
-      if (visitedElements.contains(element) ||
-          children.length >= widget.maxChildren) {
-        return;
+    void visit(Element element) {
+      if (foundElements.length >= maxChildren) return;
+      if (selector(element.widget)) {
+        foundElements.add(element);
       }
-
-      visitedElements.add(element);
-      final elementWidget = element.widget;
-
-      // Check if this widget should be staggered
-      bool shouldStagger = false;
-      if (widget.elementSelector != null) {
-        shouldStagger = widget.elementSelector!(element);
-      } else if (widget.selector != null) {
-        shouldStagger = widget.selector!(elementWidget);
-      } else {
-        // Default stagger detection for common UI widgets
-        shouldStagger = _isDefaultStaggerableWidget(elementWidget);
-      }
-
-      if (shouldStagger) {
-        children.add(elementWidget);
-      }
-
-      // Recursively visit all child elements
-      element.visitChildren(deepElementTraversal);
+      element.visitChildren(visit);
     }
 
-    // Alternative widget-based traversal for widget-only contexts
-    void fallbackWidgetTraversal(Widget widgetNode) {
-      if (children.length >= widget.maxChildren) return;
+    context.visitChildElements(visit);
 
-      if (widget.selector == null || widget.selector!(widgetNode)) {
-        children.add(widgetNode);
-      }
+    final orderedElements = widget.staggerEffect.reverse
+        ? foundElements.reversed.toList()
+        : foundElements;
 
-      // Enhanced widget traversal with better coverage
-      if (widgetNode is SingleChildRenderObjectWidget &&
-          widgetNode.child != null) {
-        fallbackWidgetTraversal(widgetNode.child!);
-      } else if (widgetNode is ProxyWidget) {
-        fallbackWidgetTraversal(widgetNode.child);
-      } else if (widgetNode is ParentDataWidget) {
-        fallbackWidgetTraversal(widgetNode.child);
-      } else if (widgetNode is InheritedWidget) {
-        fallbackWidgetTraversal(widgetNode.child);
-      } else if (widgetNode is MultiChildRenderObjectWidget) {
-        _traverseMultiChildWidget(widgetNode, fallbackWidgetTraversal);
-      } else if (widgetNode is StatefulWidget ||
-          widgetNode is StatelessWidget) {
-        // For complex widgets, we can't easily traverse without building
-        // But we can detect common patterns
-        _handleComplexWidget(widgetNode, fallbackWidgetTraversal);
-      }
+    if (orderedElements.isEmpty) {
+      setState(() {});
+      return;
     }
 
-    // Try element traversal first (more robust), fallback to widget traversal
-    try {
-      // Convert BuildContext to Element safely
-      final Element contextElement = context as Element;
-      deepElementTraversal(contextElement);
-    } catch (e) {
-      // Fallback to widget-based traversal if element traversal fails
-      fallbackWidgetTraversal(widget.child);
-    }
+    final effect = widget.staggerEffect;
+    final parentAnimation = widget.animation;
+    final baseEffect =
+        effect.baseEffect ?? const SlideEffect(begin: Offset(0, 0.2));
+    final effectDuration =
+        baseEffect.duration ?? const Duration(milliseconds: 400);
+    final staggerInterval = effect.interval ?? const Duration(milliseconds: 60);
 
-    _staggeredChildren.clear();
-    _staggeredChildren.addAll(widget.reverse ? children.reversed : children);
-  }
+    // *** THE FIX IS HERE ***
+    // The total duration is now calculated dynamically to ensure it's long enough
+    // for all staggered items to complete their animation.
+    final totalDuration =
+        (staggerInterval * (orderedElements.length - 1)) + effectDuration;
 
-  /// Determines if a widget is staggerable by default
-  bool _isDefaultStaggerableWidget(Widget widget) {
-    return widget is Card ||
-        widget is ListTile ||
-        widget is Container ||
-        widget is Material ||
-        widget is InkWell ||
-        widget is GestureDetector ||
-        widget is AnimatedContainer ||
-        widget is Chip ||
-        widget is FloatingActionButton ||
-        widget is ElevatedButton ||
-        widget is OutlinedButton ||
-        widget is TextButton ||
-        widget is IconButton ||
-        widget is ExpansionTile ||
-        widget is SwitchListTile ||
-        widget is CheckboxListTile ||
-        widget is RadioListTile ||
-        widget is GridTile ||
-        widget is DataRow ||
-        widget is TableRow ||
-        (widget is Padding && _hasStaggerableChild(widget.child)) ||
-        (widget is Align && _hasStaggerableChild(widget.child)) ||
-        (widget is Center && _hasStaggerableChild(widget.child));
-  }
+    for (int i = 0; i < orderedElements.length; i++) {
+      final element = orderedElements[i];
+      final renderBox = element.findRenderObject() as RenderBox?;
+      if (renderBox == null || !renderBox.attached) continue;
 
-  /// Checks if a child widget is worth staggering
-  bool _hasStaggerableChild(Widget? child) {
-    return child != null && _isDefaultStaggerableWidget(child);
-  }
+      final offset = renderBox.localToGlobal(Offset.zero);
+      final size = renderBox.size;
+      final rect = offset & size;
 
-  /// Handles traversal of multi-child widgets
-  void _traverseMultiChildWidget(
-      MultiChildRenderObjectWidget widget, void Function(Widget) visitor) {
-    if (widget is Column) {
-      widget.children.forEach(visitor);
-    } else if (widget is Row) {
-      widget.children.forEach(visitor);
-    } else if (widget is Stack) {
-      widget.children.forEach(visitor);
-    } else if (widget is Flex) {
-      widget.children.forEach(visitor);
-    } else if (widget is Wrap) {
-      widget.children.forEach(visitor);
-    } else if (widget is Flow) {
-      widget.children.forEach(visitor);
-    } else if (widget is Table && widget.children.isNotEmpty) {
-      widget.children.forEach(visitor);
-    } else if (widget is IndexedStack) {
-      widget.children.forEach(visitor);
-    }
-  }
+      final delay = staggerInterval * i;
+      // These values are now guaranteed to be between 0.0 and 1.0.
+      final startTime = delay.inMilliseconds / totalDuration.inMilliseconds;
+      final endTime = (delay + effectDuration).inMilliseconds /
+          totalDuration.inMilliseconds;
 
-  /// Handles complex widgets that might contain staggerable children
-  void _handleComplexWidget(Widget widget, void Function(Widget) visitor) {
-    // Handle widgets that we know might contain lists or grids
-    if (widget.runtimeType.toString().contains('ListView') ||
-        widget.runtimeType.toString().contains('GridView') ||
-        widget.runtimeType.toString().contains('CustomScrollView') ||
-        widget.runtimeType.toString().contains('SingleChildScrollView')) {
-      // These typically contain multiple children but we can't easily access them
-      // without building. The element traversal should handle these cases better.
-    }
-  }
-
-  /// Creates individual animations for each staggered child.
-  void _createChildAnimations() {
-    _childAnimations = [];
-
-    for (int i = 0; i < _staggeredChildren.length; i++) {
-      final delay = widget.interval.inMilliseconds * i;
-      // Use a default duration since Animation doesn't have duration property
-      final totalDuration = widget.baseEffect.duration?.inMilliseconds ?? 300;
-
-      // Calculate the start point as a percentage of the total animation
-      final startRatio = (delay / totalDuration).clamp(0.0, 1.0);
-      final endRatio = 1.0;
-
-      final childAnimation = CurvedAnimation(
-        parent: widget.animation,
-        curve: Interval(startRatio, endRatio, curve: Curves.easeOut),
+      final animation = CurvedAnimation(
+        parent: parentAnimation,
+        curve: Interval(
+          startTime,
+          endTime.clamp(startTime, 1.0), // Clamp is kept as a safeguard
+          curve: effect.curve,
+        ),
       );
 
-      _childAnimations.add(childAnimation);
+      _staggeredItems.add(_StaggeredItem(
+        rect: rect,
+        widget: element.widget,
+        animation: animation,
+      ));
     }
+
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    // For now, we'll apply the stagger effect to the entire child
-    // In a complete implementation, this would traverse and wrap individual children
-    return widget.baseEffect.build(widget.animation, widget.child);
+    // Show the original child until the animated items are ready.
+    if (_staggeredItems.isEmpty) {
+      return widget.child;
+    }
+
+    return Stack(
+      children: [
+        Opacity(
+          opacity: 0.0,
+          child: widget.child,
+        ),
+        ..._staggeredItems.map((item) {
+          final baseEffect = widget.staggerEffect.baseEffect ??
+              const SlideEffect(begin: Offset(0, 0.2));
+          return AnimatedBuilder(
+            animation: item.animation,
+            builder: (context, child) {
+              return Positioned.fromRect(
+                rect: item.rect,
+                child: baseEffect.build(item.animation, item.widget),
+              );
+            },
+          );
+        }),
+      ],
+    );
   }
 }
 
-/// A simpler staggered widget that works with explicit children.
-class StaggeredGroup extends StatelessWidget {
-  /// The children to animate with stagger effect.
-  final List<Widget> children;
-
-  /// The animation to drive the stagger.
+class _StaggeredItem {
+  final Rect rect;
+  final Widget widget;
   final Animation<double> animation;
 
-  /// The interval between each child animation.
-  final Duration interval;
-
-  /// The base effect to apply to each child.
-  final RouteEffect baseEffect;
-
-  /// Whether to reverse the animation order.
-  final bool reverse;
-
-  const StaggeredGroup({
-    Key? key,
-    required this.children,
+  _StaggeredItem({
+    required this.rect,
+    required this.widget,
     required this.animation,
-    this.interval = const Duration(milliseconds: 100),
-    this.baseEffect = const FadeEffect(),
-    this.reverse = false,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final processedChildren = reverse ? children.reversed.toList() : children;
-    final animatedChildren = <Widget>[];
-
-    for (int i = 0; i < processedChildren.length; i++) {
-      final delay = interval.inMilliseconds * i;
-      // Use the base effect duration since Animation doesn't have duration property
-      final totalDuration = baseEffect.duration?.inMilliseconds ?? 300;
-
-      final startRatio = (delay / totalDuration).clamp(0.0, 0.8);
-      final endRatio = 1.0;
-
-      final childAnimation = CurvedAnimation(
-        parent: animation,
-        curve: Interval(startRatio, endRatio, curve: Curves.easeOut),
-      );
-
-      final animatedChild =
-          baseEffect.build(childAnimation, processedChildren[i]);
-      animatedChildren.add(animatedChild);
-    }
-
-    // Return the children in their original structure
-    // This is a simplified implementation - real usage would depend on the parent widget
-    return Column(children: animatedChildren);
-  }
-}
-
-/// Utility class for creating staggered animations.
-class StaggerUtils {
-  StaggerUtils._();
-
-  /// Creates a list of staggered animations for the given children.
-  static List<Animation<double>> createStaggeredAnimations({
-    required Animation<double> parent,
-    required int childCount,
-    required Duration interval,
-    Duration? totalDuration,
-    Curve curve = Curves.easeOut,
-  }) {
-    final animations = <Animation<double>>[];
-    final duration = totalDuration ?? const Duration(milliseconds: 600);
-
-    for (int i = 0; i < childCount; i++) {
-      final delay = interval.inMilliseconds * i;
-      final startRatio = (delay / duration.inMilliseconds).clamp(0.0, 0.8);
-
-      final animation = CurvedAnimation(
-        parent: parent,
-        curve: Interval(startRatio, 1.0, curve: curve),
-      );
-
-      animations.add(animation);
-    }
-
-    return animations;
-  }
-
-  /// Wraps a list of children with staggered effects.
-  static List<Widget> wrapChildrenWithStagger({
-    required List<Widget> children,
-    required List<Animation<double>> animations,
-    required RouteEffect effect,
-  }) {
-    assert(children.length == animations.length,
-        'Children and animations lists must have the same length');
-
-    final wrappedChildren = <Widget>[];
-
-    for (int i = 0; i < children.length; i++) {
-      final wrapped = effect.build(animations[i], children[i]);
-      wrappedChildren.add(wrapped);
-    }
-
-    return wrappedChildren;
-  }
-}
-
-/// A mixin for widgets that want to support staggered animations.
-mixin StaggeredAnimationMixin<T extends StatefulWidget> on State<T>
-    implements TickerProvider {
-  /// Creates staggered animations for a list of children.
-  List<Animation<double>> createStaggeredAnimations({
-    required int childCount,
-    Duration interval = const Duration(milliseconds: 100),
-    Duration duration = const Duration(milliseconds: 600),
-    Curve curve = Curves.easeOut,
-  }) {
-    final controller = AnimationController(duration: duration, vsync: this);
-    final animations = <Animation<double>>[];
-
-    for (int i = 0; i < childCount; i++) {
-      final delay = interval.inMilliseconds * i;
-      final startRatio = (delay / duration.inMilliseconds).clamp(0.0, 0.8);
-
-      final animation = CurvedAnimation(
-        parent: controller,
-        curve: Interval(startRatio, 1.0, curve: curve),
-      );
-
-      animations.add(animation);
-    }
-
-    return animations;
-  }
+  });
 }

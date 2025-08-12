@@ -14,6 +14,7 @@ export 'src/effects/scale_effect.dart';
 export 'src/effects/rotation_effect.dart';
 export 'src/effects/blur_effect.dart';
 export 'src/effects/stagger_effect.dart';
+export 'src/effects/sequenced_effect.dart';
 export 'src/effects/shear_effect.dart';
 export 'src/effects/color_tint_effect.dart';
 export 'src/effects/clip_path_effect.dart';
@@ -24,9 +25,11 @@ export 'src/effects/mask_effect.dart';
 export 'src/effects/parallax_effect.dart';
 export 'src/effects/perspective_effect.dart';
 export 'src/effects/physics_spring_effect.dart';
+export 'src/effects/shared_element_effect.dart';
 
 // Widget exports - simplified Shifter (Hero wrapper)
 export 'src/widgets/shifter_widget.dart';
+export 'src/widgets/sequenced_item.dart';
 
 // Preset exports
 export 'src/presets/material_presets.dart';

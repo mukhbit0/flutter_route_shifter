@@ -24,7 +24,7 @@ class Shifter extends StatelessWidget {
   /// Unique identifier for this shared element.
   ///
   /// Elements with the same [shiftId] will be animated between during
-  /// route transitions. This acts as the Hero tag and can be any object 
+  /// route transitions. This acts as the Hero tag and can be any object
   /// (String, int, enum, etc.) but must implement proper equality comparison.
   final Object shiftId;
 

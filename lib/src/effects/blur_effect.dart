@@ -58,13 +58,20 @@ class BlurEffect extends RouteEffect {
         // Web performance optimization: Use lower quality blur on web
         final effectiveSigma = kIsWeb ? currentSigma * 0.7 : currentSigma;
 
-        return BackdropFilter(
-          filter: ImageFilter.blur(
-            sigmaX: effectiveSigma,
-            sigmaY: effectiveSigma,
-            tileMode: tileMode,
+        return ClipRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(
+              sigmaX: effectiveSigma,
+              sigmaY: effectiveSigma,
+              tileMode: tileMode,
+            ),
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Colors.transparent,
+              ),
+              child: child,
+            ),
           ),
-          child: child,
         );
       },
     );
