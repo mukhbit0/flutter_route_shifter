@@ -149,7 +149,7 @@
       "name": "flutter_route_shifter",
       "rootUri": "../",
       "packageUri": "lib/",
-      "languageVersion": "3.1"
+      "languageVersion": "3.0"
     }
   ],
   "generator": "pub",
