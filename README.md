@@ -1,75 +1,93 @@
 # Flutter Route Shifter
 
-A powerful, declarative route transition package with 34+ chainable animations, shared elements, and advanced effects for Flutter applications.
-
 <div align="center">
+
+**A powerful, declarative route transition package with 34+ chainable animations, shared elements, and advanced effects for Flutter applications.**
 
 [![pub package](https://img.shields.io/pub/v/flutter_route_shifter.svg)](https://pub.dev/packages/flutter_route_shifter)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Flutter](https://img.shields.io/badge/Flutter-3.7%2B-blue.svg)](https://flutter.dev/)
 [![Dart](https://img.shields.io/badge/Dart-3.1%2B-blue.svg)](https://dart.dev/)
+[![GitHub](https://img.shields.io/badge/View%20Animations-GitHub-blue.svg)](https://github.com/mukhbit0/flutter_route_animate/tree/main/animations)
 
-### 🎬 See It In Action
+> 🎥 **View Live Animations**: [See all 17 animation demos on GitHub](https://github.com/mukhbit0/flutter_route_animate/tree/main/animations) - GIFs show each transition in action!
 
+</div>
+
+---
+
+## 🎬 Animation Showcase
+
+<div align="center">
 <table>
 <tr>
-<td align="center">
-<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/fade_slide.gif" width="200"/>
-<br><b>Fade + Slide</b>
+<td align="center" width="33%">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/fade_slide.gif" width="180" height="320"/>
+<br><strong>Fade + Slide</strong>
 </td>
-<td align="center">
-<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/scale.gif" width="200"/>
-<br><b>Scale Animation</b>
+<td align="center" width="33%">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/scale.gif" width="180" height="320"/>
+<br><strong>Scale Animation</strong>
 </td>
-<td align="center">
-<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/sequenced.gif" width="200"/>
-<br><b>Sequenced Effects</b>
+<td align="center" width="33%">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/sequenced.gif" width="180" height="320"/>
+<br><strong>Sequenced Effects</strong>
 </td>
 </tr>
 <tr>
-<td align="center">
-<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/glass.gif" width="200"/>
-<br><b>Glass Morphism</b>
+<td align="center" width="33%">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/glass.gif" width="180" height="320"/>
+<br><strong>Glass Morphism</strong>
 </td>
-<td align="center">
-<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/shared.gif" width="200"/>
-<br><b>Shared Elements</b>
+<td align="center" width="33%">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/shared.gif" width="180" height="320"/>
+<br><strong>Shared Elements</strong>
 </td>
-<td align="center">
-<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/perspective_fade.gif" width="200"/>
-<br><b>3D Perspective</b>
+<td align="center" width="33%">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/perspective_fade.gif" width="180" height="320"/>
+<br><strong>3D Perspective</strong>
+</td>
+</tr>
+</table>
+</div>
+
+---
+
+## ✨ Features
+
+<table>
+<tr>
+<td width="50%">
+
+### 🎨 **Rich Animation Library**
+- **34+ Built-in Effects** - Complete collection of transitions
+- **Chainable API** - Intuitive `.fade().slide().scale()` syntax
+- **Creative Effects** - Glass, glitch, parallax, and more
+- **3D Transformations** - Perspective, shear, and depth effects
+
+</td>
+<td width="50%">
+
+### 🚀 **Advanced Features**
+- **Shared Elements** - Hero-like transitions between pages
+- **Platform Presets** - Material Design & Cupertino styles
+- **Sequenced Animations** - Precise timing control
+- **Performance Optimized** - Minimal overhead, smooth 60fps
+
 </td>
 </tr>
 </table>
 
-</div>
+---
 
-## ✨ Features
-
-- **🔗 Chainable API**: Intuitive `.fade().slide().scale()` syntax for combining effects
-- **🎨 34+ Rich Effects**: Complete animation library including fade, slide, scale, rotation, blur, shear, and more
-- **🚀 Shared Elements**: Hero-like transitions between pages with advanced shared element support
-- **📱 Platform Presets**: Material Design and Cupertino (iOS) style transitions
-- **⏱️ Sequenced Animations**: Manual timing control for precise choreography
-- **🎯 Performance Optimized**: Efficient animations with minimal overhead
-- **🛠️ Highly Customizable**: Custom curves, durations, and timing controls
-- **🎪 Creative Effects**: Follow-path animations, parallax effects, clip-path transitions
-- **📐 Advanced Geometry**: Shear, perspective, and 3D-like transformations
-- **🎨 Visual Effects**: Blur, glass, glitch, color tint, and mask effects
-- **🧩 Modular Architecture**: Clean, maintainable codebase with mixin-based structure
-
-## 🚀 Getting Started
+## 🚀 Quick Start
 
 ### Installation
-
-Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
   flutter_route_shifter: ^1.0.0
 ```
-
-Then run:
 
 ```bash
 $ flutter pub get
@@ -88,13 +106,20 @@ final route = RouteShifterBuilder()
 Navigator.of(context).push(route);
 ```
 
-## 🎨 Complete Effects Library
+---
 
-### 🟢 Basic Transitions
+## 🎨 Animation Effects
 
-#### Fade Transitions
+### 🔹 Core Transitions
 
-<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/fade.gif" width="250" align="right"/>
+<details>
+<summary><strong>📱 Fade Transitions</strong></summary>
+
+<br>
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/fade.gif" width="250"/>
+</div>
 
 ```dart
 // Basic fade in
@@ -113,9 +138,16 @@ RouteShifterBuilder()
   )
 ```
 
-#### Slide Transitions
+</details>
 
-<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/slide.gif" width="250" align="right"/>
+<details>
+<summary><strong>📱 Slide Transitions</strong></summary>
+
+<br>
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/slide.gif" width="250"/>
+</div>
 
 ```dart
 // Slide from right
@@ -125,22 +157,22 @@ RouteShifterBuilder()
     duration: Duration(milliseconds: 300),
   )
 
-// Slide from bottom
-RouteShifterBuilder()
-  .slideFromBottom()
-
-// Slide from left  
-RouteShifterBuilder()
-  .slideFromLeft()
-
-// Slide from top
-RouteShifterBuilder()
-  .slideFromTop()
+// Convenient presets
+RouteShifterBuilder().slideFromBottom()
+RouteShifterBuilder().slideFromLeft()
+RouteShifterBuilder().slideFromTop()
 ```
 
-#### Scale Transitions
+</details>
 
-<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/scale.gif" width="250" align="right"/>
+<details>
+<summary><strong>📱 Scale Transitions</strong></summary>
+
+<br>
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/scale.gif" width="250"/>
+</div>
 
 ```dart
 // Scale up from center
@@ -151,18 +183,21 @@ RouteShifterBuilder()
     alignment: Alignment.center,
   )
 
-// Scale with zoom effect
-RouteShifterBuilder()
-  .scaleUp()
-
-// Scale down effect
-RouteShifterBuilder()
-  .scaleDown()
+// Quick presets
+RouteShifterBuilder().scaleUp()
+RouteShifterBuilder().scaleDown()
 ```
 
-#### Rotation Transitions
+</details>
 
-<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/rotate.gif" width="250" align="right"/>
+<details>
+<summary><strong>📱 Rotation Transitions</strong></summary>
+
+<br>
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/rotate.gif" width="250"/>
+</div>
 
 ```dart
 // Rotate on entry
@@ -173,49 +208,46 @@ RouteShifterBuilder()
     alignment: Alignment.center,
   )
 
-// Spin effect
+// Full spin effect
 RouteShifterBuilder()
-  .rotation(beginAngle: -6.28) // Full rotation
+  .rotation(beginAngle: -6.28) // 2π rotation
 ```
 
-### 🔵 Advanced Effects
+</details>
 
-#### Blur Transitions
-```dart
-// Blur in effect
-RouteShifterBuilder()
-  .blur(
-    beginSigma: 10.0,
-    endSigma: 0.0,
-    duration: Duration(milliseconds: 600),
-  )
+---
 
-// Backdrop blur
-RouteShifterBuilder()
-  .blur(
-    beginSigma: 0.0,
-    endSigma: 5.0,
-    tileMode: TileMode.clamp,
-  )
-```
+### 🔹 Advanced Effects
 
-#### Shear Transformations
+<details>
+<summary><strong>🌟 Glass Morphism</strong></summary>
 
-<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/shear.gif" width="250" align="right"/>
+<br>
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/glass.gif" width="250"/>
+</div>
 
 ```dart
-// Shear effect
+// Glass effect
 RouteShifterBuilder()
-  .shear(
-    beginShear: Offset(0.0, 0.0),
-    endShear: Offset(0.2, 0.0),
-    duration: Duration(milliseconds: 500),
+  .glass(
+    blur: 20.0,
+    opacity: 0.1,
+    duration: Duration(milliseconds: 800),
   )
 ```
 
-#### Perspective 3D
+</details>
 
-<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/perspective_fade.gif" width="250" align="right"/>
+<details>
+<summary><strong>🌟 3D Perspective</strong></summary>
+
+<br>
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/perspective_fade.gif" width="250"/>
+</div>
 
 ```dart
 // 3D perspective flip
@@ -227,9 +259,37 @@ RouteShifterBuilder()
   )
 ```
 
-#### Sequenced Animations
+</details>
 
-<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/sequenced.gif" width="250" align="right"/>
+<details>
+<summary><strong>🌟 Shear Transform</strong></summary>
+
+<br>
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/shear.gif" width="250"/>
+</div>
+
+```dart
+// Shear effect
+RouteShifterBuilder()
+  .shear(
+    beginShear: Offset(0.0, 0.0),
+    endShear: Offset(0.2, 0.0),
+    duration: Duration(milliseconds: 500),
+  )
+```
+
+</details>
+
+<details>
+<summary><strong>🌟 Sequenced Animations</strong></summary>
+
+<br>
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/sequenced.gif" width="250"/>
+</div>
 
 ```dart
 // Manual timing control
@@ -250,25 +310,20 @@ SequencedItem(
 )
 ```
 
-### 🟡 Creative Effects
+</details>
 
-#### Glass Morphism
+---
 
-<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/glass.gif" width="250" align="right"/>
+### 🔹 Creative Effects
 
-```dart
-// Glass effect
-RouteShifterBuilder()
-  .glass(
-    blur: 20.0,
-    opacity: 0.1,
-    duration: Duration(milliseconds: 800),
-  )
-```
+<details>
+<summary><strong>⚡ Glitch Effect</strong></summary>
 
-#### Glitch Effect
+<br>
 
-<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/glitch.gif" width="250" align="right"/>
+<div align="center">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/glitch.gif" width="250"/>
+</div>
 
 ```dart
 // Digital glitch
@@ -279,9 +334,16 @@ RouteShifterBuilder()
   )
 ```
 
-#### Color Tint
+</details>
 
-<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/tint.gif" width="250" align="right"/>
+<details>
+<summary><strong>⚡ Color Tint</strong></summary>
+
+<br>
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/tint.gif" width="250"/>
+</div>
 
 ```dart
 // Color overlay transition
@@ -292,29 +354,16 @@ RouteShifterBuilder()
   )
 ```
 
-#### Parallax Effect
-```dart
-// Parallax scroll effect
-RouteShifterBuilder()
-  .parallax(
-    offset: Offset(0.0, 0.5),
-    intensity: 0.7,
-  )
-```
+</details>
 
-#### Follow Path
-```dart
-// Follow custom path
-RouteShifterBuilder()
-  .followPath(
-    path: customPath,
-    duration: Duration(milliseconds: 1000),
-  )
-```
+<details>
+<summary><strong>⚡ Mask Transition</strong></summary>
 
-#### Mask Effect
+<br>
 
-<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/mask.gif" width="250" align="right"/>
+<div align="center">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/mask.gif" width="250"/>
+</div>
 
 ```dart
 // Mask transition
@@ -325,9 +374,16 @@ RouteShifterBuilder()
   )
 ```
 
-#### Clip Path
+</details>
 
-<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/clip.gif" width="250" align="right"/>
+<details>
+<summary><strong>⚡ Clip Path</strong></summary>
+
+<br>
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/clip.gif" width="250"/>
+</div>
 
 ```dart
 // Custom clip transition
@@ -338,24 +394,20 @@ RouteShifterBuilder()
   )
 ```
 
-### 🟠 Physics-Based
+</details>
 
-#### Spring Physics
-```dart
-// Spring bounce effect
-RouteShifterBuilder()
-  .spring(
-    mass: 1.0,
-    stiffness: 100.0,
-    damping: 10.0,
-  )
-```
+---
 
-### 🔴 Platform Presets
+### 🔹 Platform Presets
 
-#### Material Design
+<details>
+<summary><strong>📱 Material Design</strong></summary>
 
-<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/material.gif" width="250" align="right"/>
+<br>
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/material.gif" width="250"/>
+</div>
 
 ```dart
 // Material 3 preset
@@ -369,9 +421,16 @@ RouteShifterBuilder()
 // - MaterialTransition.container
 ```
 
-#### Cupertino (iOS)
+</details>
 
-<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/cupertino.gif" width="250" align="right"/>
+<details>
+<summary><strong>🍎 Cupertino (iOS)</strong></summary>
+
+<br>
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/cupertino.gif" width="250"/>
+</div>
 
 ```dart
 // iOS-style preset
@@ -385,9 +444,16 @@ RouteShifterBuilder()
 // - CupertinoTransition.pageReplace
 ```
 
-#### Cupertino Modal
+</details>
 
-<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/cupertino_modal.gif" width="250" align="right"/>
+<details>
+<summary><strong>🍎 Cupertino Modal</strong></summary>
+
+<br>
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/cupertino_modal.gif" width="250"/>
+</div>
 
 ```dart
 // iOS modal presentation
@@ -398,48 +464,44 @@ RouteShifterBuilder()
   )
 ```
 
-### 🟣 Combinations
+</details>
 
-<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/shared.gif" width="250" align="right"/>
+---
 
-#### Slide + Fade
+### 🔹 Effect Combinations
+
+<details>
+<summary><strong>🔗 Popular Combinations</strong></summary>
+
+<br>
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/shared.gif" width="250"/>
+</div>
+
 ```dart
+// Slide + Fade
 RouteShifterBuilder()
   .slideAndFade(
     slideBegin: Offset(1.0, 0.0),
     fadeBegin: 0.0,
   )
-```
 
-#### Scale + Fade
-```dart
+// Scale + Fade
 RouteShifterBuilder()
   .scaleAndFade(
     scaleBegin: 0.8,
     fadeBegin: 0.0,
   )
-```
 
-#### Rotation + Scale
-```dart
+// Rotation + Scale
 RouteShifterBuilder()
   .rotationAndScale(
     rotationBegin: -0.5,
     scaleBegin: 0.0,
   )
-```
 
-#### Slide + Rotation
-```dart
-RouteShifterBuilder()
-  .slideAndRotation(
-    slideBegin: Offset(1.0, 0.0),
-    rotationBegin: 0.5,
-  )
-```
-
-#### Complex Combination
-```dart
+// Complex combination
 RouteShifterBuilder()
   .complexTransition(
     slideBegin: Offset(0.0, 1.0),
@@ -448,6 +510,10 @@ RouteShifterBuilder()
     rotationBegin: 0.1,
   )
 ```
+
+</details>
+
+---
 
 ## 🔧 Advanced Usage
 
@@ -491,36 +557,103 @@ RouteShifterBuilder()
   )
 ```
 
+### Additional Effects
+
+<details>
+<summary>Click to see more effects</summary>
+
+```dart
+// Blur transitions
+RouteShifterBuilder()
+  .blur(
+    beginSigma: 10.0,
+    endSigma: 0.0,
+    duration: Duration(milliseconds: 600),
+  )
+
+// Parallax effect
+RouteShifterBuilder()
+  .parallax(
+    offset: Offset(0.0, 0.5),
+    intensity: 0.7,
+  )
+
+// Follow path animation
+RouteShifterBuilder()
+  .followPath(
+    path: customPath,
+    duration: Duration(milliseconds: 1000),
+  )
+
+// Spring physics
+RouteShifterBuilder()
+  .spring(
+    mass: 1.0,
+    stiffness: 100.0,
+    damping: 10.0,
+  )
+```
+
+</details>
+
+---
+
 ## 🎯 Performance Tips
 
-- Use `const` constructors where possible
-- Prefer shorter animation durations for better UX
-- Combine related effects rather than chaining many separate ones
-- Use `builder` patterns for complex animations
+- ✅ Use `const` constructors where possible
+- ✅ Prefer shorter animation durations for better UX (200-400ms)
+- ✅ Combine related effects rather than chaining many separate ones
+- ✅ Use `builder` patterns for complex animations
+- ✅ Test on lower-end devices to ensure smooth performance
+
+---
 
 ## 📱 Platform Support
 
-- ✅ iOS 9.0+
-- ✅ Android API 16+
-- ✅ Web
-- ✅ macOS 10.11+
-- ✅ Windows 7+
-- ✅ Linux
+<div align="center">
+
+| Platform | Version | Status |
+|----------|---------|---------|
+| 🤖 **Android** | API 16+ | ✅ Fully Supported |
+| 🍎 **iOS** | 9.0+ | ✅ Fully Supported |
+| 🌐 **Web** | Modern Browsers | ✅ Fully Supported |
+| 🖥️ **macOS** | 10.11+ | ✅ Fully Supported |
+| 🪟 **Windows** | 7+ | ✅ Fully Supported |
+| 🐧 **Linux** | All Distros | ✅ Fully Supported |
+
+</div>
+
+---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details.
+We welcome contributions! Here's how you can help:
+
+1. **🐛 Report Bugs** - Found an issue? [Create an issue](https://github.com/mukhbit0/flutter_route_shifter/issues)
+2. **💡 Suggest Features** - Have an idea? We'd love to hear it!
+3. **📝 Improve Documentation** - Help make our docs better
+4. **🔧 Submit Pull Requests** - Read our [Contributing Guide](CONTRIBUTING.md)
+
+---
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+---
+
 ## 🙏 Acknowledgments
 
-- Flutter team for the amazing framework
-- Community contributors and testers
-- Inspiration from various animation libraries
+- 💙 **Flutter Team** - For the incredible framework
+- 🌟 **Community Contributors** - Thank you for your support and feedback
+- 🎨 **Design Inspiration** - Various animation libraries and design systems
 
 ---
 
-Made with ❤️ for the Flutter community
+<div align="center">
+
+**Made with ❤️ for the Flutter community**
+
+[⭐ Star us on GitHub](https://github.com/mukhbit0/flutter_route_shifter) | [📦 View on pub.dev](https://pub.dev/packages/flutter_route_shifter) | [📚 Documentation](https://github.com/mukhbit0/flutter_route_shifter/wiki)
+
+</div>

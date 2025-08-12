@@ -1,0 +1,22 @@
+# Exclude files that aren't needed for pub.dev publication
+
+# Documentation and development files
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+DEVELOPMENT.md
+
+# Animation assets (large GIFs - users can view them on GitHub)
+animations/
+
+# Test files (keep modular_test.dart but exclude standalone test file)
+test_modular.dart
+
+# Example app specific files that aren't needed
+example/android/
+example/web/
+example/README.md
+example/analysis_options.yaml
+
+# Analysis options (use Flutter's default)
+analysis_options.yaml
+example/analysis_options.yaml
