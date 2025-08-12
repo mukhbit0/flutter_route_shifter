@@ -2,10 +2,47 @@
 
 A powerful, declarative route transition package with 34+ chainable animations, shared elements, and advanced effects for Flutter applications.
 
+<div align="center">
+
 [![pub package](https://img.shields.io/pub/v/flutter_route_shifter.svg)](https://pub.dev/packages/flutter_route_shifter)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Flutter](https://img.shields.io/badge/Flutter-3.7%2B-blue.svg)](https://flutter.dev/)
 [![Dart](https://img.shields.io/badge/Dart-3.1%2B-blue.svg)](https://dart.dev/)
+
+### 🎬 See It In Action
+
+<table>
+<tr>
+<td align="center">
+<img src="https://img.ionicerrrrscode.com/animations/fade_slide.gif" width="200"/>
+<br><b>Fade + Slide</b>
+</td>
+<td align="center">
+<img src="https://img.ionicerrrrscode.com/animations/scale.gif" width="200"/>
+<br><b>Scale Animation</b>
+</td>
+<td align="center">
+<img src="https://img.ionicerrrrscode.com/animations/sequenced.gif" width="200"/>
+<br><b>Sequenced Effects</b>
+</td>
+</tr>
+<tr>
+<td align="center">
+<img src="https://img.ionicerrrrscode.com/animations/glass.gif" width="200"/>
+<br><b>Glass Morphism</b>
+</td>
+<td align="center">
+<img src="https://img.ionicerrrrscode.com/animations/shared.gif" width="200"/>
+<br><b>Shared Elements</b>
+</td>
+<td align="center">
+<img src="https://img.ionicerrrrscode.com/animations/perspective_fade.gif" width="200"/>
+<br><b>3D Perspective</b>
+</td>
+</tr>
+</table>
+
+</div>
 
 ## ✨ Features
 
@@ -56,6 +93,9 @@ Navigator.of(context).push(route);
 ### 🟢 Basic Transitions
 
 #### Fade Transitions
+
+<img src="https://img.ionicerrrrscode.com/animations/fade.gif" width="250" align="right"/>
+
 ```dart
 // Basic fade in
 RouteShifterBuilder()
@@ -74,6 +114,9 @@ RouteShifterBuilder()
 ```
 
 #### Slide Transitions
+
+<img src="https://img.ionicerrrrscode.com/animations/slide.gif" width="250" align="right"/>
+
 ```dart
 // Slide from right
 RouteShifterBuilder()
@@ -96,6 +139,9 @@ RouteShifterBuilder()
 ```
 
 #### Scale Transitions
+
+<img src="https://img.ionicerrrrscode.com/animations/scale.gif" width="250" align="right"/>
+
 ```dart
 // Scale up from center
 RouteShifterBuilder()
@@ -115,6 +161,9 @@ RouteShifterBuilder()
 ```
 
 #### Rotation Transitions
+
+<img src="https://img.ionicerrrrscode.com/animations/rotate.gif" width="250" align="right"/>
+
 ```dart
 // Rotate on entry
 RouteShifterBuilder()
@@ -151,6 +200,9 @@ RouteShifterBuilder()
 ```
 
 #### Shear Transformations
+
+<img src="https://img.ionicerrrrscode.com/animations/shear.gif" width="250" align="right"/>
+
 ```dart
 // Shear effect
 RouteShifterBuilder()
@@ -162,6 +214,9 @@ RouteShifterBuilder()
 ```
 
 #### Perspective 3D
+
+<img src="https://img.ionicerrrrscode.com/animations/perspective_fade.gif" width="250" align="right"/>
+
 ```dart
 // 3D perspective flip
 RouteShifterBuilder()
@@ -173,6 +228,9 @@ RouteShifterBuilder()
 ```
 
 #### Sequenced Animations
+
+<img src="https://img.ionicerrrrscode.com/animations/sequenced.gif" width="250" align="right"/>
+
 ```dart
 // Manual timing control
 RouteShifterBuilder()
@@ -195,6 +253,9 @@ SequencedItem(
 ### 🟡 Creative Effects
 
 #### Glass Morphism
+
+<img src="https://img.ionicerrrrscode.com/animations/glass.gif" width="250" align="right"/>
+
 ```dart
 // Glass effect
 RouteShifterBuilder()
@@ -206,6 +267,9 @@ RouteShifterBuilder()
 ```
 
 #### Glitch Effect
+
+<img src="https://img.ionicerrrrscode.com/animations/glitch.gif" width="250" align="right"/>
+
 ```dart
 // Digital glitch
 RouteShifterBuilder()
@@ -216,6 +280,9 @@ RouteShifterBuilder()
 ```
 
 #### Color Tint
+
+<img src="https://img.ionicerrrrscode.com/animations/tint.gif" width="250" align="right"/>
+
 ```dart
 // Color overlay transition
 RouteShifterBuilder()
@@ -281,6 +348,9 @@ RouteShifterBuilder()
 ### 🔴 Platform Presets
 
 #### Material Design
+
+<img src="https://img.ionicerrrrscode.com/animations/material.gif" width="250" align="right"/>
+
 ```dart
 // Material 3 preset
 RouteShifterBuilder()
@@ -294,6 +364,9 @@ RouteShifterBuilder()
 ```
 
 #### Cupertino (iOS)
+
+<img src="https://img.ionicerrrrscode.com/animations/cupertino.gif" width="250" align="right"/>
+
 ```dart
 // iOS-style preset
 RouteShifterBuilder()
@@ -307,6 +380,8 @@ RouteShifterBuilder()
 ```
 
 ### 🟣 Combinations
+
+<img src="https://img.ionicerrrrscode.com/animations/shared.gif" width="250" align="right"/>
 
 #### Slide + Fade
 ```dart
