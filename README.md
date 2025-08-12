@@ -14,29 +14,29 @@ A powerful, declarative route transition package with 34+ chainable animations, 
 <table>
 <tr>
 <td align="center">
-<img src="https://img.ionicerrrrscode.com/animations/fade_slide.gif" width="200"/>
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/fade_slide.gif" width="200"/>
 <br><b>Fade + Slide</b>
 </td>
 <td align="center">
-<img src="https://img.ionicerrrrscode.com/animations/scale.gif" width="200"/>
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/scale.gif" width="200"/>
 <br><b>Scale Animation</b>
 </td>
 <td align="center">
-<img src="https://img.ionicerrrrscode.com/animations/sequenced.gif" width="200"/>
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/sequenced.gif" width="200"/>
 <br><b>Sequenced Effects</b>
 </td>
 </tr>
 <tr>
 <td align="center">
-<img src="https://img.ionicerrrrscode.com/animations/glass.gif" width="200"/>
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/glass.gif" width="200"/>
 <br><b>Glass Morphism</b>
 </td>
 <td align="center">
-<img src="https://img.ionicerrrrscode.com/animations/shared.gif" width="200"/>
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/shared.gif" width="200"/>
 <br><b>Shared Elements</b>
 </td>
 <td align="center">
-<img src="https://img.ionicerrrrscode.com/animations/perspective_fade.gif" width="200"/>
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/perspective_fade.gif" width="200"/>
 <br><b>3D Perspective</b>
 </td>
 </tr>
@@ -94,7 +94,7 @@ Navigator.of(context).push(route);
 
 #### Fade Transitions
 
-<img src="https://img.ionicerrrrscode.com/animations/fade.gif" width="250" align="right"/>
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/fade.gif" width="250" align="right"/>
 
 ```dart
 // Basic fade in
@@ -115,7 +115,7 @@ RouteShifterBuilder()
 
 #### Slide Transitions
 
-<img src="https://img.ionicerrrrscode.com/animations/slide.gif" width="250" align="right"/>
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/slide.gif" width="250" align="right"/>
 
 ```dart
 // Slide from right
@@ -140,7 +140,7 @@ RouteShifterBuilder()
 
 #### Scale Transitions
 
-<img src="https://img.ionicerrrrscode.com/animations/scale.gif" width="250" align="right"/>
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/scale.gif" width="250" align="right"/>
 
 ```dart
 // Scale up from center
@@ -162,7 +162,7 @@ RouteShifterBuilder()
 
 #### Rotation Transitions
 
-<img src="https://img.ionicerrrrscode.com/animations/rotate.gif" width="250" align="right"/>
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/rotate.gif" width="250" align="right"/>
 
 ```dart
 // Rotate on entry
@@ -201,7 +201,7 @@ RouteShifterBuilder()
 
 #### Shear Transformations
 
-<img src="https://img.ionicerrrrscode.com/animations/shear.gif" width="250" align="right"/>
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/shear.gif" width="250" align="right"/>
 
 ```dart
 // Shear effect
@@ -215,7 +215,7 @@ RouteShifterBuilder()
 
 #### Perspective 3D
 
-<img src="https://img.ionicerrrrscode.com/animations/perspective_fade.gif" width="250" align="right"/>
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/perspective_fade.gif" width="250" align="right"/>
 
 ```dart
 // 3D perspective flip
@@ -229,7 +229,7 @@ RouteShifterBuilder()
 
 #### Sequenced Animations
 
-<img src="https://img.ionicerrrrscode.com/animations/sequenced.gif" width="250" align="right"/>
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/sequenced.gif" width="250" align="right"/>
 
 ```dart
 // Manual timing control
@@ -254,7 +254,7 @@ SequencedItem(
 
 #### Glass Morphism
 
-<img src="https://img.ionicerrrrscode.com/animations/glass.gif" width="250" align="right"/>
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/glass.gif" width="250" align="right"/>
 
 ```dart
 // Glass effect
@@ -268,7 +268,7 @@ RouteShifterBuilder()
 
 #### Glitch Effect
 
-<img src="https://img.ionicerrrrscode.com/animations/glitch.gif" width="250" align="right"/>
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/glitch.gif" width="250" align="right"/>
 
 ```dart
 // Digital glitch
@@ -281,7 +281,7 @@ RouteShifterBuilder()
 
 #### Color Tint
 
-<img src="https://img.ionicerrrrscode.com/animations/tint.gif" width="250" align="right"/>
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/tint.gif" width="250" align="right"/>
 
 ```dart
 // Color overlay transition
@@ -313,6 +313,9 @@ RouteShifterBuilder()
 ```
 
 #### Mask Effect
+
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/mask.gif" width="250" align="right"/>
+
 ```dart
 // Mask transition
 RouteShifterBuilder()
@@ -323,6 +326,9 @@ RouteShifterBuilder()
 ```
 
 #### Clip Path
+
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/clip.gif" width="250" align="right"/>
+
 ```dart
 // Custom clip transition
 RouteShifterBuilder()
@@ -349,7 +355,7 @@ RouteShifterBuilder()
 
 #### Material Design
 
-<img src="https://img.ionicerrrrscode.com/animations/material.gif" width="250" align="right"/>
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/material.gif" width="250" align="right"/>
 
 ```dart
 // Material 3 preset
@@ -365,7 +371,7 @@ RouteShifterBuilder()
 
 #### Cupertino (iOS)
 
-<img src="https://img.ionicerrrrscode.com/animations/cupertino.gif" width="250" align="right"/>
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/cupertino.gif" width="250" align="right"/>
 
 ```dart
 // iOS-style preset
@@ -379,9 +385,22 @@ RouteShifterBuilder()
 // - CupertinoTransition.pageReplace
 ```
 
+#### Cupertino Modal
+
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/cupertino_modal.gif" width="250" align="right"/>
+
+```dart
+// iOS modal presentation
+RouteShifterBuilder()
+  .cupertinoModal(
+    presentationStyle: ModalPresentationStyle.pageSheet,
+    duration: Duration(milliseconds: 400),
+  )
+```
+
 ### 🟣 Combinations
 
-<img src="https://img.ionicerrrrscode.com/animations/shared.gif" width="250" align="right"/>
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/shared.gif" width="250" align="right"/>
 
 #### Slide + Fade
 ```dart
