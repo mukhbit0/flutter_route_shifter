@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2025-08-13
+
+### 🔧 Pub.dev Metadata Fixes
+
+#### 🔄 Changed
+- **License Declaration**: Added explicit `license: BSD-3-Clause` field to pubspec.yaml for proper pub.dev recognition
+- **Platform Support**: Added comprehensive platforms section listing all 6 supported Flutter platforms
+- **SDK Constraints**: Updated Dart SDK constraint to `>=3.0.0 <4.0.0` for broader compatibility
+
+#### 🐛 Fixed
+- **pub.dev Display**: Resolved "unknown license" issue - now properly shows "BSD 3-Clause"
+- **Platform Icons**: Fixed "unknown platforms" issue - now displays all supported platform icons
+- **Metadata Score**: Improved pub.dev package score with complete metadata specification
+
+#### 📦 Technical Details
+- Explicit license field enables automatic pub.dev license badge generation
+- Platform declarations improve package discoverability and user confidence
+- Broader SDK compatibility increases potential user base
+
+---
+
 ## [1.0.1] - 2025-08-12
 
 ### 🏗️ Major Architecture Improvements
