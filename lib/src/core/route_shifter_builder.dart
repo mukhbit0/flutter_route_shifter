@@ -102,7 +102,7 @@ class RouteShifterBuilder
   }
 
   /// Modern-style push method using the stored page
-  /// 
+  ///
   /// Example:
   /// ```dart
   /// NextPage().routeShift().fade().slide().push(context);
@@ -114,16 +114,17 @@ class RouteShifterBuilder
     bool fullscreenDialog = false,
   }) {
     if (_page == null) {
-      throw ArgumentError('No page set. Use setPage() or routeShift() extension first.');
+      throw ArgumentError(
+          'No page set. Use setPage() or routeShift() extension first.');
     }
-    
+
     final route = toRoute<T>(
       page: _page!,
       settings: settings,
       maintainState: maintainState,
       fullscreenDialog: fullscreenDialog,
     );
-    
+
     return Navigator.push<T>(context, route);
   }
 

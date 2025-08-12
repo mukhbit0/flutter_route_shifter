@@ -2,14 +2,14 @@ import 'package:flutter/widgets.dart';
 import '../core/route_shifter_builder.dart';
 
 /// Widget extensions for route shifting animations
-/// 
+///
 /// Provides a modern widget API for route transitions:
 /// ```dart
 /// NextPage().routeShift().fade().slide().push(context);
 /// ```
 extension WidgetRouteShiftExtensions on Widget {
   /// Creates a RouteShifterBuilder for this widget
-  /// 
+  ///
   /// Example:
   /// ```dart
   /// MyPage().routeShift()
