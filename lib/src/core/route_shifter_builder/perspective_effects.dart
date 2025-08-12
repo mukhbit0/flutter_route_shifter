@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../effects/perspective_effect.dart';
+import '../../effects/advanced/perspective_effect.dart';
 
 /// Mixin that provides perspective and 3D effects for RouteShifterBuilder.
 mixin PerspectiveEffects {

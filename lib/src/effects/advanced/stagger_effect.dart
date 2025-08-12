@@ -1,7 +1,7 @@
 // file: lib/src/effects/stagger_effect.dart
 import 'package:flutter/material.dart';
-import 'base_effect.dart';
-import 'slide_effect.dart';
+import '../base/effect.dart';
+import '../basic/slide_effect.dart';
 
 /// An effect that applies delayed animations to specific child widgets of a route.
 class StaggerEffect extends RouteEffect {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../effects/shear_effect.dart';
+import '../../effects/advanced/shear_effect.dart';
 
 /// Extension methods for shear effects on RouteShifterBuilder.
 mixin ShearEffects {

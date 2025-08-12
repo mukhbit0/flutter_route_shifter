@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../effects/glitch_effect.dart';
+import '../../effects/creative/glitch_effect.dart';
 
 /// Mixin that provides glitch and digital effects for RouteShifterBuilder.
 mixin GlitchEffects {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../core/sequenced_item_registry.dart';
-import '../effects/sequenced_effect.dart';
+import '../effects/advanced/sequenced_effect.dart';
 
 /// A widget that marks its child for a manually timed animation.
 ///

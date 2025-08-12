@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'base_effect.dart';
+import '../base/effect.dart';
 
 /// Creates depth by moving screens at different speeds.
 ///

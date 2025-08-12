@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'base_effect.dart';
+import '../base/effect.dart';
 
 /// Creates color overlay transitions for modals and dialogs.
 ///

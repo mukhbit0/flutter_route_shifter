@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'base_effect.dart';
+import '../base/effect.dart';
 
 /// Creates dramatic reveal transitions by animating a ClipPath.
 ///

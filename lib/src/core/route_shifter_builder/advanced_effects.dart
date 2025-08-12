@@ -1,10 +1,10 @@
 // file: lib/src/core/route_shifter_builder/advanced_effects.dart
 import 'package:flutter/material.dart';
-import '../../effects/blur_effect.dart';
-import '../../effects/rotation_effect.dart';
-import '../../effects/sequenced_effect.dart';
-import '../../effects/stagger_effect.dart';
-import '../../effects/base_effect.dart';
+import '../../effects/advanced/blur_effect.dart';
+import '../../effects/basic/rotation_effect.dart';
+import '../../effects/advanced/sequenced_effect.dart';
+import '../../effects/advanced/stagger_effect.dart';
+import '../../effects/base/effect.dart';
 
 /// Mixin that provides advanced effects for RouteShifterBuilder.
 mixin AdvancedEffects {

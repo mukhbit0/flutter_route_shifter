@@ -1,6 +1,6 @@
 name: flutter_route_shifter
-description: A powerful, declarative route transition package with 34+ chainable animations, shared elements, and advanced effects for Flutter applications.
-version: 1.0.0
+description: A powerful, declarative route transition package with 18+ categorized chainable animations, shared elements, and advanced effects for Flutter applications.
+version: 1.0.1
 homepage: https://github.com/mukhbit0/flutter_route_shifter
 repository: https://github.com/mukhbit0/flutter_route_shifter
 issue_tracker: https://github.com/mukhbit0/flutter_route_shifter/issues
@@ -27,7 +27,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
 # Additional metadata for pub.dev
 platforms:
   android:

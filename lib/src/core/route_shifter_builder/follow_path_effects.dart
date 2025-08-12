@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../effects/follow_path_effect.dart';
+import '../../effects/creative/follow_path_effect.dart';
 
 /// Extension methods for follow path effects on RouteShifterBuilder.
 mixin FollowPathEffects {

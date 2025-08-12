@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../effects/base_effect.dart';
-import '../effects/slide_effect.dart';
-import '../effects/fade_effect.dart';
+import '../effects/base/effect.dart';
+import '../effects/basic/slide_effect.dart';
+import '../effects/basic/fade_effect.dart';
 import 'route_shifter.dart' as local_shifter;
 
 // Import all effect mixins
@@ -57,6 +57,12 @@ class RouteShifterBuilder
   bool _interactiveDismissEnabled = false;
   local_shifter.DismissDirection? _dismissDirection;
   Map<String, dynamic>? _sharedElementSettings;
+  Widget? _page;
+
+  /// Sets the page/widget for this route transition
+  void setPage(Widget page) {
+    _page = page;
+  }
 
   /// Access to the effects list for mixins
   List<RouteEffect> get effects => _effects;
@@ -93,6 +99,32 @@ class RouteShifterBuilder
       dismissDirection: _dismissDirection,
       sharedElementSettings: _sharedElementSettings,
     );
+  }
+
+  /// Modern-style push method using the stored page
+  /// 
+  /// Example:
+  /// ```dart
+  /// NextPage().routeShift().fade().slide().push(context);
+  /// ```
+  Future<T?> push<T>(
+    BuildContext context, {
+    RouteSettings? settings,
+    bool maintainState = true,
+    bool fullscreenDialog = false,
+  }) {
+    if (_page == null) {
+      throw ArgumentError('No page set. Use setPage() or routeShift() extension first.');
+    }
+    
+    final route = toRoute<T>(
+      page: _page!,
+      settings: settings,
+      maintainState: maintainState,
+      fullscreenDialog: fullscreenDialog,
+    );
+    
+    return Navigator.push<T>(context, route);
   }
 
   /// Pushes the route and returns a Future that completes when the route is popped.

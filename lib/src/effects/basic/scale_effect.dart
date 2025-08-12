@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'base_effect.dart';
+import '../base/effect.dart';
 
 /// A scale transition effect that animates the size from one scale to another.
 ///

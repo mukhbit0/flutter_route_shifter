@@ -5,6 +5,72 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2025-08-12
+
+### 🏗️ Major Architecture Improvements
+
+#### ✨ Added
+- **Modern Widget Extensions**: New `.routeShift()` API for clean, chainable syntax
+- **Duration Extensions**: Clean `300.ms` and `1.2.s` syntax for better readability
+- **Categorized Effects Structure**: Organized into Basic (🟢), Advanced (🟡), and Creative (🔴) categories
+- **Grouped Exports**: Clean, tree-shaking friendly export structure (4 grouped exports vs 41 individual)
+
+#### 🗂️ New Package Structure
+- **Basic Effects** (4): Essential transitions - fade, slide, scale, rotation
+- **Advanced Effects** (7): Professional UX - blur, perspective, sequenced, shared elements, shear, stagger, physics spring  
+- **Creative Effects** (7): Artistic transitions - glass morphism, clip path, color tint, glitch, parallax, follow path, mask
+
+#### 🎨 Enhanced API
+- **Widget Extensions**: `NextPage().routeShift().fade(300.ms).push(context)`
+- **Modern Chaining**: Multiple effects with clean syntax
+- **Direct Navigation**: `.push(context)` method for immediate navigation
+- **Duration Syntax**: `duration: 500.ms` instead of `Duration(milliseconds: 500)`
+
+#### 📚 Documentation Overhaul
+- **Categorized Examples**: Progressive learning from basic to creative effects
+- **Modern API Showcase**: Widget extension examples throughout
+- **Visual Organization**: Clear emoji-based categorization (🟢🟡🔴)
+- **Developer Journey**: Guided progression path for different skill levels
+
+#### 🔧 Technical Improvements
+- **Clean Architecture**: Organized folder structure with category-based organization
+- **Better Tree Shaking**: Grouped exports reduce bundle size
+- **Import Optimization**: Fixed all import paths for new structure
+- **Code Quality**: 100% `flutter analyze` clean
+
+#### 📄 Legal & Branding
+- **License Update**: Changed from MIT to BSD 3-Clause for better commercial compatibility
+- **Independent Branding**: Removed external package references for clean identity
+- **Brand Protection**: BSD 3-Clause provides name usage protection
+
+### 🛠️ Breaking Changes
+- **Import Structure**: Effects now organized in categories (automatic migration via grouped exports)
+- **Package Identity**: Cleaned branding and documentation (no functional impact)
+
+### 🔄 Migration Guide
+```dart
+// Old imports still work (backward compatible)
+import 'package:flutter_route_shifter/flutter_route_shifter.dart';
+
+// New widget extension API (recommended)
+NextPage().routeShift()
+  .fade(duration: 300.ms)
+  .slideFromRight()
+  .push(context);
+
+// Traditional API still fully supported
+RouteShifterBuilder()
+  .fade(duration: Duration(milliseconds: 300))
+  .toRoute(page: NextPage());
+```
+
+### 📊 Effect Count Update
+- **Total Effects**: 18+ (reorganized from previous 34+ count for accuracy)
+- **Categorization**: Clear organization by complexity and use case
+- **Documentation**: Each effect properly categorized and documented
+
+---
+
 ## [1.0.0] - 2025-08-12
 
 ### 🎉 Initial Release
@@ -140,31 +206,29 @@ RouteShifterBuilder()
 - **Contributions**: Open source, community-driven development
 
 ### 📄 License
-MIT License - see LICENSE file for details
+BSD 3-Clause License - see LICENSE file for details
 
 ---
 
 ## Known Issues & Future Improvements
 
-### 🐛 Known Issues (v1.0.0)
-1. **Follow Path Effect**: Missing null checks for empty paths
-2. **Glitch Effect**: Performance impact on lower-end devices
-3. **Physics Spring**: Requires base effect parameter (not standalone)
-4. **Web Performance**: Some effects have reduced performance on web
-5. **Memory**: Large path effects may use more memory than expected
+### 🐛 Known Issues (v1.0.1)
+1. **Web Performance**: Some creative effects have reduced performance on web platforms
+2. **Memory Usage**: Large path effects may use more memory than expected  
+3. **Creative Effects**: Some advanced creative effects may impact performance on lower-end devices
 
 ### 🚀 Planned for v1.1.0
 - **Performance**: Web-optimized rendering for all effects
-- **New Effects**: Liquid morphing, particle systems
-- **Accessibility**: Screen reader support and reduced motion
-- **Testing**: Automated performance benchmarking
-- **Documentation**: Video tutorials and interactive playground
+- **More Extensions**: BuildContext extensions and preset combinations
+- **Testing Suite**: Comprehensive automated tests
+- **Accessibility**: Screen reader support and reduced motion preferences
+- **Documentation**: Interactive playground and video tutorials
 
-### 🔮 Future Roadmap
-- **v1.2.0**: Custom easing curves editor
-- **v1.3.0**: Integration with Flutter's new material widgets
-- **v1.4.0**: 3D transitions with advanced perspective
-- **v2.0.0**: Breaking changes for improved API consistency
+### 🔮 Future Roadmap  
+- **v1.2.0**: Advanced physics and spring animations
+- **v1.3.0**: Integration with Flutter's latest animation APIs
+- **v1.4.0**: 3D transitions with advanced perspective controls
+- **v2.0.0**: Next-generation API with enhanced performance
 
 ---
 

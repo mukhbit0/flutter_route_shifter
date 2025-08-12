@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../effects/parallax_effect.dart';
+import '../../effects/creative/parallax_effect.dart';
 
 /// Extension methods for parallax effects on RouteShifterBuilder.
 mixin ParallaxEffects {

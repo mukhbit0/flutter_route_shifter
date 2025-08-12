@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../effects/scale_effect.dart';
+// file: lib/src/core/route_shifter_builder/scale_effects.dart
+import '../../effects/basic/scale_effect.dart';
 
 /// Mixin that provides scale effects for RouteShifterBuilder.
 mixin ScaleEffects {

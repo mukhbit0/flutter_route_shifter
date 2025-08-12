@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'base_effect.dart';
+import '../base/effect.dart';
 
 /// A slide transition effect that animates position from one offset to another.
 ///

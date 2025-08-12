@@ -1,6 +1,6 @@
 // lib/src/effects/perspective_effect.dart
 import 'package:flutter/material.dart';
-import 'base_effect.dart';
+import '../base/effect.dart';
 import 'dart:math' as math;
 
 /// Creates a 3D perspective rotation effect for route transitions.

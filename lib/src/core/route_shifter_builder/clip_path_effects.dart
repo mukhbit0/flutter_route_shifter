@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../effects/clip_path_effect.dart';
+import '../../effects/creative/clip_path_effect.dart';
 
 /// Mixin that provides clip path effects for RouteShifterBuilder.
 mixin ClipPathEffects {

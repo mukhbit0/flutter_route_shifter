@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../effects/base_effect.dart';
-import '../effects/shared_element_effect.dart';
+import '../effects/base/effect.dart';
+import '../effects/advanced/shared_element_effect.dart';
 import 'transition_coordinator.dart';
 
 /// The main route class that handles animated transitions between pages.

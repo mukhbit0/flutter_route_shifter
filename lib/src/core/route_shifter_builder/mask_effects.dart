@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../effects/mask_effect.dart';
+import '../../effects/creative/mask_effect.dart';
 
 /// Mixin that provides mask effects for RouteShifterBuilder.
 mixin MaskEffects {

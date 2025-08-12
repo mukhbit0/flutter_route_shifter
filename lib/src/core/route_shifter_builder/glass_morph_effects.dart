@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../effects/glass_morph_effect.dart';
+import '../../effects/creative/glass_morph_effect.dart';
 
 /// Mixin that provides glass morphism effects for RouteShifterBuilder.
 mixin GlassMorphEffects {

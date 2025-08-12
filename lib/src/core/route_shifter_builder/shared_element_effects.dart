@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../effects/shared_element_effect.dart';
-import '../../effects/base_effect.dart';
+import '../../effects/advanced/shared_element_effect.dart';
+import '../../effects/base/effect.dart';
 
 /// Mixin providing shared element transition methods for RouteShifterBuilder.
 mixin SharedElementEffects {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'base_effect.dart';
-import '../core/shifter_registry.dart';
+import '../base/effect.dart';
+import '../../core/shifter_registry.dart';
 
 /// A specialized effect for shared element transitions.
 ///

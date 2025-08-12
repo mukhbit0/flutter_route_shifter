@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'base_effect.dart';
+import '../base/effect.dart';
 
 /// A blur transition effect that animates blur from one sigma to another.
 ///

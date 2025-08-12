@@ -5,7 +5,7 @@
 **A powerful, declarative route transition package with 34+ chainable animations, shared elements, and advanced effects for Flutter applications.**
 
 [![pub package](https://img.shields.io/pub/v/flutter_route_shifter.svg)](https://pub.dev/packages/flutter_route_shifter)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: BSD-3](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Flutter](https://img.shields.io/badge/Flutter-3.7%2B-blue.svg)](https://flutter.dev/)
 [![Dart](https://img.shields.io/badge/Dart-3.1%2B-blue.svg)](https://dart.dev/)
 [![GitHub](https://img.shields.io/badge/View%20Animations-GitHub-blue.svg)](https://github.com/mukhbit0/flutter_route_animate/tree/main/animations)
@@ -60,19 +60,31 @@
 <td width="50%">
 
 ### 🎨 **Rich Animation Library**
-- **34+ Built-in Effects** - Complete collection of transitions
-- **Chainable API** - Intuitive `.fade().slide().scale()` syntax
-- **Creative Effects** - Glass, glitch, parallax, and more
+- **18+ Categorized Effects** - Organized for easy discovery
+- **Modern Widget API** - Intuitive widget extension syntax
+- **Duration Extensions** - Clean `300.ms` syntax  
 - **3D Transformations** - Perspective, shear, and depth effects
+
+### 🟢 **Basic Effects** (4)
+Essential transitions: fade, slide, scale, rotation
+
+### 🟡 **Advanced Effects** (7)  
+Professional UX: blur, perspective, sequenced, shared elements
 
 </td>
 <td width="50%">
 
 ### 🚀 **Advanced Features**
-- **Shared Elements** - Hero-like transitions between pages
+- **Widget Extensions** - `MyWidget().routeShift().fadeIn()`
+- **Chaining API** - Multiple effects in sequence
 - **Platform Presets** - Material Design & Cupertino styles
-- **Sequenced Animations** - Precise timing control
 - **Performance Optimized** - Minimal overhead, smooth 60fps
+
+### 🔴 **Creative Effects** (7)
+Artistic transitions: glass morphism, glitch, parallax, clip paths
+
+### 📦 **Clean Architecture**
+Organized exports, tree-shaking friendly, pub.dev optimized
 
 </td>
 </tr>
@@ -98,19 +110,58 @@ $ flutter pub get
 ```dart
 import 'package:flutter_route_shifter/flutter_route_shifter.dart';
 
-// Simple fade transition
+// Traditional Builder API
 final route = RouteShifterBuilder()
-  .fade(duration: Duration(milliseconds: 300))
+  .fade(duration: 300.ms)  // New duration extension!
   .toRoute(page: NextPage());
 
 Navigator.of(context).push(route);
+
+// ✨ NEW: Widget Extension API (Modern chaining style!)
+NextPage().routeShift()
+  .fade(duration: 300.ms)
+  .slide(beginOffset: Offset(1.0, 0.0))
+  .scale(beginScale: 0.8)
+  .push(context);  // Direct navigation
+
+// ✨ NEW: Chaining with duration extensions
+MyWidget().routeShift()
+  .fadeIn(500.ms)
+  .slideFromRight(400.ms)
+  .scaleUp(300.ms)
+  .toRoute();
+```
+
+### Quick Examples
+
+```dart
+// Basic animations
+LoginPage().routeShift().fadeIn(300.ms).push(context);
+ProfilePage().routeShift().slideFromBottom().push(context);
+SettingsPage().routeShift().scaleUp().push(context);
+
+// Advanced combinations
+DetailPage().routeShift()
+  .fade(300.ms)
+  .slide(beginOffset: Offset(0.3, 0), duration: 400.ms)
+  .blur(beginBlur: 0, endBlur: 10, duration: 200.ms)
+  .push(context);
+
+// Creative effects
+GalleryPage().routeShift()
+  .glass(blur: 20.0, duration: 800.ms)
+  .clipPath(clipType: ClipPathType.circle)
+  .push(context);
 ```
 
 ---
 
 ## 🎨 Animation Effects
 
-### 🔹 Core Transitions
+Flutter Route Shifter organizes its 18+ effects into three categories for optimal discoverability:
+
+### � **Basic Effects** - Essential transitions for everyday use
+Clean, performant animations that form the foundation of most app transitions.
 
 <details>
 <summary><strong>📱 Fade Transitions</strong></summary>
@@ -125,7 +176,7 @@ Navigator.of(context).push(route);
 // Basic fade in
 RouteShifterBuilder()
   .fade(
-    duration: Duration(milliseconds: 400),
+    duration: 300.ms,  // New duration extension!
     curve: Curves.easeInOut,
   )
 
@@ -134,8 +185,13 @@ RouteShifterBuilder()
   .fade(
     beginOpacity: 0.0,
     endOpacity: 1.0,
-    duration: Duration(milliseconds: 500),
+    duration: 500.ms,
   )
+
+// New Widget Extension API - Modern chaining style!
+MyWidget().routeShift()
+  .fade(duration: 300.ms)
+  .toRoute()
 ```
 
 </details>
@@ -154,13 +210,17 @@ RouteShifterBuilder()
 RouteShifterBuilder()
   .slide(
     beginOffset: Offset(1.0, 0.0),
-    duration: Duration(milliseconds: 300),
+    duration: 300.ms,
   )
 
 // Convenient presets
 RouteShifterBuilder().slideFromBottom()
 RouteShifterBuilder().slideFromLeft()
 RouteShifterBuilder().slideFromTop()
+
+// Widget extension API
+MyWidget().routeShift()
+  .slideFromRight(duration: 400.ms)
 ```
 
 </details>
@@ -183,15 +243,16 @@ RouteShifterBuilder()
     alignment: Alignment.center,
   )
 
-// Quick presets
-RouteShifterBuilder().scaleUp()
-RouteShifterBuilder().scaleDown()
+// Quick presets with new API
+MyWidget().routeShift()
+  .scaleUp(duration: 250.ms)
+  .scaleDown(duration: 250.ms)
 ```
 
 </details>
 
 <details>
-<summary><strong>📱 Rotation Transitions</strong></summary>
+<summary><strong>� Rotation Transitions</strong></summary>
 
 <br>
 
@@ -208,16 +269,175 @@ RouteShifterBuilder()
     alignment: Alignment.center,
   )
 
-// Full spin effect
+// Full spin effect with new API
+MyWidget().routeShift()
+  .rotation(beginAngle: -6.28, duration: 400.ms) // 2π rotation
+```
+
+</details>
+
+</details>
+
+---
+
+### 🟡 **Advanced Effects** - Professional animations for enhanced UX
+Sophisticated transitions that add depth and interactivity to your app.
+
+<details>
+<summary><strong>🌀 Blur Transitions</strong></summary>
+
+<br>
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/blur.gif" width="250"/>
+</div>
+
+```dart
+// Blur effect
 RouteShifterBuilder()
-  .rotation(beginAngle: -6.28) // 2π rotation
+  .blur(
+    beginBlur: 0.0,
+    endBlur: 10.0,
+    duration: 500.ms,
+  )
+
+// Widget extension
+MyWidget().routeShift()
+  .blur(endBlur: 15.0, duration: 600.ms)
+```
+
+</details>
+
+<details>
+<summary><strong>🎭 Perspective 3D</strong></summary>
+
+<br>
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/perspective_fade.gif" width="250"/>
+</div>
+
+```dart
+// 3D perspective flip
+RouteShifterBuilder()
+  .perspective(
+    rotationX: 0.3,
+    rotationY: 0.0,
+    distance: 2.0,
+    duration: 700.ms,
+  )
+```
+
+</details>
+
+<details>
+<summary><strong>🎯 Sequenced Animations</strong></summary>
+
+<br>
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/sequenced.gif" width="250"/>
+</div>
+
+```dart
+// Precise timing control
+RouteShifterBuilder()
+  .sequenced(
+    items: [
+      SequencedItem(id: 'header', delay: 0.ms),
+      SequencedItem(id: 'content', delay: 200.ms),
+      SequencedItem(id: 'footer', delay: 400.ms),
+    ],
+    staggerDuration: 100.ms,
+  )
+```
+
+</details>
+
+<details>
+<summary><strong>🔄 Shear Transform</strong></summary>
+
+<br>
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/shear.gif" width="250"/>
+</div>
+
+```dart
+// Shear effect
+RouteShifterBuilder()
+  .shear(
+    beginShear: Offset(0.0, 0.0),
+    endShear: Offset(0.2, 0.0),
+    duration: 500.ms,
+  )
+```
+
+</details>
+
+<details>
+<summary><strong>⭐ Shared Elements</strong></summary>
+
+<br>
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/shared.gif" width="250"/>
+</div>
+
+```dart
+// Hero-like shared element transitions
+RouteShifterBuilder()
+  .sharedElement(
+    shiftIds: ['hero-image', 'hero-title'],
+    flightDuration: 600.ms,
+    flightCurve: Curves.fastLinearToSlowEaseIn,
+  )
+```
+
+</details>
+
+<details>
+<summary><strong>🌊 Stagger Effects</strong></summary>
+
+<br>
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/stagger.gif" width="250"/>
+</div>
+
+```dart
+// Staggered child animations
+RouteShifterBuilder()
+  .stagger(
+    interval: 100.ms,
+    childSelector: (index) => index < 5, // First 5 children
+    childEffect: SlideEffect(beginOffset: Offset(0, 20)),
+  )
+```
+
+</details>
+
+<details>
+<summary><strong>⚡ Physics Spring</strong></summary>
+
+```dart
+// Spring physics
+RouteShifterBuilder()
+  .physicsSpring(
+    spring: SpringDescription(
+      mass: 1.0,
+      stiffness: 500.0,
+      damping: 20.0,
+    ),
+  )
 ```
 
 </details>
 
 ---
 
-### 🔹 Advanced Effects
+### 🔴 **Creative Effects** - Experimental and artistic transitions
+Eye-catching animations that make your app memorable and unique.
 
 <details>
 <summary><strong>🌟 Glass Morphism</strong></summary>
@@ -234,53 +454,148 @@ RouteShifterBuilder()
   .glass(
     blur: 20.0,
     opacity: 0.1,
-    duration: Duration(milliseconds: 800),
+    duration: 800.ms,
+  )
+
+// Widget extension
+MyWidget().routeShift()
+  .glass(blur: 25.0, opacity: 0.15)
+```
+
+</details>
+
+<details>
+<summary><strong>✂️ Clip Path</strong></summary>
+
+<br>
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/clip.gif" width="250"/>
+</div>
+
+```dart
+// Geometric reveal animations
+RouteShifterBuilder()
+  .clipPath(
+    clipType: ClipPathType.circle,
+    direction: ClipDirection.centerOut,
+    duration: 800.ms,
+  )
+
+// Different shapes
+MyWidget().routeShift()
+  .clipPath(clipType: ClipPathType.diamond)
+  .clipPath(clipType: ClipPathType.star)
+```
+
+</details>
+
+<details>
+<summary><strong>🎨 Color Tint</strong></summary>
+
+<br>
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/tint.gif" width="250"/>
+</div>
+
+```dart
+// Color overlay transitions
+RouteShifterBuilder()
+  .colorTint(
+    color: Colors.blue.withOpacity(0.3),
+    blendMode: BlendMode.overlay,
+    duration: 600.ms,
   )
 ```
 
 </details>
 
 <details>
-<summary><strong>🌟 3D Perspective</strong></summary>
+<summary><strong>⚡ Glitch Effect</strong></summary>
 
 <br>
 
 <div align="center">
-<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/perspective_fade.gif" width="250"/>
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/glitch.gif" width="250"/>
 </div>
 
 ```dart
-// 3D perspective flip
+// Digital glitch
 RouteShifterBuilder()
-  .perspective(
-    rotationX: 0.3,
-    rotationY: 0.0,
-    distance: 2.0,
+  .glitch(
+    intensity: 0.1,
+    frequency: 8,
+    duration: 1000.ms,
   )
 ```
 
 </details>
 
 <details>
-<summary><strong>🌟 Shear Transform</strong></summary>
+<summary><strong>🌌 Parallax</strong></summary>
 
 <br>
 
 <div align="center">
-<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/shear.gif" width="250"/>
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/parallax.gif" width="250"/>
 </div>
 
 ```dart
-// Shear effect
+// Multi-layer parallax
 RouteShifterBuilder()
-  .shear(
-    beginShear: Offset(0.0, 0.0),
-    endShear: Offset(0.2, 0.0),
-    duration: Duration(milliseconds: 500),
+  .parallax(
+    direction: ParallaxDirection.horizontal,
+    intensity: 0.5,
+    layers: 3,
   )
 ```
 
 </details>
+
+<details>
+<summary><strong>🛤️ Follow Path</strong></summary>
+
+<br>
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/mukhbit0/flutter_route_animate/main/animations/path.gif" width="250"/>
+</div>
+
+```dart
+// Custom path animation
+RouteShifterBuilder()
+  .followPath(
+    path: Path()
+      ..moveTo(0, 0)
+      ..quadraticBezierTo(100, -50, 200, 0),
+    duration: 1.2.s,
+  )
+```
+
+</details>
+
+<details>
+<summary><strong>🎭 Mask Effect</strong></summary>
+
+```dart
+// Mask-based reveals
+RouteShifterBuilder()
+  .mask(
+    maskWidget: Container(
+      decoration: BoxDecoration(
+        gradient: RadialGradient(colors: [Colors.transparent, Colors.black]),
+      ),
+    ),
+    duration: 800.ms,
+  )
+```
+
+</details>
+
+---
+
+### 🔹 Advanced Effects
 
 <details>
 <summary><strong>🌟 Sequenced Animations</strong></summary>

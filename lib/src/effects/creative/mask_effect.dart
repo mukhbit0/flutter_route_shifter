@@ -1,6 +1,6 @@
 // lib/src/effects/mask_effect.dart
 import 'package:flutter/material.dart';
-import 'base_effect.dart';
+import '../base/effect.dart';
 import 'dart:math' as math;
 
 /// Reveals the page content through a widget mask.

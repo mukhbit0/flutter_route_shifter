@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../effects/slide_effect.dart';
+// file: lib/src/core/route_shifter_builder/slide_effects.dart
+import '../../effects/basic/slide_effect.dart';
 
 /// Mixin that provides slide effects for RouteShifterBuilder.
 mixin SlideEffects {

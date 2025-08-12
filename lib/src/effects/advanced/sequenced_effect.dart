@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../core/sequenced_item_registry.dart';
-import 'base_effect.dart';
-import 'slide_effect.dart';
+import '../../core/sequenced_item_registry.dart';
+import '../base/effect.dart';
+import '../basic/slide_effect.dart';
 
 /// Widget that provides animation state to descendant SequencedItem widgets
 class SequencedAnimationProvider extends InheritedWidget {

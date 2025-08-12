@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../effects/color_tint_effect.dart';
+import '../../effects/creative/color_tint_effect.dart';
 
 /// Extension methods for color tint effects on RouteShifterBuilder.
 mixin ColorTintEffects {

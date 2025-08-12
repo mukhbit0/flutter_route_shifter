@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'base_effect.dart';
+import '../base/effect.dart';
 
 /// A fade transition effect that animates opacity from 0.0 to 1.0.
 ///

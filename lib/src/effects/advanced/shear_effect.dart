@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-import 'base_effect.dart';
+import '../base/effect.dart';
 
 /// Creates stylistic skewing transitions.
 ///

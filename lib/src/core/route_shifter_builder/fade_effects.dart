@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../effects/fade_effect.dart';
+// file: lib/src/core/route_shifter_builder/fade_effects.dart
+import '../../effects/basic/fade_effect.dart';
 
 /// Mixin that provides fade effects for RouteShifterBuilder.
 mixin FadeEffects {

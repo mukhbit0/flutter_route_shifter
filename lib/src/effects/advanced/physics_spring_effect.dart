@@ -1,7 +1,7 @@
 // lib/src/effects/physics_spring_effect.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
-import 'base_effect.dart';
+import '../base/effect.dart';
 
 /// A meta-effect that drives another effect using a physics-based SpringSimulation.
 ///

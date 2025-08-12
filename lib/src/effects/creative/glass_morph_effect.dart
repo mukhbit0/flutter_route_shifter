@@ -1,7 +1,7 @@
 // lib/src/effects/glass_morph_effect.dart
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'base_effect.dart';
+import '../base/effect.dart';
 
 /// Creates a "frosted glass" or "glassmorphism" effect.
 ///
