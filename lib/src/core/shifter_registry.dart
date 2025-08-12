@@ -75,7 +75,10 @@ class ShifterRegistry {
           Rect.fromLTWH(position.dx, position.dy, size.width, size.height);
 
       element.rect = rect;
-    } catch (e) {}
+    } catch (e) {
+      // Element may not be mounted or renderable yet, skip positioning
+      // This is expected during widget disposal or when elements are not yet rendered
+    }
   }
 
   /// Checks for pairs and creates element data when both source and target are ready
