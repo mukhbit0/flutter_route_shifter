@@ -2,7 +2,7 @@
 
 <div align="center">
 
-**A powerful, declarative route transition package with 34+ chainable animations, shared elements, advanced effects, and go_router integration for Flutter applications.**
+**A powerful, declarative route transition package with 18+ chainable animations, shared elements, advanced effects, deep linking, responsive animations, theme integration, and go_router support for Flutter applications.**
 
 [![pub package](https://img.shields.io/pub/v/flutter_route_shifter.svg)](https://pub.dev/packages/flutter_route_shifter)
 [![License: BSD-3](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
@@ -61,31 +61,45 @@
 <td width="50%">
 
 ### 🎨 **Rich Animation Library**
+
 - **18+ Categorized Effects** - Organized for easy discovery
 - **Modern Widget API** - Intuitive widget extension syntax
 - **Duration Extensions** - Clean `300.ms` syntax  
 - **3D Transformations** - Perspective, shear, and depth effects
 
 ### 🟢 **Basic Effects** (4)
+
 Essential transitions: fade, slide, scale, rotation
 
 ### 🟡 **Advanced Effects** (7)  
+
 Professional UX: blur, perspective, sequenced, shared elements
 
 </td>
 <td width="50%">
 
 ### 🚀 **Advanced Features**
+
 - **Widget Extensions** - `MyWidget().routeShift().fadeIn()`
-- **Chaining API** - Multiple effects in sequence
+- **Chaining API** - Multiple effects in sequence  
 - **go_router Integration** - Seamless support for declarative routing
 - **Platform Presets** - Material Design & Cupertino styles
 - **Performance Optimized** - Minimal overhead, smooth 60fps
 
+### 🆕 **v1.1.0 Features**
+
+- **🎨 Theme Integration** - Material 3 & Cupertino adaptive animations
+- **📱 Responsive Animations** - Screen size & orientation adaptive
+- **🔗 Deep Link Animations** - URL-driven animation configuration  
+- **📦 Animation Presets** - Pre-built combinations for common use cases
+- **🎭 Custom Curve Builder** - Visual curve creation with control points
+
 ### 🔴 **Creative Effects** (7)
+
 Artistic transitions: glass morphism, glitch, parallax, clip paths
 
 ### 📦 **Clean Architecture**
+
 Organized exports, tree-shaking friendly, go_router compatible
 
 </td>
@@ -104,7 +118,7 @@ dependencies:
 ```
 
 ```bash
-$ flutter pub get
+flutter pub get
 ```
 
 ### Basic Usage
@@ -193,11 +207,121 @@ final GoRouter router = GoRouter(
 
 ---
 
+## 🆕 New in v1.1.0
+
+### 🎨 Theme Integration
+
+Automatically adapt animations to your app's Material 3 or Cupertino theme:
+
+```dart
+// Material 3 theme-aware animations
+ProfilePage().routeShift()
+  .followMaterial3()  // Uses theme colors & motion
+  .fadeIn(300.ms)
+  .push(context);
+
+// Cupertino theme integration  
+SettingsPage().routeShift()
+  .followCupertino()
+  .slideFromRight()
+  .push(context);
+```
+
+### 📱 Responsive Animations
+
+Animations that adapt to screen size and orientation:
+
+```dart
+// Different animations for different screen sizes
+DetailPage().routeShift()
+  .adaptive(
+    mobile: () => slideFromBottom(),
+    tablet: () => fade().scale(),
+    desktop: () => glass(blur: 15.0),
+  )
+  .push(context);
+
+// Orientation-aware animations
+GalleryPage().routeShift()
+  .orientationAdaptive(
+    portrait: () => slideFromRight(),
+    landscape: () => fade().scale(beginScale: 0.9),
+  )
+  .push(context);
+```
+
+### 🔗 Deep Link Animations
+
+Configure animations through URL parameters:
+
+```dart
+// URL: /profile?animation=slide&duration=400&direction=right
+GoRoute(
+  path: '/profile',
+  pageBuilder: (context, state) {
+    return DeepLinkRouteShifter
+      .fromUrl(state.uri.toString())
+      .toPage(child: ProfilePage());
+  },
+);
+
+// Preset URLs for common patterns
+// URL: /product?preset=ecommerce
+GoRoute(
+  path: '/product',  
+  pageBuilder: (context, state) {
+    return DeepLinkRouteShifter
+      .fromUrl(state.uri.toString())
+      .toPage(child: ProductPage());
+  },
+);
+```
+
+### 📦 Animation Presets
+
+Pre-built combinations for common use cases:
+
+```dart
+// E-commerce optimized animations
+ProductPage().routeShift()
+  .preset(RouteShifterPresets.ecommerce())
+  .push(context);
+
+// Social media style transitions  
+FeedPage().routeShift()
+  .preset(RouteShifterPresets.socialMedia())
+  .push(context);
+
+// Gaming transitions
+GamePage().routeShift()
+  .preset(RouteShifterPresets.gaming())
+  .push(context);
+```
+
+### 🎭 Custom Curve Builder
+
+Create custom animation curves visually:
+
+```dart
+// Build custom curves with control points
+final customCurve = CustomCurveBuilder()
+  .addPoint(0.2, 0.8)  // Control point
+  .addSegment(CurveSegmentType.bouncy)
+  .build();
+
+DetailPage().routeShift()
+  .fade(curve: customCurve)
+  .push(context);
+```
+
+---
+
 ## 🎨 Animation Effects
 
 Flutter Route Shifter organizes its 18+ effects into three categories for optimal discoverability:
 
 ### � **Basic Effects** - Essential transitions for everyday use
+
 Clean, performant animations that form the foundation of most app transitions.
 
 <details>
@@ -318,6 +442,7 @@ MyWidget().routeShift()
 ---
 
 ### 🟡 **Advanced Effects** - Professional animations for enhanced UX
+
 Sophisticated transitions that add depth and interactivity to your app.
 
 <details>
@@ -474,6 +599,7 @@ RouteShifterBuilder()
 ---
 
 ### 🔴 **Creative Effects** - Experimental and artistic transitions
+
 Eye-catching animations that make your app memorable and unique.
 
 <details>

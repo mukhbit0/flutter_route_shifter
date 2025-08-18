@@ -14,3 +14,8 @@ export 'src/utils/utils.dart';
 
 // Integration support for popular packages
 export 'src/integrations/integrations.dart';
+
+// Advanced features
+export 'src/theme/theme.dart';
+export 'src/responsive/responsive.dart';
+export 'src/curves/curves.dart';
