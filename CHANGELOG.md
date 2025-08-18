@@ -5,6 +5,56 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2025-08-18
+
+### 🔗 go_router Integration
+
+#### ✨ Added
+- **go_router Support**: Seamless integration with the popular go_router package for declarative routing
+- **RouteShifterPage<T>**: New page class that extends Page<T> for go_router compatibility
+- **CustomRouteShifterPage<T>**: Advanced MaterialPageRoute-based integration for complex scenarios
+- **Extension Methods**: Added `.toPage()` and `.toCustomPage()` methods for easy conversion
+- **Comprehensive Documentation**: Complete integration guide with real-world examples
+
+#### 🎯 Features
+- **Declarative Routing**: Full support for go_router's pageBuilder pattern
+- **All Effects Available**: Use any RouteShifterBuilder effect within go_router routes
+- **Type Safe**: Generic Page<T> implementation with full type safety
+- **Performance Optimized**: Efficient integration without additional overhead
+
+#### 📚 Integration Examples
+```dart
+// Easy go_router integration
+GoRoute(
+  path: '/details',
+  pageBuilder: (context, state) {
+    return RouteShifterBuilder()
+      .fade(duration: 400.ms)
+      .slideFromRight()
+      .toPage(child: DetailsPage());
+  },
+),
+
+// Advanced glass morphism with parallax
+GoRoute(
+  path: '/gallery',
+  pageBuilder: (context, state) {
+    return RouteShifterBuilder()
+      .glass(blur: 20.0, duration: 800.ms)
+      .parallax(direction: ParallaxDirection.horizontal)
+      .toPage(child: GalleryPage());
+  },
+),
+```
+
+#### 🌟 Benefits
+- **Modern Routing**: Supports Flutter's recommended declarative routing approach
+- **Wider Adoption**: Compatible with go_router's large user base
+- **Easy Migration**: Simple upgrade path for existing go_router projects
+- **Best Practices**: Follows Flutter and go_router conventions
+
+---
+
 ## [1.0.2] - 2025-08-13
 
 ### 🔧 Pub.dev Metadata Fixes

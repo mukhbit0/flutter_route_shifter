@@ -11,3 +11,6 @@ export 'src/effects/effects.dart';
 export 'src/presets/presets.dart';
 export 'src/widgets/widgets.dart';
 export 'src/utils/utils.dart';
+
+// Integration support for popular packages
+export 'src/integrations/integrations.dart';

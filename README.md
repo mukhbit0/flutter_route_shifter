@@ -2,12 +2,13 @@
 
 <div align="center">
 
-**A powerful, declarative route transition package with 34+ chainable animations, shared elements, and advanced effects for Flutter applications.**
+**A powerful, declarative route transition package with 34+ chainable animations, shared elements, advanced effects, and go_router integration for Flutter applications.**
 
 [![pub package](https://img.shields.io/pub/v/flutter_route_shifter.svg)](https://pub.dev/packages/flutter_route_shifter)
 [![License: BSD-3](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Flutter](https://img.shields.io/badge/Flutter-3.7%2B-blue.svg)](https://flutter.dev/)
 [![Dart](https://img.shields.io/badge/Dart-3.1%2B-blue.svg)](https://dart.dev/)
+[![go_router](https://img.shields.io/badge/go__router-Compatible-green.svg)](https://pub.dev/packages/go_router)
 [![GitHub](https://img.shields.io/badge/View%20Animations-GitHub-blue.svg)](https://github.com/mukhbit0/flutter_route_animate/tree/main/animations)
 
 > 🎥 **View Live Animations**: [See all 17 animation demos on GitHub](https://github.com/mukhbit0/flutter_route_animate/tree/main/animations) - GIFs show each transition in action!
@@ -77,6 +78,7 @@ Professional UX: blur, perspective, sequenced, shared elements
 ### 🚀 **Advanced Features**
 - **Widget Extensions** - `MyWidget().routeShift().fadeIn()`
 - **Chaining API** - Multiple effects in sequence
+- **go_router Integration** - Seamless support for declarative routing
 - **Platform Presets** - Material Design & Cupertino styles
 - **Performance Optimized** - Minimal overhead, smooth 60fps
 
@@ -84,7 +86,7 @@ Professional UX: blur, perspective, sequenced, shared elements
 Artistic transitions: glass morphism, glitch, parallax, clip paths
 
 ### 📦 **Clean Architecture**
-Organized exports, tree-shaking friendly, pub.dev optimized
+Organized exports, tree-shaking friendly, go_router compatible
 
 </td>
 </tr>
@@ -98,7 +100,7 @@ Organized exports, tree-shaking friendly, pub.dev optimized
 
 ```yaml
 dependencies:
-  flutter_route_shifter: ^1.0.0
+  flutter_route_shifter: ^1.1.0
 ```
 
 ```bash
@@ -153,6 +155,41 @@ GalleryPage().routeShift()
   .clipPath(clipType: ClipPathType.circle)
   .push(context);
 ```
+
+### 🔗 go_router Integration
+
+Perfect integration with the popular `go_router` package for declarative routing:
+
+```dart
+final GoRouter router = GoRouter(
+  routes: [
+    GoRoute(
+      path: '/',
+      builder: (context, state) => HomePage(),
+    ),
+    GoRoute(
+      path: '/details',
+      pageBuilder: (context, state) {
+        return RouteShifterBuilder()
+          .fade(duration: 400.ms)
+          .slideFromRight()
+          .toPage(child: DetailsPage());
+      },
+    ),
+    GoRoute(
+      path: '/profile',
+      pageBuilder: (context, state) {
+        return RouteShifterBuilder()
+          .glass(blur: 20.0, duration: 800.ms)
+          .parallax(direction: ParallaxDirection.horizontal)
+          .toPage(child: ProfilePage());
+      },
+    ),
+  ],
+);
+```
+
+**[📖 Complete go_router Integration Guide →](GO_ROUTER_INTEGRATION.md)**
 
 ---
 

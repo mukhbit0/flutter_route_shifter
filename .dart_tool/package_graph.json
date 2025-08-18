@@ -5,7 +5,7 @@
   "packages": [
     {
       "name": "flutter_route_shifter",
-      "version": "1.0.2",
+      "version": "1.1.0",
       "dependencies": [
         "flutter"
       ],
