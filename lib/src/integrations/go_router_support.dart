@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import '../core/route_shifter_builder.dart';
 
 /// A route page that integrates RouteShifterBuilder with go_router.
-/// 
+///
 /// This class provides seamless integration between route shifter animations
 /// and the go_router package, allowing you to use all shifter effects
 /// within a declarative routing setup.
-/// 
+///
 /// Example usage:
 /// ```dart
 /// GoRoute(
@@ -22,7 +22,7 @@ import '../core/route_shifter_builder.dart';
 class RouteShifterPage<T> extends Page<T> {
   /// The widget to display.
   final Widget child;
-  
+
   /// The route shifter builder that defines the transition.
   final RouteShifterBuilder shifter;
 
@@ -45,11 +45,11 @@ class RouteShifterPage<T> extends Page<T> {
 /// Extension to create RouteShifterPage instances.
 extension RouteShifterPageExtension on RouteShifterBuilder {
   /// Creates a RouteShifterPage for go_router integration.
-  /// 
+  ///
   /// This is the recommended way to integrate RouteShifterBuilder
   /// with go_router. The resulting page can be returned from
   /// GoRoute.pageBuilder.
-  /// 
+  ///
   /// Example:
   /// ```dart
   /// GoRoute(
@@ -81,7 +81,7 @@ extension RouteShifterPageExtension on RouteShifterBuilder {
 }
 
 /// A custom material page that works with go_router's pageBuilder.
-/// 
+///
 /// This provides a more direct approach for go_router integration by
 /// extending MaterialPageRoute and overriding the buildTransitions method.
 class CustomRouteShifterPage<T> extends MaterialPageRoute<T> {
@@ -129,11 +129,11 @@ class CustomRouteShifterPage<T> extends MaterialPageRoute<T> {
 /// Extension to create CustomRouteShifterPage instances.
 extension RouteShifterCustomPageExtension on RouteShifterBuilder {
   /// Creates a CustomRouteShifterPage for advanced go_router integration.
-  /// 
+  ///
   /// Use this when you need more control over the page behavior or
   /// when working with complex go_router configurations that require
   /// a MaterialPageRoute-based approach.
-  /// 
+  ///
   /// Example:
   /// ```dart
   /// GoRoute(
