@@ -5,6 +5,49 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.1] - 2025-01-27
+
+### 🐛 Bug Fix Release
+
+#### ✅ Fixed
+
+- **go_router Integration Bug**: Fixed critical issue where `toPage()` method was not available from main package import
+- **Export Chain Issue**: Resolved missing export of go_router integration methods in main package file
+- **Import Confusion**: Eliminated need for separate imports when using with go_router
+
+#### 🔧 Technical Changes
+
+- **Main Export Updated**: Added explicit export of `src/integrations/go_router_support.dart` in main package
+- **Extension Methods Available**: `toPage()` and `toCustomPage()` now accessible without separate imports
+- **Classes Available**: `RouteShifterPage` and `CustomRouteShifterPage` now directly importable
+
+#### 📝 Before (Broken)
+
+```dart
+import 'package:flutter_route_shifter/flutter_route_shifter.dart';
+
+// ❌ This would fail with "NoSuchMethodError: toPage"
+RouteShifterBuilder().fade().toPage(child: ProfilePage());
+```
+
+#### ✅ After (Fixed)
+
+```dart
+import 'package:flutter_route_shifter/flutter_route_shifter.dart';
+
+// ✅ This now works perfectly!
+RouteShifterBuilder().fade().toPage(child: ProfilePage());
+```
+
+#### 🎯 Impact
+
+- **Developer Experience**: No more confusing "method not found" errors
+- **Code Clarity**: Single import statement for all functionality
+- **Backward Compatibility**: Existing code continues to work
+- **Go Router Integration**: Seamless integration without workarounds
+
+---
+
 ## [1.2.0] - 2025-08-18
 
 ### 🚀 Major Feature Release

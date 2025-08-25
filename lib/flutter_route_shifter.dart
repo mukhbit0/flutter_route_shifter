@@ -15,6 +15,10 @@ export 'src/utils/utils.dart';
 // Integration support for popular packages
 export 'src/integrations/integrations.dart';
 
+// 🔑 CRITICAL: Explicitly export go_router integration to make toPage() available
+// This ensures the extension methods are available without separate imports
+export 'src/integrations/go_router_support.dart';
+
 // Advanced features
 export 'src/theme/theme.dart';
 export 'src/responsive/responsive.dart';

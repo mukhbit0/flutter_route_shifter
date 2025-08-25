@@ -86,7 +86,7 @@ Professional UX: blur, perspective, sequenced, shared elements
 - **Platform Presets** - Material Design & Cupertino styles
 - **Performance Optimized** - Minimal overhead, smooth 60fps
 
-### 🆕 **v1.1.0 Features**
+### 🆕 **v1.2.1 Features**
 
 - **🎨 Theme Integration** - Material 3 & Cupertino adaptive animations
 - **📱 Responsive Animations** - Screen size & orientation adaptive
@@ -114,7 +114,7 @@ Organized exports, tree-shaking friendly, go_router compatible
 
 ```yaml
 dependencies:
-  flutter_route_shifter: ^1.1.0
+  flutter_route_shifter: ^1.2.1
 ```
 
 ```bash
@@ -207,7 +207,7 @@ final GoRouter router = GoRouter(
 
 ---
 
-## 🆕 New in v1.1.0
+## 🆕 New in v1.2.1
 
 ### 🎨 Theme Integration
 

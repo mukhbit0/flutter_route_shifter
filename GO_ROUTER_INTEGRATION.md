@@ -24,7 +24,7 @@
 
 ```yaml
 dependencies:
-  flutter_route_shifter: ^1.2.0
+  flutter_route_shifter: ^1.2.1
   go_router: ^14.0.0  # Latest version
 ```
 
