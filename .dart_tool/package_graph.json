@@ -5,7 +5,7 @@
   "packages": [
     {
       "name": "flutter_route_shifter",
-      "version": "1.2.1",
+      "version": "1.2.2",
       "dependencies": [
         "flutter",
         "go_router"

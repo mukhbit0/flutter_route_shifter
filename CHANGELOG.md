@@ -5,6 +5,50 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.2] - 2025-09-23
+
+### 🧩 Integration Polish & Stability
+
+This release improves go_router compatibility and removes dynamic-call pitfalls seen under Dart Dev Compiler (web/Chrome).
+
+#### ✅ Fixed
+
+- Dynamic call failures in go_router pageBuilder when chaining methods like `.withCustomCurve(...)` and `.followMaterial3(context)`
+- Navigator 3 page-based assertion by ensuring `Page.createRoute` passes the Page instance as `RouteSettings`
+
+#### ✨ Added
+
+- Strongly-typed builder helpers on `RouteShifterBuilder`:
+  - `withCustomCurve(Curve curve)`
+  - `withCurveBuilder(Curve Function(CustomCurveBuilder) builder)`
+  - `followMaterial3(BuildContext context)`, `followCupertino(...)`, `followPlatformTheme(...)` (no-op typed helpers)
+- Internal typed `toPage({ required child, ... })` method on `RouteShifterBuilder` returning a Page that wires `settings: this`
+
+#### 🔧 Changes
+
+- Kept extension-based integration in `lib/src/integrations/go_router_support.dart` while adding typed instance methods to avoid dynamic resolution issues in DDC/go_router closures
+- Example `go_router_demo.dart` updated to use typed `.toPage(...)` and `.withCustomCurve(...)` calls
+
+#### 🧪 QA
+
+- `flutter analyze` clean
+- Demo runs on Chrome without dynamic-call NoSuchMethodErrors
+
+#### 📦 Migration
+
+No code changes required. If you previously saw runtime NoSuchMethodErrors in go_router pageBuilder, prefer the typed chain:
+
+```dart
+RouteShifterBuilder()
+  .fade(duration: 300.ms)
+  .withCustomCurve(Curves.easeInOutBack)
+  .toPage(child: const SettingsPage());
+```
+
+The extension-based `.toPage()` continues to work; the new instance method is recommended in go_router contexts.
+
+---
+
 ## [1.2.1] - 2025-01-27
 
 ### 🐛 Bug Fix Release
