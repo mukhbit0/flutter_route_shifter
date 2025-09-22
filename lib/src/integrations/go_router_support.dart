@@ -19,7 +19,7 @@ import '../core/route_shifter_builder.dart';
 ///   },
 /// ),
 /// ```
-class RouteShifterPage<T> extends Page<T> {
+class RouteShifterPage extends Page {
   /// The widget to display.
   final Widget child;
 
@@ -37,8 +37,12 @@ class RouteShifterPage<T> extends Page<T> {
   });
 
   @override
-  Route<T> createRoute(BuildContext context) {
-    return shifter.toRoute(page: child);
+  Route createRoute(BuildContext context) {
+    // Important: pass this Page as settings to satisfy Navigator's page-based API
+    return shifter.toRoute(
+      page: child,
+      settings: this,
+    );
   }
 }
 
@@ -62,14 +66,14 @@ extension RouteShifterPageExtension on RouteShifterBuilder {
   ///   },
   /// ),
   /// ```
-  RouteShifterPage<T> toPage<T>({
+  RouteShifterPage toPage({
     required Widget child,
     LocalKey? key,
     String? name,
     Object? arguments,
     String? restorationId,
   }) {
-    return RouteShifterPage<T>(
+    return RouteShifterPage(
       shifter: this,
       child: child,
       key: key,
@@ -84,7 +88,7 @@ extension RouteShifterPageExtension on RouteShifterBuilder {
 ///
 /// This provides a more direct approach for go_router integration by
 /// extending MaterialPageRoute and overriding the buildTransitions method.
-class CustomRouteShifterPage<T> extends MaterialPageRoute<T> {
+class CustomRouteShifterPage extends MaterialPageRoute {
   /// The route shifter builder that defines the transition.
   final RouteShifterBuilder shifter;
 
@@ -145,11 +149,11 @@ extension RouteShifterCustomPageExtension on RouteShifterBuilder {
   ///   },
   /// ),
   /// ```
-  CustomRouteShifterPage<T> toCustomPage<T>({
+  CustomRouteShifterPage toCustomPage({
     required Widget child,
     RouteSettings? settings,
   }) {
-    return CustomRouteShifterPage<T>(
+    return CustomRouteShifterPage(
       shifter: this,
       child: child,
       settings: settings,

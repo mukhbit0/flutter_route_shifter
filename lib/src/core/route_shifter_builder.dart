@@ -3,6 +3,7 @@ import '../effects/base/effect.dart';
 import '../effects/basic/slide_effect.dart';
 import '../effects/basic/fade_effect.dart';
 import 'route_shifter.dart' as local_shifter;
+import '../curves/custom_curve_builder.dart';
 
 // Import all effect mixins
 import 'route_shifter_builder/fade_effects.dart';
@@ -206,6 +207,39 @@ class RouteShifterBuilder
     return this;
   }
 
+  // Instance theme helpers (no-op placeholders) to avoid dynamic extension resolution issues in routers
+  RouteShifterBuilder followMaterial3(BuildContext context) {
+    // Integrations/theme extension may also exist; this no-op keeps chains typed
+    return this;
+  }
+
+  RouteShifterBuilder followCupertino(BuildContext context) {
+    return this;
+  }
+
+  RouteShifterBuilder followPlatformTheme(BuildContext context) {
+    // Choose based on platform, but current implementation is no-op
+    return this;
+  }
+
+  /// Applies a custom [curve] to the most recently added effect, if possible.
+  ///
+  /// This avoids relying on dynamic extensions in hot paths like go_router
+  /// pageBuilder and keeps the chain strongly typed.
+  RouteShifterBuilder withCustomCurve(Curve curve) {
+    if (_effects.isEmpty) return this;
+    final last = _effects.removeLast();
+    _effects.add(last.copyWith(curve: curve));
+    return this;
+  }
+
+  /// Builds a curve using a [builder] and applies it via [withCustomCurve].
+  RouteShifterBuilder withCurveBuilder(
+      Curve Function(CustomCurveBuilder) builder) {
+    final curve = builder(CustomCurveBuilder());
+    return withCustomCurve(curve);
+  }
+
   /// Adds a custom effect to the route transition.
   RouteShifterBuilder addEffect(RouteEffect effect) {
     _effects.add(effect);
@@ -265,5 +299,56 @@ class RouteShifterBuilder
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeOut,
     ));
+  }
+
+  /// Creates a Page compatible with declarative routers (e.g., go_router).
+  ///
+  /// This mirrors the integration helper but is defined as an instance method
+  /// so it also works when your chained calls are typed as `dynamic`.
+  ///
+  /// Example:
+  ///   RouteShifterBuilder()
+  ///     .fade(duration: const Duration(milliseconds: 400))
+  ///     .slideFromRight()
+  ///     .toPage(child: const NextPage());
+  Page toPage({
+    required Widget child,
+    LocalKey? key,
+    String? name,
+    Object? arguments,
+    String? restorationId,
+  }) {
+    return _InternalRouteShifterPage(
+      shifter: this,
+      child: child,
+      key: key,
+      name: name,
+      arguments: arguments,
+      restorationId: restorationId,
+    );
+  }
+}
+
+/// Private Page implementation used by RouteShifterBuilder.toPage().
+class _InternalRouteShifterPage extends Page {
+  final Widget child;
+  final RouteShifterBuilder shifter;
+
+  const _InternalRouteShifterPage({
+    required this.child,
+    required this.shifter,
+    super.key,
+    super.name,
+    super.arguments,
+    super.restorationId,
+  });
+
+  @override
+  Route createRoute(BuildContext context) {
+    // Important: pass this Page as settings to satisfy Navigator's page-based API
+    return shifter.toRoute(
+      page: child,
+      settings: this,
+    );
   }
 }
